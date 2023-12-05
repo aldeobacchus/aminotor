@@ -26,7 +26,7 @@ def receive_answer():
     if user_answer in valid_answers:
         # Si la réponse est valide, traitez-la comme requis
         # ...
-
+        ###
         # Exemple de réponse pour /api/answer/
         response = {
             "message": f"Received answer: {user_answer}"
