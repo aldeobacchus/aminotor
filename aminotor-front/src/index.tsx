@@ -12,7 +12,7 @@ import ErrorView from './containers/ErrorView';
 const router = createBrowserRouter(
   createRoutesFromElements(
       <Route errorElement={<ErrorView />}>
-
+        
         <Route path="/" element={<Home />} ></Route>
         
       </Route>
