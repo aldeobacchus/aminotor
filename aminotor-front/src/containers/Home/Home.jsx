@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SizePanelBar from '../../components/SizePanelBar/SizePanelBar';
 import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
 
-function App() {
+function Home() {
   
 
   return (
@@ -13,4 +13,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
