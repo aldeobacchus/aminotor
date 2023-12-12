@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import GameSelection from './components/gameSelection/GameSelection';
 import { useState } from 'react';

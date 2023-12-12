@@ -1,10 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Test from './containers/Test/Test';
-import Game from './containers/Game/Game';
-import Home from './containers/Home/Home';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from "react-router-dom";
 import { createRoot } from "react-dom/client";
