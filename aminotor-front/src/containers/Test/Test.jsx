@@ -28,6 +28,9 @@ function Test() {
       {selectedImage && <img src={`/img/200/${selectedImage}.jpg`} alt="Selected" />}
     </div>
   );
+    <div>Test</div>
+    
+  )
 }
 
 export default Test
