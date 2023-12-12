@@ -4,51 +4,31 @@ import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
 import { useState } from 'react';
 import Amino from '../../components/Amino/Amino';
 import Theseus from '../../components/Theseus/Theseus';
+import CharacterSelection from '../../components/CharacterSelection/CharacterSelection';
 
 function Game(args) {
-  const [sliderValue, setSliderValue] = useState(2);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [squares, setSquares] = useState([]);
-
-  const handleSliderChange = (value) => {
-    setSliderValue(value);
-  };
-
-  React.useEffect(() => {
-    const newSquares = [];
-    for (let i = 0; i < 1024; i++) {
-      const random = Math.floor(Math.random() * 200) + 1;
-      const padded = random.toString().padStart(6, '0');
-      newSquares.push(padded);
-    }
-    setSquares(newSquares);
-  }, []);
+  const [selectionMode, setSelectionMode] = useState(true);
 
   return (
     <div className='game'>
       
-      {args.gm === 'Amino' && (
+      {selectionMode && (
+        <CharacterSelection setSelectionMode={setSelectionMode}/>
+      )}
+
+      {!selectionMode && args.gm === 'Amino' && (
         <div className="game_amino">
           
           <h1>Amino's Guess</h1>  
-        
-          <SizePanelBar onSliderChange={handleSliderChange} />
-          <SelectionPanel size={sliderValue} squares={squares} onImageSelect={setSelectedImage}/>
-          <br/>
-          {selectedImage && <img src={`/img/200/${selectedImage}.jpg`} alt="Selected" />}     
         </div>
         
       )}
 
-      {args.gm === 'Thesus' && (
+      {!selectionMode && args.gm === 'Thesus' && (
         <div className="game_thesus">
           
-        <h1>Amino's Guess</h1>  
-      
-        <SizePanelBar onSliderChange={handleSliderChange} />
-        <SelectionPanel size={sliderValue} squares={squares} onImageSelect={setSelectedImage}/>
-        <br/>
-        {selectedImage && <img src={`/img/200/${selectedImage}.jpg`} alt="Selected" />}  
+        <h1>Thesus battle</h1>  
+ 
       </div> 
       )}
       
