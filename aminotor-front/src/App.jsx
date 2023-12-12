@@ -2,6 +2,7 @@ import './App.css';
 import GameSelection from './components/GameSelection/GameSelection';
 import { useState } from 'react';
 import Game from './containers/Game/Game';
+import Test from './containers/Test/Test';
 
 function App() {
   
@@ -17,20 +18,23 @@ function App() {
     <div className="app">
 
       <button onClick={() => {setMode("home")}}>home</button>
+      <h1>Aminotor</h1>
 
       {mode === 'home' && (
-        <GameSelection callback={(e) => onChangeGameMode(e)}/>
+        <>
+          <GameSelection callback={(e) => onChangeGameMode(e)} />
+        </>
       )}
 
       {mode === 'Amino' && (
         <Game gm="Amino"/>
       )}
 
-      {mode === 'Thesus' && (
-        <Game gm="Thesus"/>
+      {mode === 'Theseus' && (
+        <Game gm="Theseus"/>
       )}
 
-
+      
     </div>
   );
 }

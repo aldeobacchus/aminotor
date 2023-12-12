@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 function CharacterSelection(args) {
     const [squares, setSquares] = useState([]);
-
     const [sliderValue, setSliderValue] = useState(2);
     const [selectedImage, setSelectedImage] = useState(null);
   
@@ -26,11 +25,8 @@ function CharacterSelection(args) {
   return (
     <div className='game_characterSelection'>
         <SizePanelBar onSliderChange={handleSliderChange} />
-          <SelectionPanel size={sliderValue} squares={squares} onImageSelect={setSelectedImage}/>
-          <br/>
-          {selectedImage && <img src={`/img/200/${selectedImage}.jpg`} alt="Selected" />}   
-
-          <button onClick={() => args.setSelectionMode(false)}>Start</button>  
+        <SelectionPanel size={sliderValue} squares={squares} onImageSelect={setSelectedImage}/>
+        {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage)}}>Start</button> }
     </div>
   )
 }

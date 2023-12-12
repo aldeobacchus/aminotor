@@ -5,12 +5,12 @@ import SelectionPanel from '../SelectionPanel/SelectionPanel';
 function Theseus(args) {
   return (
     
-    <div className="game_thesus">
+    <div className="game_theseus">
           
       <h1>Theseus</h1>
+      
+      <img src={`/img/200/${args.character}.jpg`} alt="Selected" /> 
 
-      <SizePanelBar onSliderChange={args.handleSliderChange} />
-      <SelectionPanel size={args.sliderValue} />
     </div> 
 
     )

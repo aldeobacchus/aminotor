@@ -8,28 +8,22 @@ import CharacterSelection from '../../components/CharacterSelection/CharacterSel
 
 function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);
+  const [character, setCharacter] = useState(null);
+  const [question, setQuestion] = useState(null);
 
   return (
     <div className='game'>
       
       {selectionMode && (
-        <CharacterSelection setSelectionMode={setSelectionMode}/>
+        <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}/>
       )}
 
       {!selectionMode && args.gm === 'Amino' && (
-        <div className="game_amino">
-          
-          <h1>Amino's Guess</h1>  
-        </div>
-        
+        <Amino character={character} question/>
       )}
 
-      {!selectionMode && args.gm === 'Thesus' && (
-        <div className="game_thesus">
-          
-        <h1>Thesus battle</h1>  
- 
-      </div> 
+      {!selectionMode && args.gm === 'Theseus' && (
+        <Theseus character={character}/>
       )}
       
     </div>
