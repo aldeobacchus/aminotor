@@ -2,6 +2,7 @@ import React from 'react';
 import './SelectionPanel.css';
 
 const SelectionPanel = ({ size }) => {
+  size = size || 2;
 
   // generate a list of 1024  random numbers between 000001 and 000200
   const squares = [];

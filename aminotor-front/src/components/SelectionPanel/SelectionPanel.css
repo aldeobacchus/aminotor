@@ -7,18 +7,4 @@
   overflow: auto;
 }
 
-
-.square {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.square:hover {
-  background-color: #eee;
-}
   
