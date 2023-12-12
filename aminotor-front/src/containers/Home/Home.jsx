@@ -1,10 +1,20 @@
-import React from 'react'
-import GameSelection from '../../components/gameSelection/GameSelection'
+import React, { useState } from 'react';
+import SizePanelBar from '../../components/SizePanelBar/SizePanelBar';
+import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
 
-export default function Home (){
+function App() {
+  const [sliderValue, setSliderValue] = useState(2);
+
+  const handleSliderChange = (value) => {
+    setSliderValue(value);
+  };
+
   return (
-    <div className='home'>
-      <GameSelection />
+    <div>
+      <SizePanelBar onSliderChange={handleSliderChange} />
+      <SelectionPanel size={sliderValue} />
     </div>
-  )
+  );
 }
+
+export default App;
