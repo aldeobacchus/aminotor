@@ -4,6 +4,7 @@ import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
 
 function App() {
   const [sliderValue, setSliderValue] = useState(2);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleSliderChange = (value) => {
     setSliderValue(value);
@@ -12,7 +13,8 @@ function App() {
   return (
     <div>
       <SizePanelBar onSliderChange={handleSliderChange} />
-      <SelectionPanel size={sliderValue} />
+      <SelectionPanel size={sliderValue}  onImageSelect={setSelectedImage}/>
+      {selectedImage && <p>Selected image: {selectedImage}</p>}
     </div>
   );
 }

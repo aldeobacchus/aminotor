@@ -13,7 +13,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
       <Route errorElement={<ErrorView />}>
         
-        <Route path="/" element={<Home />} ></Route>
+        <Route path="/" element={<Test />} ></Route>
         
       </Route>
   )

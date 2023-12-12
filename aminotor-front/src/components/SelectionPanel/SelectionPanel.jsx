@@ -1,8 +1,8 @@
 import React from 'react';
 import './SelectionPanel.css';
 
-const SelectionPanel = ({ size }) => {
-  size = size || 2;
+const SelectionPanel = ({ size, onImageSelect }) => {
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   // generate a list of 1024  random numbers between 000001 and 000200
   const squares = [];
@@ -12,16 +12,23 @@ const SelectionPanel = ({ size }) => {
     squares.push(padded);
   }
 
-  // affiche uniquement les size premiers éléments de la liste squares
+  // display only the first 'size' elements of the 'squares' list
   const squaresToDisplay = squares.slice(0, 2**(size*2));
+
+  const handleImageSelect = (image) => {
+    setSelectedImage(image);
+    onImageSelect(image);
+  };
 
   return (
     <div key={size} className="selection-panel">
-      {squaresToDisplay.map((squaresToDisplay) => (
+      {squaresToDisplay.map((square) => (
         <img 
-          key={squaresToDisplay} 
-          src={`/img/200/${squaresToDisplay}.jpg`}
-          alt={`${squaresToDisplay}`}
+          key={square} 
+          src={`/img/200/${square}.jpg`}
+          alt={`${square}`}
+          onClick={() => handleImageSelect(square)}
+          style={square === selectedImage ? { boxShadow: '0 0 10px 5px red' } : {}}
         />
       ))}
     </div>
