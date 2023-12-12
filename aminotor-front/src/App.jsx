@@ -1,5 +1,5 @@
 import './App.css';
-import GameSelection from './components/gameSelection/GameSelection';
+import GameSelection from './components/GameSelection/GameSelection';
 import { useState } from 'react';
 import Game from './containers/Game/Game';
 
