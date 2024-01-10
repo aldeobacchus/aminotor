@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 #initialisation du jeu : sélection de 1024 images
 @app.route('/api/init', methods=['GET'])
-def init_game():
+def get_images():
     #sélection de 1024 id au hasard
     global list_image
     nb_images_bdd = 10000
@@ -62,7 +62,7 @@ def get_response_and_next_question():
     answers = request.json.get('answers', [])
 
     #actualisation des probas
-    receive_answer(answers)
+    update_probabilities(answers)
 
     # Select a new feature to ask a question about
     if nb_questions < max_questions:
@@ -93,7 +93,7 @@ def get_response_and_next_question():
             characterMatch=guess
         ) 
 
-def receive_answer(user_answer):
+def update_probabilities(user_answer):
     N= len(proba_list)
 
     # Validation de la réponse de l'utilisateur

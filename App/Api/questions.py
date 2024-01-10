@@ -13,7 +13,7 @@ def get_questions(labels, grid):
         else :
             rate.append(0)
 
-    #compute positive rate for each feature
+    #compute rate for each feature that hasn't been chosen yet
     for i in range (0,nb_col):
         if rate[i]!= None:
             count = 0
