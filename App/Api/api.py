@@ -13,9 +13,10 @@ app = Flask(__name__)
 def get_images():
     #sélection de 1024 id au hasard
     global list_image
+    list_image = []
     nb_images_bdd = 10000
     for i in range(1024):
-        list_image.add(randrange(nb_images_bdd))
+        list_image.append(randrange(nb_images_bdd))
 
     #get images de la bdd à partir de leurs id
     #renvoie les images au front
@@ -42,7 +43,7 @@ def start_game(nb_images):
 
     #create img list from size selected by user
     for i in range(nb_images):
-        final_img_list.add(list_image[i])
+        final_img_list.append(list_image[i])
 
     #predict labels on selected images
     predicted_labels = load_process_predict(nb_images)
