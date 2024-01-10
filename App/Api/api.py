@@ -27,14 +27,17 @@ def start_game(nb_images):
     data = request.get_json()
 
     #déclaration et initialisation des variables globales
-    global predicted_labels, nb_questions, max_questions, last_feature, proba_list, list_features
+    global predicted_labels, nb_questions, max_questions, last_feature, proba_list, list_features, guess, nb_questions_global
     global final_img_list
 
     final_img_list = []
     list_features = new_features
     nb_questions = 0
+    nb_questions_global = 0
+
     max_questions = 10
     last_feature = None
+    guess = None
     proba_list = [0 for i in range(nb_images)]
 
     #create img list from size selected by user
@@ -43,6 +46,15 @@ def start_game(nb_images):
 
     #predict labels on selected images
     predicted_labels = load_process_predict(nb_images)
+
+    #check if some labels are useless
+    for i in range(0, len(predicted_labels[0])):
+        count = 0
+        for j in range(0, len(predicted_labels)):
+            count = count + predicted_labels[j][i]
+        if count == 0:
+            list_features[i] = None
+
 
     #donner la première question
     feature = get_questions(list_features, predicted_labels)
@@ -92,6 +104,26 @@ def get_response_and_next_question():
         return jsonify(
             characterMatch=guess
         ) 
+    
+@app.route('/api/proposition/', methods=['GET'])
+def continue_next_question():
+    final_img_list[final_img_list.index(guess)] = None
+    nb_questions = 0
+
+    feature = get_questions(list_features, predicted_labels)
+
+    # Prepare the response
+    question += f" {new_questions[feature]}?"
+    param = f"is_{feature}"
+
+    nb_questions +=1
+
+    return jsonify(
+        feature=feature,
+        param=param,
+        question=question,
+        answers=new_answers[feature],
+    ) 
 
 def update_probabilities(user_answer):
     N= len(proba_list)
