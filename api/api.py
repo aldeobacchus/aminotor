@@ -4,16 +4,14 @@ from random import randrange
 from questions import get_questions
 from ml import load_process_predict, load_process_images  # Import your ML functions
 from flask_cors import cross_origin  # Fix the typo in import
-from features import new_features, new_questions, new_answers, proba_features  # Import new features, questions, and answers
+from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
 # Ajouter option guess si il est sur de lui
-# Ajouter option pour valider le guess (session de jeux finie)
 # Ajouter option l'IA se déclare perdante (proba trop faible)
-# Quand on initialise on doit tout réinitialiser (proba, liste d'images, etc)
 
 #initialisation du jeu : sélection de 1024 images
 @app.route('/api/init', methods=['GET'])
@@ -22,16 +20,13 @@ def init_game():
     global list_image
     list_image = []
     nb_images_bdd = 40000
-    # i want to generate 1024 random numbers between 052000 and 100000
     while len(list_image) < 1024:
-        r = randrange(0, nb_images_bdd) + 52000
+        r = randrange(0, nb_images_bdd) + 52000 #the number of the images start at 52000
         if r not in list_image:
             list_image.append(r)
 
-    #get images de la bdd à partir de leurs id
-    #renvoie les images au front
+    # envoie liste d'id images
     return jsonify(list_image)
-        
 
 #première question du jeu
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
@@ -70,8 +65,7 @@ def start_game(nb_images):
 
     return jsonify(
         feature=feature,
-        question=question,
-        answers=new_answers[feature],
+        question=question
     )
 
 
@@ -98,16 +92,15 @@ def get_response_and_next_question(answer):
         return jsonify(
             feature=feature,
             question=question,
-            answers=new_answers[feature],
         ) 
             
     else : #max amount of questions reached => try to guess !!
 
-        guess_index = proba_list.index(max(filter(lambda x: x is not None,proba_list)))
+        guess_index = proba_list.index(max(proba_list))
         guess = final_img_list[guess_index]
         # return quoi ???
         return jsonify(
-            characterMatch=guess
+            character=guess
         ) 
     
 @app.route('/api/proposition/', methods=['GET'])
@@ -133,7 +126,6 @@ def continue_next_question():
     return jsonify(
         feature=feature,
         question=question,
-        answers=new_answers[feature],
     ) 
 
 

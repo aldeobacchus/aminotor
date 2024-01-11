@@ -29,7 +29,7 @@ function App() {
       {mode === 'Amino' && (
         <>
           <h3 onClick={() => {setMode("home")}}>Aminotor</h3>
-          <Game gm="Amino"/>
+          <Game gm="Amino" setMode={setMode}/>
         </>
       )}
 

@@ -31,7 +31,7 @@ function CharacterSelection(args) {
     <div className='game_characterSelection'>
         <SizePanelBar onSliderChange={handleSliderChange} />
         <SelectionPanel size={sliderValue} squares={squares} onImageSelect={setSelectedImage}/>
-        {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage)}}>Start</button> }
+        {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
     </div>
   )
 }

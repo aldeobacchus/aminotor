@@ -44,11 +44,6 @@ new_questions = {
     'Wearing_Necktie': 'Is the character wearing a necktie?',
     'Young': 'Is the character young?'
 }
-# Réponses uniformes pour toutes les caractéristiques (avec des boutons pour "oui", "non" ou "peut être")
-uniform_answers = [{ 'title': 'Oui', 'value': '1' }, { 'title': 'Non', 'value': '0' }, { 'title': 'Peut être', 'value': 'NULL' }]
-
-# Création du dictionnaire des réponses pour toutes les caractéristiques
-new_answers = {feature: uniform_answers for feature in new_features}
 
 # Proba features
 proba_features = [  0.9008, 0.7902, 0.7648, 0.805, 0.9752, 0.9252, 0.7598, 0.8002, 0.874, 
