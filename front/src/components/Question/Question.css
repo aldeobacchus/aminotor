@@ -1,0 +1,8 @@
+.question {
+    text-align: center;
+}
+  
+.answer {
+display: flex;
+justify-content: center;
+}

@@ -13,17 +13,19 @@ function Game(args) {
 
   return (
     <div className='game'>
+
+      {<h1>{args.gm}</h1>}
       
       {selectionMode && (
         <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setSliderValue={setSliderValue}/>
       )}
 
-      {!selectionMode && args.gm === 'Amino' && (
+      {!selectionMode && args.gm === "Amino'Guess" && (
         <Amino character={character} sliderValue={sliderValue} setMode={args.setMode} setSelectionMode={setSelectionMode}/>
       )}
 
-      {!selectionMode && args.gm === 'Theseus' && (
-        <Theseus character={character}/>
+      {!selectionMode && args.gm === "Theseus Battle" && (
+        <Theseus character={character} setMode={args.setMode}/>
       )}
       
     </div>

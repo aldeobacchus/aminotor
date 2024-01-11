@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import axios from 'axios';
+import './Question.css';
 
 function Question(args) {
   const [question, setQuestion] = React.useState(args.question);
@@ -60,14 +61,25 @@ function Question(args) {
         });
     }
 
-  return (
-    <div className='question'>
-        <h3>Question : {question}</h3>
-        <button onClick={() => answerYes()}>Oui</button>
-        <button onClick={() => answerNo()}>Non</button>
-        <button onClick={() => answerDontKnow()}>Je ne sais pas</button>
-    </div>
-  )
+  if (question !== '') {
+      return (
+          <div className='question'>
+              <h3>Question : {question}</h3>
+              <div className='answer'>
+                <button onClick={() => answerYes()}>Oui</button>
+                <button onClick={() => answerNo()}>Non</button>
+                <button onClick={() => answerDontKnow()}>Je ne sais pas</button>
+              </div>
+          </div>
+    )
+    } else {
+      return (
+        <div className='wait'>
+            <h3>Laissez-moi réfléchir un instant...</h3>
+        </div>
+      )
+    }
+
 }
 
 export default Question

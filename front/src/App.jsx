@@ -26,17 +26,17 @@ function App() {
         </>
       )}
 
-      {mode === 'Amino' && (
+      {mode === "Amino'Guess" && (
         <>
           <h3 onClick={() => {setMode("home")}}>Aminotor</h3>
-          <Game gm="Amino" setMode={setMode}/>
+          <Game gm="Amino'Guess" setMode={setMode}/>
         </>
       )}
 
-      {mode === 'Theseus' && (
+      {mode === 'Theseus Battle' && (
         <>
           <h3 onClick={() => {setMode("home")}}>Aminotor</h3>
-          <Game gm="Theseus"/>
+          <Game gm="Theseus Battle" setMode={setMode}/>
         </>
       )}
 
