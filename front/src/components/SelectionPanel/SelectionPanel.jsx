@@ -20,7 +20,7 @@ const SelectionPanel = ({ size, squares, onImageSelect}) => {
           src={`https://etud.insa-toulouse.fr/~alami-mejjat/${square}.jpg`}
           alt={`${square}`}
           onClick={() => handleImageSelect(square)}
-          style={square === selectedImage ? { boxShadow: '0 0 10px 5px red' } : {}}
+          style={square === selectedImage ? { boxShadow: '0 0 10px 5px blue' } : {}}
         />
       ))}
     </div>

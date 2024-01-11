@@ -1,7 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import SizePanelBar from '../../components/SizePanelBar/SizePanelBar';
 import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
-import { useState } from 'react';
 import Amino from '../../components/Amino/Amino';
 import Theseus from '../../components/Theseus/Theseus';
 import CharacterSelection from '../../components/CharacterSelection/CharacterSelection';
@@ -9,17 +8,18 @@ import CharacterSelection from '../../components/CharacterSelection/CharacterSel
 function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);
   const [character, setCharacter] = useState(null);
-  const [question, setQuestion] = useState(null);
+  const [sliderValue, setSliderValue] = useState(null);
+
 
   return (
     <div className='game'>
       
       {selectionMode && (
-        <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}/>
+        <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setSliderValue={setSliderValue}/>
       )}
 
       {!selectionMode && args.gm === 'Amino' && (
-        <Amino character={character} question/>
+        <Amino character={character} sliderValue={sliderValue} setMode={args.setMode} setSelectionMode={setSelectionMode}/>
       )}
 
       {!selectionMode && args.gm === 'Theseus' && (
