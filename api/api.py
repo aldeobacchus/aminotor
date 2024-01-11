@@ -31,7 +31,6 @@ def init_game():
 #première question du jeu
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
 def start_game(nb_images):
-    #data = request.get_json()
     print("nb_images", nb_images)
 
     #déclaration et initialisation des variables globales
