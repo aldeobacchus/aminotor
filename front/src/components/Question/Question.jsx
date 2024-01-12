@@ -26,6 +26,9 @@ function Question(args) {
           const paddedCharacter = response.data.character.toString().padStart(6, '0');
           args.setGuess(paddedCharacter);
         }
+        else if (response.data.fail === true) {
+          args.setGuess("fail");
+        }
         setQuestion(response.data.question);
       })
       .catch(error => {
@@ -40,6 +43,9 @@ function Question(args) {
             const paddedCharacter = response.data.character.toString().padStart(6, '0');
             args.setGuess(paddedCharacter);
           }
+          else if (response.data.fail) {
+            args.setGuess("fail");
+          }
           setQuestion(response.data.question);
         })
         .catch(error => {
@@ -53,6 +59,9 @@ function Question(args) {
           if (response.data.character) {
             const paddedCharacter = response.data.character.toString().padStart(6, '0');
             args.setGuess(paddedCharacter);
+          }
+          else if (response.data.fail) {
+            args.setGuess("fail");
           }
           setQuestion(response.data.question);
         })

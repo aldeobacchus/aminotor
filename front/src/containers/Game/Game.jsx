@@ -14,7 +14,7 @@ function Game(args) {
   return (
     <div className='game'>
 
-      {<h1>{args.gm}</h1>}
+      {<h2>{args.gm}</h2>}
       
       {selectionMode && (
         <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setSliderValue={setSliderValue}/>

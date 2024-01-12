@@ -41,7 +41,7 @@ def start_game(nb_images):
     # list_features est égal à la valeur de new_features
     list_features = new_features.copy()
     nb_questions = 0
-    max_questions = 5
+    max_questions = 10
     last_feature = None
     proba_list = [1]*nb_images
 
@@ -79,8 +79,20 @@ def get_response_and_next_question(answer):
 
     list_features[list_features.index(last_feature)] = None
 
-    # Select a new feature to ask a question about
-    if nb_questions < max_questions:
+    # Si le max est 2 fois plus grand que le deuxième max, on peut proposer une réponse
+    if max(proba_list) > 2*sorted(proba_list)[-2] or nb_questions == max_questions :
+        guess_index = proba_list.index(max(proba_list))
+        guess = final_img_list[guess_index]
+        return jsonify(
+            character=guess
+        ) 
+    # Si les probas sont trop faibles, on peut déclarer forfait
+    elif max(proba_list) < 0.05 :
+        return jsonify(
+            fail=True
+        )
+    # Sinon on continue à jouer en posant une nouvelle question
+    else :
         feature = get_questions(list_features, predicted_labels)
 
         # Prepare the response
@@ -92,15 +104,6 @@ def get_response_and_next_question(answer):
         return jsonify(
             feature=feature,
             question=question,
-        ) 
-            
-    else : #max amount of questions reached => try to guess !!
-
-        guess_index = proba_list.index(max(proba_list))
-        guess = final_img_list[guess_index]
-        # return quoi ???
-        return jsonify(
-            character=guess
         ) 
     
 @app.route('/api/proposition/', methods=['GET'])
@@ -131,10 +134,11 @@ def continue_next_question():
 
 # Update the probabilities based on the user's answer
 def update_probabilities(user_answer):
-
+        
     #update probabilities from players' answer
     index = list_features.index(last_feature)
     for i in range(len(final_img_list)):
+
         if user_answer == predicted_labels[i][index]:
             proba_list[i] *= proba_features[index]
         else:
