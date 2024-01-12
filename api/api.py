@@ -35,10 +35,11 @@ def start_game(nb_images):
 
     #déclaration et initialisation des variables globales
     global predicted_labels, nb_questions, max_questions, last_feature, proba_list, list_features
-    global final_img_list
+    global final_img_list # good
 
     final_img_list = []
-    list_features = new_features
+    # list_features est égal à la valeur de new_features
+    list_features = new_features.copy()
     nb_questions = 0
     max_questions = 5
     last_feature = None
@@ -49,7 +50,7 @@ def start_game(nb_images):
         final_img_list.append(list_image[i])
 
     # create a list of path from the list of images
-    list_path = []
+    list_path = []  
     for i in range(nb_images):
         list_path.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
 

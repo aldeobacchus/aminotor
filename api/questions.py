@@ -9,6 +9,8 @@ def get_questions(labels, predicted_labels):
     rate = []
     for i in range(0, nb_col):
         if labels[i]== None:
+            print("JE SUIS NONE ET JE SUIS A LA POSITION", i)
+            print("C'EST LE LABEL", labels[i])
             rate.append(None)
         else :
             rate.append(0)
