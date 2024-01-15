@@ -18,17 +18,23 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_SECURE'] = True
 Session(app)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+CORS(app)
 
 #initialisation du jeu : sélection de 1024 images
-@app.route('/api/init', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
-def init_game():
+@app.route('/api/init/<int:gamemod>', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def init_game(gamemod):
     session['list_image'] = []
     list_image = session['list_image']
     
     nb_images_bdd = 40000
-    while len(session['list_image']) < 1024:
+
+    if gamemod == 1:
+        grid_size = 1024
+    elif gamemod == 2:
+        grid_size = 28
+
+    while len(session['list_image']) < grid_size:
         r = randrange(0, nb_images_bdd) + 52000 #the number of the images start at 52000
         if r not in list_image:
             list_image.append(r)
@@ -38,9 +44,10 @@ def init_game():
     # envoie liste d'id images
     return jsonify(list_image)
 
+
 #première question du jeu
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game(nb_images):
     list_image = session['list_image']    
     final_img_list = []
@@ -85,7 +92,7 @@ def start_game(nb_images):
 
 #update pour chaque question que l'on pose
 @app.route('/api/answer/<int:answer>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_response_and_next_question(answer):
     #actualisation des probas
     if answer != 2:
@@ -132,7 +139,7 @@ def get_response_and_next_question(answer):
         ) 
     
 @app.route('/api/proposition/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def continue_next_question():
     proba_list = session['proba_list']
     final_img_list = session['final_img_list']
