@@ -11,14 +11,17 @@ import os
 
 
 app = Flask(__name__)
-app.secret_key = 'you-will-never-guess' #don't forget to add it to azure
+app.secret_key = 'you-will-never-guess' #don't forget to change it on azure
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True
 Session(app)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 #initialisation du jeu : sélection de 1024 images
 @app.route('/api/init', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
 def init_game():
     #sélection de 1024 id au hasard
     print(session)
@@ -39,13 +42,15 @@ def init_game():
             list_image.append(r)
 
     session['list_image'] = list_image
-
+    session.modified = True
     # envoie liste d'id images
     return jsonify(list_image)
 
 #première question du jeu
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
 def start_game(nb_images):
+
     print("nb_images", nb_images)
 
     if 'list_image' in session:
@@ -90,6 +95,8 @@ def start_game(nb_images):
     session['last_feature'] = feature
     session['nb_questions'] = 1
     session['predicted_labels'] = predicted_labels
+    session['list_features'] = list_features
+
 
     return jsonify(
         feature=feature,
@@ -99,6 +106,7 @@ def start_game(nb_images):
 
 #update pour chaque question que l'on pose
 @app.route('/api/answer/<int:answer>', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
 def get_response_and_next_question(answer):
     #actualisation des probas
     if answer != 2:
@@ -145,6 +153,7 @@ def get_response_and_next_question(answer):
         ) 
     
 @app.route('/api/proposition/', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
 def continue_next_question():
     proba_list = session['proba_list']
     final_img_list = session['final_img_list']

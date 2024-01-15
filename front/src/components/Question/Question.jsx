@@ -2,6 +2,9 @@ import React, {useEffect} from 'react';
 import axios from 'axios';
 import './Question.css';
 
+// Set withCredentials to true globally
+axios.defaults.withCredentials = true;
+
 function Question(args) {
   const [question, setQuestion] = React.useState(args.question);
 
@@ -10,7 +13,7 @@ function Question(args) {
       if (question === '') {
         console.log(question);
         const grid_size = 2**(args.sliderValue*2);
-        const response = await axios.get(`http://127.0.0.1:5000/api/start/${grid_size}`)
+        const response = await axios.get(`http://127.0.0.1:5000/api/start/${grid_size}`, { withCredentials: true })
         setQuestion(response.data.question);
         console.log(question);
         return question;

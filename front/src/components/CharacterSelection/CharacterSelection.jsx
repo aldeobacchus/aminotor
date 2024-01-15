@@ -5,6 +5,9 @@ import { useState } from 'react';
 import './characterSelection.css';
 import axios from 'axios';
 
+// Set withCredentials to true globally
+axios.defaults.withCredentials = true;
+
 function CharacterSelection(args) {
     const [squares, setSquares] = useState([]);
     const [sliderValue, setSliderValue] = useState(2);
