@@ -23,18 +23,9 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 @app.route('/api/init', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
 def init_game():
-    #sélection de 1024 id au hasard
-    print(session)
-    print(app.secret_key)
-
     session['list_image'] = []
     list_image = session['list_image']
     
-    if 'list_image' in session:
-        print("ehoh coco")
-    else :
-        print("non non non")
-
     nb_images_bdd = 40000
     while len(session['list_image']) < 1024:
         r = randrange(0, nb_images_bdd) + 52000 #the number of the images start at 52000
@@ -42,7 +33,7 @@ def init_game():
             list_image.append(r)
 
     session['list_image'] = list_image
-    session.modified = True
+
     # envoie liste d'id images
     return jsonify(list_image)
 
@@ -50,22 +41,9 @@ def init_game():
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000", allow_credentials=True)
 def start_game(nb_images):
-
-    print("nb_images", nb_images)
-
-    if 'list_image' in session:
-        print("ehoh coco")
-    else :
-        print("non non non")
-    
-    #déclaration et initialisation des variables globales
-    print(app.secret_key)
-    print("session", session)
-    print("list_image", session['list_image'])
-    print("session.get('list_image')", session.get('list_image'))
-    list_image = session.get('list_image')
-    
+    list_image = session['list_image']    
     final_img_list = []
+
     # list_features est égal à la valeur de new_features
     list_features = new_features.copy()
 
