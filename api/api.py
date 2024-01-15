@@ -11,7 +11,8 @@ import os
 
 
 app = Flask(__name__)
-app.secret_key = 'you-will-never-guess' #don't forget to change it on azure
+#app.secret_key = os.environ.get('SECRET_KEY') #KEEP THIS LINE AND ADD THE KEY ON AZURE
+app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
