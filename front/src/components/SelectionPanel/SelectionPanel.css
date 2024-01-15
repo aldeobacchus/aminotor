@@ -1,10 +1,10 @@
 .selection-panel {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  display: flex;
   gap: 10px;
-  max-height: 680px;
+  max-height: 50vh;
   overflow: auto;
+  flex-wrap: wrap;
+  padding: 10px;
 }
 
 .selection-panel > div {
@@ -13,4 +13,30 @@
   padding: 20px 0;
   font-size: 30px;
 }
-  
+
+.square-img{
+  width: 13.25%;
+}
+
+/*SCROLL BAR*/
+/* width */
+::-webkit-scrollbar {
+  width: 1vw;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--color-purple1);
+  border-radius: 10px;
+  }
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-orange1);
+  border-radius: 10px
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-orange2);
+}
