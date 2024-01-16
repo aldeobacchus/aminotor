@@ -1,11 +1,15 @@
 import tensorflow as tf
 from keras.preprocessing.image import img_to_array
 import numpy as np
-import os
-import requests
 from PIL import Image
 from io import BytesIO
+from flask import Flask, jsonify, request, session
+from flask_cors import CORS
+import os
+import requests
 
+app = Flask(__name__)
+CORS(app)
 
 # Parameters
 model_path = os.path.join(os.getcwd(), "model_ki_s")
@@ -60,18 +64,21 @@ def load_images (list_images):
 
     return np.array(images)
 
+@app.route('/ml/predict', methods=['POST'])
+def load_process_predict(_model_path=model_path):
+    data = request.json
 
-def load_process_predict(list_path, _model_path=model_path):
     # Load the model
     model = tf.keras.models.load_model(_model_path)
 
+    list_path = data['list_path']
     # Load and preprocess the images
     images = load_images(list_path)
 
-    labels_predicted = model.predict(images)
+    predicted_labels = np.round(model.predict(images)).tolist()
 
-    return np.round(labels_predicted)
+    return jsonify(predicted_labels=predicted_labels)
 
 
-#for v in load_process_predict(["https://etud.insa-toulouse.fr/~alami-mejjat/052000.jpg", "https://etud.insa-toulouse.fr/~alami-mejjat/052001.jpg"]):
-#	 print(v)
+if __name__ == '__main__':
+    app.run(debug=True, port = 5003)

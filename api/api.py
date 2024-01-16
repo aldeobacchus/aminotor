@@ -1,13 +1,9 @@
-import random
 from flask import Flask, jsonify, request, session
-from random import randrange
-from questions import get_questions
-from ml import load_process_predict, load_process_images  # Import your ML functions
 from flask_cors import cross_origin  # Fix the typo in import
 from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
 from flask_cors import CORS
 from flask_session import Session
-import os
+import requests
 
 
 app = Flask(__name__)
@@ -22,71 +18,41 @@ CORS(app)
 
 #initialisation du jeu : sélection de 1024 images
 @app.route('/api/init/<int:gamemod>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+@cross_origin(supports_credentials=True, origins="http://localhost:3000" )
 def init_game(gamemod):
-    session['list_image'] = []
-    list_image = session['list_image']
-    
-    nb_images_bdd = 40000
-
-    if gamemod == 1:
-        grid_size = 1024
-    elif gamemod == 2:
-        grid_size = 28
-
-    while len(session['list_image']) < grid_size:
-        r = randrange(0, nb_images_bdd) + 52000 #the number of the images start at 52000
-        if r not in list_image:
-            list_image.append(r)
-
-    session['list_image'] = list_image
-
-    # envoie liste d'id images
-    return jsonify(list_image)
+    response = requests.get(f'http://localhost:5001/image/init/{gamemod}').json()
+    session['list_image'] = response.get('list_image')
+    return jsonify(session['list_image'])
 
 
 #première question du jeu
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game(nb_images):
-    list_image = session['list_image']    
-    final_img_list = []
 
-    # list_features est égal à la valeur de new_features
-    list_features = new_features.copy()
+    session['list_features'] = new_features.copy()
+    session['nb_images'] = nb_images
+    data={
+        'list_features': session['list_features'],
+        'nb_images': session['nb_images'],
+        'list_image': session['list_image']
+    }
+    
+    response = requests.post('http://localhost:5002/aminoguess/start', json=data).json()
 
-    #initialisation des variables de session
+    #initialisation et update the session variables
     session['max_questions'] = 10
     session['last_feature'] = None
     session['proba_list'] = [1]*nb_images
-
-    #create img list from size selected by user
-    for i in range(nb_images):
-        final_img_list.append(list_image[i])
-
-    # create a list of path from the list of images
-    list_path = []  
-    for i in range(nb_images):
-        list_path.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
-
-    #predict labels on selected images
-    predicted_labels = load_process_predict(list_path)
-
-    #donner la première question
-    feature = get_questions(list_features, predicted_labels)
-    question = new_questions[feature]
-
-    #update the session variables
-    session['final_img_list'] = final_img_list
-    session['last_feature'] = feature
+    session['final_img_list'] = response.get("final_img_list")
+    session['last_feature'] = response.get("feature")
+    session['question'] = response.get("question")
     session['nb_questions'] = 1
-    session['predicted_labels'] = predicted_labels
-    session['list_features'] = list_features
-
+    session['predicted_labels'] = response.get("predicted_labels")
 
     return jsonify(
-        feature=feature,
-        question=question
+        feature=response.get("feature"),
+        question=response.get("question")
     )
 
 
@@ -94,79 +60,56 @@ def start_game(nb_images):
 @app.route('/api/answer/<int:answer>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_response_and_next_question(answer):
-    #actualisation des probas
-    if answer != 2:
-        update_probabilities(answer)
 
-    list_features = session['list_features']
-    last_feature = session['last_feature']
-    proba_list = session['proba_list']
-    final_img_list = session['final_img_list']
-    nb_questions = session['nb_questions']
-    max_questions = session['max_questions']
+    data = {
+        'answer': answer,
+        'list_features': session['list_features'],
+        'last_feature': session['last_feature'],
+        'proba_list': session['proba_list'],
+        'final_img_list': session['final_img_list'],
+        'nb_questions': session['nb_questions'],
+        'max_questions': session['max_questions'],
+        'predicted_labels': session['predicted_labels']
+    }
+    response = requests.post('http://localhost:5002/aminoguess/answer', json=data).json()
+    feature = response.get('feature')
+    question = response.get('question')
 
-    list_features[list_features.index(last_feature)] = None
+    if response.get('proba_list'):
+        session['proba_list'] = response.get('proba_list')
 
-    # Si le max est 2 fois plus grand que le deuxième max, on peut proposer une réponse
-    if max(proba_list) > 2*sorted(proba_list)[-2] or nb_questions == max_questions :
-        guess_index = proba_list.index(max(proba_list))
-        guess = final_img_list[guess_index]
-        return jsonify(
-            character=guess
-        ) 
-    # Si les probas sont trop faibles, on peut déclarer forfait
-    elif max(proba_list) < 0.05 :
-        return jsonify(
-            fail=True
-        )
-    # Sinon on continue à jouer en posant une nouvelle question
-    else :
-        predicted_labels = session['predicted_labels']
-        feature = get_questions(list_features, predicted_labels)
+    session['list_features'] = response.get("list_features")
 
-        # Prepare the response
-        question = new_questions[feature]
-
-        nb_questions +=1
-
-        #update the session variables
-        session['nb_questions'] = nb_questions
+    if question: # L'IA pose une nouvelle fonction
         session['last_feature'] = feature
+        session['question'] = question
+        session['nb_questions'] = session['nb_questions'] + 1
 
-        return jsonify(
-            feature=feature,
-            question=question,
-        ) 
+    return response
     
 @app.route('/api/proposition/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def continue_next_question():
-    proba_list = session['proba_list']
-    final_img_list = session['final_img_list']
-    list_features = session['list_features']
-    predicted_labels = session['predicted_labels']
 
-    guess_index = proba_list.index(max(proba_list))
-    guess = final_img_list[guess_index]
-    
-    final_img_list[final_img_list.index(guess)] = None
-    proba_list[guess_index] = 0
+    data = {
+        'list_features': session['list_features'],
+        'proba_list': session['proba_list'],
+        'final_img_list': session['final_img_list'],
+        'predicted_labels': session['predicted_labels']
+    }
 
-    feature = get_questions(list_features, predicted_labels)
+    response = requests.post('http://localhost:5002/aminoguess/proposition', json=data).json()
 
-    # Prepare the response
-    question = new_questions[feature]
-
-    #update the session variables
-    session['nb_questions'] = 0
-    session['last_feature'] = feature
-    
+    # update the session variables
+    session['nb_questions'] = 1
+    session['last_feature'] = response.get('feature')
+    session['final_img_list'] = response.get('final_img_list')
+    session['proba_list'] = response.get('proba_list')
 
     return jsonify(
-        feature=feature,
-        question=question,
-    ) 
-
+        feature=response.get('feature'),
+        question=response.get('question'),
+    )
 
 # Update the probabilities based on the user's answer
 def update_probabilities(user_answer):
@@ -190,4 +133,4 @@ def update_probabilities(user_answer):
     
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port = 5000)
