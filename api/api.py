@@ -254,7 +254,6 @@ def flush_upload():
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_img(img):
     img_folder = os.path.join(app.root_path, 'temp')
-    
     return send_from_directory(img_folder, img)
             
 
