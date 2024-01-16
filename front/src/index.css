@@ -51,7 +51,7 @@ h2{
 h3{
   font-family: var(--font-caesar);
   text-transform: uppercase;
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin:2vh auto;
 }
 h3:hover{
@@ -65,7 +65,7 @@ button{
   width: fit-content;
 
   font-family: var(--font-caesar);
-  font-size: 1.25rem;
+  font-size: 1rem;
   text-transform: uppercase;
   color: black;
   border: none;

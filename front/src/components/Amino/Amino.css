@@ -2,6 +2,65 @@
     transition: transform 0.2s; /* Animation */
   }
   
-  .zoom-image:hover {
-    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+.zoom-image:hover {
+  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.game_amino{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: auto;
+}
+
+.character{
+  width: 25vh;
+  border-radius: 10px;
+}
+
+.mycharacter{
+  position: fixed;
+  bottom: 10vh;
+  right: 10vw;
+  cursor: zoom-in!important;
+}
+
+.win{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.characterFocus{
+  height: 60vh;
+  border-radius: 10px;
+  position:fixed;
+  bottom: 10vh;
+  right: 10vw;
+}
+
+.characterFocus:hover{
+  cursor: zoom-out!important;
+}
+
+@media screen and (max-width: 768px) {
+  .character{
+    width:40vw;
   }
+  .mycharacter{
+    position: inherit;
+  }
+
+  .characterFocus{
+    height: auto;
+    width: 80vw;
+    border-radius: 10px;
+  }
+
+  
+}
+.mycharacter:hover{
+  cursor: pointer;
+}

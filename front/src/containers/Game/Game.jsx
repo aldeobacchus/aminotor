@@ -4,6 +4,7 @@ import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
 import Amino from '../../components/Amino/Amino';
 import Theseus from '../../components/Theseus/Theseus';
 import CharacterSelection from '../../components/CharacterSelection/CharacterSelection';
+import './game.css'
 
 function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);

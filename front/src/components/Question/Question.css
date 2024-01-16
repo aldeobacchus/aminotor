@@ -3,6 +3,20 @@
 }
   
 .answer {
-display: flex;
-justify-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.answer-sol{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 768px){
+    .answer{
+        flex-direction: column;
+    }
+    
 }

@@ -17,11 +17,17 @@
 .square-img{
   width: 13.25%;
 }
+@media screen and (max-width: 768px){
+  .square-img{
+    width: 30%;
+  }
+  
+}
 
 /*SCROLL BAR*/
 /* width */
 ::-webkit-scrollbar {
-  width: 1vw;
+  width: 10px;
 }
 
 /* Track */

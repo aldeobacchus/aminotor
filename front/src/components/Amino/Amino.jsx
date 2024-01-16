@@ -9,14 +9,18 @@ function Amino(args) {
   const [guess, setGuess] = useState('');
   const [boolFind, setBoolFind] = useState(false);
   const [question, setQuestion] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
+  const handleClick = event => {
+    setIsFocused(current => !current);
+  };
   return (
 
     <div className="game_amino">
 
       {!guess && !boolFind && <>
         <Question setGuess={setGuess} question={question} sliderValue={args.sliderValue} setQuestion={setQuestion}/>
-        <img className="character" src={`https://etud.insa-toulouse.fr/~alami-mejjat/${args.character}.jpg`} alt="Selected" /> 
+        <img className={isFocused ? "characterFocus" : "character mycharacter"} onClick={handleClick}src={`https://etud.insa-toulouse.fr/~alami-mejjat/${args.character}.jpg`} alt="Selected" /> 
       </>
       }
 
@@ -31,7 +35,7 @@ function Amino(args) {
 
       {guess && guess !== 'fail' && !boolFind && <>
         <Guess guess={guess} setGuess={setGuess} setBoolFind={setBoolFind} setQuestion={setQuestion}/>
-        <img className="character" src={`https://etud.insa-toulouse.fr/~alami-mejjat/${args.character}.jpg`} alt="Selected" />
+        <img className={isFocused ? "characterFocus" : "character mycharacter"} onClick={handleClick} src={`https://etud.insa-toulouse.fr/~alami-mejjat/${args.character}.jpg`} alt="Selected" />
       </>
       }
 
