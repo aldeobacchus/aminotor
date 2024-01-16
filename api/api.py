@@ -89,7 +89,6 @@ def start_game(nb_images):
         question=question
     )
 
-
 #update pour chaque question que l'on pose
 @app.route('/api/answer/<int:answer>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
