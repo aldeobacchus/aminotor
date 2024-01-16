@@ -1,5 +1,6 @@
 # Nouvelles caractéristiques
-new_features = ['5_o_Clock_Shadow', 'Arched_Eyebrows', 'Attractive', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips', 'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Blurry', 'Brown_Hair', 'Bushy_Eyebrows', 'Chubby', 'Double_Chin', 'Eyeglasses', 'Goatee', 'Gray_Hair', 'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open', 'Mustache', 'Narrow_Eyes', 'No_Beard', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose', 'Receding_Hairline', 'Rosy_Cheeks', 'Sideburns', 'Smiling', 'Straight_Hair', 'Wavy_Hair', 'Wearing_Earrings', 'Wearing_Hat', 'Wearing_Lipstick', 'Wearing_Necklace', 'Wearing_Necktie', 'Young']
+#new_features = ['5_o_Clock_Shadow', 'Arched_Eyebrows', 'Attractive', 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips', 'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Blurry', 'Brown_Hair', 'Bushy_Eyebrows', 'Chubby', 'Double_Chin', 'Eyeglasses', 'Goatee', 'Gray_Hair', 'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open', 'Mustache', 'Narrow_Eyes', 'No_Beard', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose', 'Receding_Hairline', 'Rosy_Cheeks', 'Sideburns', 'Smiling', 'Straight_Hair', 'Wavy_Hair', 'Wearing_Earrings', 'Wearing_Hat', 'Wearing_Lipstick', 'Wearing_Necklace', 'Wearing_Necktie', 'Young']
+new_features = ['5_o_Clock_Shadow', 'Arched_Eyebrows', None , 'Bags_Under_Eyes', 'Bald', 'Bangs', 'Big_Lips', 'Big_Nose', 'Black_Hair', 'Blond_Hair', 'Blurry', 'Brown_Hair', 'Bushy_Eyebrows', 'Chubby', 'Double_Chin', 'Eyeglasses', 'Goatee', 'Gray_Hair', 'Heavy_Makeup', 'High_Cheekbones', 'Male', 'Mouth_Slightly_Open', 'Mustache', 'Narrow_Eyes', 'No_Beard', 'Oval_Face', 'Pale_Skin', 'Pointy_Nose', 'Receding_Hairline', 'Rosy_Cheeks', 'Sideburns', 'Smiling', 'Straight_Hair', 'Wavy_Hair', 'Wearing_Earrings', 'Wearing_Hat', 'Wearing_Lipstick', 'Wearing_Necklace', 'Wearing_Necktie', None]
 
 # Nouvelles questions pour les caractéristiques
 new_questions = {
@@ -45,9 +46,15 @@ new_questions = {
     'Young': 'Le personnage est-il jeune?'
 }
 
+
 # Proba features
-proba_features = [  0.9008, 0.7902, 0.7648, 0.805, 0.9752, 0.9252, 0.7598, 0.8002, 0.874, 
+#proba_features_old = [  0.9008, 0.7902, 0.7648, 0.805, 0.9752, 0.9252, 0.7598, 0.8002, 0.874, 
+ #                   0.9284, 0.9532, 0.8348, 0.8916, 0.9464, 0.9542, 0.9752, 0.9508, 0.9698, 0.8886, 0.84, 
+  #                  0.9406, 0.8578, 0.9622, 0.8882, 0.9098, 0.722, 0.9618, 0.7334, 0.9222, 0.9416, 0.9506, 
+   #                 0.8876, 0.7758, 0.7714,0.8364, 0.975, 0.9052, 0.858, 0.946, 0.8372]
+# Proba features
+proba_features = [  0.9008, 0.7902, None , 0.805, 0.9752, 0.9252, 0.7598, 0.8002, 0.874, 
                     0.9284, 0.9532, 0.8348, 0.8916, 0.9464, 0.9542, 0.9752, 0.9508, 0.9698, 0.8886, 0.84, 
                     0.9406, 0.8578, 0.9622, 0.8882, 0.9098, 0.722, 0.9618, 0.7334, 0.9222, 0.9416, 0.9506, 
-                    0.8876, 0.7758, 0.7714,0.8364, 0.975, 0.9052, 0.858, 0.946, 0.8372]
+                    0.8876, 0.7758, 0.7714,0.8364, 0.975, 0.9052, 0.858, 0.946, None]
 

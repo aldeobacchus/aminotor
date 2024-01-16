@@ -108,14 +108,14 @@ def get_response_and_next_question(answer):
     list_features[list_features.index(last_feature)] = None
 
     # Si le max est 2 fois plus grand que le deuxième max, on peut proposer une réponse
-    if max(proba_list) > 2*sorted(proba_list)[-2] or nb_questions == max_questions :
+    if max(proba_list) > 1.3*sorted(proba_list)[-2] or nb_questions == max_questions :
         guess_index = proba_list.index(max(proba_list))
         guess = final_img_list[guess_index]
         return jsonify(
             character=guess
         ) 
     # Si les probas sont trop faibles, on peut déclarer forfait
-    elif max(proba_list) < 0.05 :
+    elif max(proba_list) < 0.5 :
         return jsonify(
             fail=True
         )
@@ -181,9 +181,25 @@ def update_probabilities(user_answer):
     for i in range(len(final_img_list)):
 
         if user_answer == predicted_labels[i][index]:
-            proba_list[i] *= proba_features[index]
+            proba_list[i] *=  1 #proba_features[index]
+
+        elif user_answer == 3:
+            if predicted_labels[i][index] == 1:
+                proba_list[i] *= 0.95
+            else :
+                proba_list[i] *= 0.90
+
+            
+
+        elif user_answer == 4:
+            if predicted_labels[i][index] == 0:
+                proba_list[i] *= 0.95
+            else :
+                proba_list[i] *= 0.90
+
+            
         else:
-            proba_list[i] *=  (1-proba_features[index])
+            proba_list[i] *=  0.8
 
     #update the session variables
     session['proba_list'] = proba_list
