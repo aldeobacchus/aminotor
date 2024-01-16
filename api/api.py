@@ -65,7 +65,11 @@ def start_game(nb_images):
         final_img_list.append(list_image[i])
 
     # create a list of path from the list of images
-    list_path = []  
+    if session.get('list_path') is None:
+        list_path = []
+    else :
+        list_path = session['list_path']
+
     for i in range(nb_images):
         list_path.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
 
@@ -186,7 +190,27 @@ def update_probabilities(user_answer):
 
     #update the session variables
     session['proba_list'] = proba_list
-    
+
+@app.route('/api/upload/', methods=['POST'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def upload_img():
+    random_name = random.randint(1, 50000)
+    file = request.files['file']
+    file.save(random_name)
+
+    if session.get('list_path') is None:
+        list_path = []
+    else :
+        list_path = session['list_path']
+
+    list_path.append(random_name)
+
+    session['list_path'] = list_path
+
+    return jsonify(
+        success=True
+    )    
+            
 
 if __name__ == '__main__':
     app.run(debug=True)

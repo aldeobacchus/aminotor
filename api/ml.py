@@ -72,6 +72,16 @@ def load_process_predict(list_path, _model_path=model_path):
 
     return np.round(labels_predicted)
 
+def load_process_predict_import(list_img, _model_path=model_path):
+    # Load the model
+    model = tf.keras.models.load_model(_model_path)
+
+    # simulate the prediction of the model
+    
+    labels_predicted = img_to_array(list_img)
+
+    return np.round(labels_predicted)
+
 
 #for v in load_process_predict(["https://etud.insa-toulouse.fr/~alami-mejjat/052000.jpg", "https://etud.insa-toulouse.fr/~alami-mejjat/052001.jpg"]):
 #	 print(v)
