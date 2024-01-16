@@ -1,12 +1,6 @@
-import random
 from flask import Flask, jsonify, request, session
 from random import randrange
-from questions import get_questions
-from ml import load_process_predict, load_process_images  # Import your ML functions
-from flask_cors import cross_origin  # Fix the typo in import
-from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
 from flask_cors import CORS
-import os
 
 
 app = Flask(__name__)
