@@ -13,6 +13,10 @@
     "react-router-dom": "^6.20.0",
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
+    // Ajoutez ou mettez à jour d'autres paquets ici
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^version" // Remplacez 'version' par la version appropriée
   },
   "scripts": {
     "start": "react-scripts start",
