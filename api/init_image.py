@@ -1,6 +1,6 @@
 import os
 import random
-from flask import Flask, jsonify, request, send_from_directory, session
+from flask import Flask, jsonify, request, send_file, send_from_directory, session
 from random import randrange
 from flask_cors import CORS
 
@@ -55,7 +55,7 @@ def upload_img():
 def delete_img():
     
     data = request.json
-    print("cucuuuul")
+
     list_upload = data["list_upload"]
     
     folder_name = "temp"
@@ -74,9 +74,11 @@ def delete_img():
 
 @app.route('/image/get/<int:img>', methods=['GET'])
 def get_img(img):
+    img_name = f"{img}.jpg"
     folder_name = "temp"
-    folder_path = os.path.join(os.getcwd(), folder_name)    
-    return jsonify(img=send_from_directory(folder_path, img))
+    folder_path = os.path.join(os.getcwd(), folder_name)  
+    img_path = os.path.join(folder_path, img_name)  
+    return send_file(img_path, mimetype='image/jpeg')
 
 if __name__ == '__main__':
     app.run(debug=True, port = 5001)

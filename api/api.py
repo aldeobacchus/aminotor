@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request, send_from_directory, session
+from flask import Flask, Response, jsonify, make_response, request, send_from_directory, session
 from flask_cors import cross_origin  # Fix the typo in import
 from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
 from flask_cors import CORS
@@ -131,6 +131,12 @@ def continue_next_question():
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def upload_img():
 
+    # check if image is uploaded
+    if 'image' not in request.files:
+        return jsonify(
+            success=False
+        )
+    
     file = request.files['image']
     data = {
         'image': file
@@ -169,6 +175,9 @@ def flush_upload():
 
     response = requests.post('http://localhost:5001/image/delete', json=data).json()
 
+    session['list_upload'] = []
+
+    response = make_response(jsonify(success=True))
     response.delete_cookie('AminotorSession')
 
     return response
@@ -176,8 +185,10 @@ def flush_upload():
 @app.route('/api/get_img/<int:img>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_img(img):
-
-    return requests.post('http://localhost:5001/image/get/<int:img>').json().get('img')
+    print(img)
+    response = requests.get('http://localhost:5001/image/get/{}'.format(img))
+    
+    return Response(response.content, content_type='image/jpeg')
 
 
     

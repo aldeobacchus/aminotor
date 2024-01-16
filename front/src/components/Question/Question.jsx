@@ -38,8 +38,9 @@ function Question(args) {
       axios.get('http://127.0.0.1:5000/api/answer/'+arg)
         .then(response => {
           if (response.data.character) {
-            const paddedCharacter = response.data.character.toString().padStart(6, '0');
-            args.setGuess(paddedCharacter);
+            const guess = response.data.character;
+            console.log(guess);
+            args.setGuess(args.charactersSources[args.characters.indexOf(guess)])
           }
           else if (response.data.fail) {
             args.setGuess("fail");

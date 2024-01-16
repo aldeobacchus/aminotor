@@ -8,7 +8,6 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 function CharacterSelection(args) {
-    const [squares, setSquares] = useState([]);
     const [sliderValue, setSliderValue] = useState(2);
     const [selectedImage, setSelectedImage] = useState(null);
   
@@ -18,21 +17,53 @@ function CharacterSelection(args) {
 
     React.useEffect(() => {
       const fetchData = async () => {
-        const response = await axios.get('http://127.0.0.1:5000/api/init/1');
-        const value = response.data.list_image;
-        const newSquares = Array(1023).fill('000000').map((_, i) => {
-          const padded = value[i].toString().padStart(6, '0');
-          return padded;
-        });
-        setSquares(newSquares);
+        try {
+          const response = await axios.get('http://127.0.0.1:5000/api/init/1');
+          const uploadValue = response.data.list_upload;
+          let imageUrls = [];
+          
+          if (uploadValue.length !== 0) {
+            // Load images in parallel
+            const imagePromises = uploadValue.map((imageName) => {
+              return fetch(`http://localhost:5000/api/get_img/${imageName}`)
+                .then(response => response.blob())
+                .then(blob => URL.createObjectURL(blob))
+                .catch(error => {
+                  console.error(`Error loading image ${imageName}:`, error);
+                  return null; // Return null for failed requests
+                });
+            });
+    
+            const resolvedImages = await Promise.allSettled(imagePromises);
+    
+            // Filter out successful responses
+            imageUrls = resolvedImages
+              .filter(result => result.status === 'fulfilled')
+              .map(result => result.value);
+          }
+    
+          const listImage = response.data.list_image;
+
+          const newSquares = listImage.map((_, i) => {
+            const padded = `https://etud.insa-toulouse.fr/~alami-mejjat/${listImage[i].toString().padStart(6, '0')}.jpg`;
+            return padded;
+          });
+  
+          // Combine the arrays and set the state
+          args.setSquares([...uploadValue,...listImage]);
+          args.setSquaresSources([...imageUrls,...newSquares]);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
       };
+  
       fetchData();
-      }, []);
+    }, []);
   
   return (
     <div className='game_characterSelection'>
         <SizePanelBar onSliderChange={handleSliderChange} />
-        <SelectionPanel size={2**(sliderValue*2)} squares={squares} onImageSelect={setSelectedImage}/>
+        <SelectionPanel size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
         {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
     </div>
   )
