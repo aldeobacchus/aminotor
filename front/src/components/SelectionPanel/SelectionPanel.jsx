@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import './SelectionPanel.css';
 
-const SelectionPanel = ({ size, squares, onImageSelect}) => {
+const SelectionPanel = (args) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   // display only the first 'size' elements of the 'squares' list
-  const squaresToDisplay = squares.slice(0, 2**(size*2));
+  const squaresToDisplay = args.squares.slice(0, args.size);
 
   const handleImageSelect = (image) => {
     setSelectedImage(image);
-    onImageSelect(image);
+    args.onImageSelect(image);
   };
 
   return (
-    <div key={size} className="selection-panel">
+    <div key={args.size} className="selection-panel">
       {squaresToDisplay.map((square) => (
         <img 
           className='square-img'

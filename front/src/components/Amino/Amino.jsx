@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import SizePanelBar from '../SizePanelBar/SizePanelBar';
-import SelectionPanel from '../SelectionPanel/SelectionPanel';
 import Question from '../Question/Question';
 import Guess from '../Guess/Guess';
 import './Amino.css';

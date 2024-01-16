@@ -1,6 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 
+// Set withCredentials to true globally
+axios.defaults.withCredentials = true;
+
 import './guess.css';
 
 function Guess(args) {

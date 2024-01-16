@@ -1,10 +1,9 @@
 import React, {useState} from 'react'
-import SizePanelBar from '../../components/SizePanelBar/SizePanelBar';
-import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
 import Amino from '../../components/Amino/Amino';
 import Theseus from '../../components/Theseus/Theseus';
 import CharacterSelection from '../../components/CharacterSelection/CharacterSelection';
 import './game.css'
+import UserGrid from '../../components/UserGrid/UserGrid';
 
 function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);
@@ -17,12 +16,16 @@ function Game(args) {
 
       {<h2>{args.gm}</h2>}
       
-      {selectionMode && (
+      {selectionMode && args.gm === "Amino'Guess" && (
         <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setSliderValue={setSliderValue}/>
       )}
 
       {!selectionMode && args.gm === "Amino'Guess" && (
         <Amino character={character} sliderValue={sliderValue} setMode={args.setMode} setSelectionMode={setSelectionMode}/>
+      )}
+
+      {selectionMode && args.gm === "Theseus Battle" && (
+        <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}/>
       )}
 
       {!selectionMode && args.gm === "Theseus Battle" && (
