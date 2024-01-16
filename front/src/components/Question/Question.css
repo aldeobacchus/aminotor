@@ -11,8 +11,18 @@
     flex-direction:row;
     justify-content: flex-start;
     align-items: flex-start;
-    margin-right: 35vw;
+    margin-right: auto;
     margin-left: auto;
+}
+
+.answer-container2{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.answer-container-padding{
+    width:20vw;
 }
 
 .answer {

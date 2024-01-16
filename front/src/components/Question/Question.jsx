@@ -59,14 +59,19 @@ function Question(args) {
               {/*get local image in public/img*/}
               { nombreAleatoire === 1 ? <img className="minotor" src='img/minotors/LAMP.png' alt="image1" /> : <img className="minotor" src='img/minotors/LAMP.png' alt="image2"/>
               }
-                <div className='answer'>
-                  <button onClick={() => answer(1)}>Oui</button>
-                  <button onClick={() => answer(3)}>Je pense que oui</button>
-                  <button onClick={() => answer(2)}>Je ne sais pas</button>
-                  <button onClick={() => answer(4)}>Je pense que non</button>
-                  <button onClick={() => answer(0)}>Non</button>
-                  
+                <div className="answer-container2">
+                  <div className='answer'>
+                    <button onClick={() => answer(1)}>Oui</button>
+                    <button onClick={() => answer(0)}>Non</button>
+                  </div>
+
+                  <div className='answer'>
+                    <button onClick={() => answer(3)}>Je pense que oui</button>
+                    <button onClick={() => answer(2)}>Je ne sais pas</button>
+                    <button onClick={() => answer(4)}>Je pense que non</button>
+                  </div>
                 </div>
+                <div className='answer-container-padding'></div>
               </div>
           </div>
     )
