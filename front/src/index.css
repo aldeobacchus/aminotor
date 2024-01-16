@@ -11,6 +11,7 @@
   --color-purple2: #482D57;
   --color-orange1: #EDA828;
   --color-orange2: #FCD25D;
+  --color-blue1: #C5D7F4;
 }
 
 
@@ -46,6 +47,7 @@ h2{
   font-family: var(--font-inika);
   text-transform: uppercase;
   font-size: 4vh;
+  margin:0;
 }
 
 h3{
@@ -58,6 +60,13 @@ h3:hover{
   cursor: pointer;
 }
 
+h4{
+  font-family: var(--font-caesar);
+  text-transform: uppercase;
+  font-size: 2.5vw;
+  margin:2vh auto;
+}
+
 
 button{
   display: flex;
@@ -65,7 +74,7 @@ button{
   width: fit-content;
 
   font-family: var(--font-caesar);
-  font-size: 1rem;
+  font-size: 1.5vw;
   text-transform: uppercase;
   color: black;
   border: none;
@@ -78,11 +87,19 @@ button{
 @media screen and (max-width: 768px){
   button{
       font-size: 1.5rem;
+
   }
   h1{
       font-size: 10vh;
   }
+  h4{
+    font-size: 1.5rem;
+  }
   
+}
+
+.white-color{
+  color: white;
 }
 
 .button-orange{
@@ -91,4 +108,16 @@ button{
 
 .button-blue{
   background: #C5D7F4;
+}
+
+.button-red{
+  background: #852B2B;
+}
+
+.inika{
+  font-family: var(--font-inika);
+}
+
+.small-text{
+  font-size: 1.25rem;
 }

@@ -76,7 +76,7 @@ function Question(args) {
   if (question !== '') {
       return (
           <div className='question'>
-              <h3>Question : {question}</h3>
+              <h4>Question : {question}</h4>
               <div className='answer'>
                 <button onClick={() => answerYes()}>Oui</button>
                 <button onClick={() => answerNo()}>Non</button>
