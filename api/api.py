@@ -24,8 +24,11 @@ CORS(app)
 @app.route('/api/init/<int:gamemod>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def init_game(gamemod):
-    session['list_image'] = []
-    list_image = session['list_image']
+    if session.get('list_upload') is None:
+        list_image = []
+    else :
+        list_image = session['list_upload']
+        print("yesssssss")
     
     nb_images_bdd = 40000
 
@@ -34,8 +37,8 @@ def init_game(gamemod):
     elif gamemod == 2:
         grid_size = 28
 
-    while len(session['list_image']) < grid_size:
-        r = randrange(0, nb_images_bdd) + 52000 #the number of the images start at 52000
+    while len(list_image) < grid_size:
+        r = randrange(0, nb_images_bdd) + 52000 # the number of the images start at 52000
         if r not in list_image:
             list_image.append(r)
 
@@ -51,7 +54,7 @@ def init_game(gamemod):
 def start_game(nb_images):
     list_image = session['list_image']    
     final_img_list = []
-
+    
     # list_features est égal à la valeur de new_features
     list_features = new_features.copy()
 
@@ -65,12 +68,15 @@ def start_game(nb_images):
         final_img_list.append(list_image[i])
 
     # create a list of path from the list of images
-    if session.get('list_path') is None:
-        list_path = []
+    if session.get('list_upload') is None:
+        list_upload = []
     else :
-        list_path = session['list_path']
+        list_upload = session['list_upload']
+    
+    nb_generated_img = nb_images-len(list_upload)
 
-    for i in range(nb_images):
+    list_path = []
+    for i in range(nb_generated_img):
         list_path.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
 
     #predict labels on selected images
@@ -195,21 +201,53 @@ def update_probabilities(user_answer):
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def upload_img():
     random_name = random.randint(1, 50000)
-    file = request.files['file']
-    file.save(random_name)
+    print(random_name)
+    file = request.files['image']
 
-    if session.get('list_path') is None:
-        list_path = []
+    # add mkdir if not exist
+    folder_path = "./temp/"
+    file.save(os.path.join(folder_path, f"{random_name}.jpg"))
+
+    if session.get('list_upload') is None:
+        list_upload = []
     else :
-        list_path = session['list_path']
+        list_upload = session['list_upload']
 
-    list_path.append(random_name)
+    list_upload.append(random_name)
 
-    session['list_path'] = list_path
+    session['list_upload'] = list_upload
 
     return jsonify(
         success=True
-    )    
+    )
+
+@app.route('/api/flush/', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def flush():
+    flush_upload()
+    session.clear()
+    return jsonify(
+        success=True
+    )
+
+@app.route('/api/flush_upload/', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def flush_upload():
+    list_upload = session['list_upload']
+
+    #delete the images from the temp folder
+    folder_path = "./temp/"
+    for img in list_upload:
+        print(img)
+        file = os.path.join(folder_path, f"{img}.jpg")
+        if os.path.exists(file):
+            os.remove(file)
+    
+    session['list_upload'] = []
+
+    return jsonify(
+        success=True
+    )
             
 
 if __name__ == '__main__':
