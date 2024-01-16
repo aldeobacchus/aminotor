@@ -2,4 +2,4 @@
 /api/__pycache__
 .github/api/__pycache__
 /api/venv
-/api/flask_sessi
+/api/flask_session
