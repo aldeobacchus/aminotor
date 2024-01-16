@@ -1,5 +1,6 @@
 import React from 'react'
 import './gameSelection.css'
+import Parameters from '../Parameters/Parameters'
 
 function GameSelection(args) {  
   const [isSelectedParameters, setIsSelectedParameters] = React.useState(true);
@@ -25,14 +26,7 @@ function GameSelection(args) {
         )}
 
         {!isSelectedParameters && (
-          <div className="param-menu">
-            <h2>Paramètres</h2>
-            <div className="param-buttons">
-              <button className="button-orange white-color inika small-text">Importer une image</button>
-              <button className="button-red white-color inika small-text">Supprimer les données</button>
-            </div>
-            <button className='button-parametres inika' onClick={handleClickParam}>Retour</button>
-          </div>
+          <Parameters handleClickParam={handleClickParam}/>
         )
         }
     </div>
