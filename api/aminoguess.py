@@ -73,12 +73,12 @@ def get_response_and_next_question():
 
 
     # Si le max est 2 fois plus grand que le deuxième max, on peut proposer une réponse
-    if max(proba_list) > 2*sorted(proba_list)[-2] or nb_questions == max_questions :
+    if max(proba_list) > 1.3*sorted(proba_list)[-2] or nb_questions == max_questions :
         guess_index = proba_list.index(max(proba_list))
         guess = final_img_list[guess_index]
         response['character']=guess
     # Si les probas sont trop faibles, on peut déclarer forfait
-    elif max(proba_list) < 0.05 :
+    elif max(proba_list) < 0.5 :
         response['fail']=True
     # Sinon on continue à jouer en posant une nouvelle question
     else :
@@ -137,9 +137,25 @@ def update_probabilities(data):
     for i in range(nb_images):
 
         if user_answer == predicted_labels[i][index]:
-            proba_list[i] *= proba_features[index]
+            proba_list[i] *=  1 #proba_features[index]
+
+        elif user_answer == 3:
+            if predicted_labels[i][index] == 1:
+                proba_list[i] *= 0.95
+            else :
+                proba_list[i] *= 0.90
+
+            
+
+        elif user_answer == 4:
+            if predicted_labels[i][index] == 0:
+                proba_list[i] *= 0.95
+            else :
+                proba_list[i] *= 0.90
+
+            
         else:
-            proba_list[i] *=  (1-proba_features[index])
+            proba_list[i] *=  0.8
 
     return proba_list
     
