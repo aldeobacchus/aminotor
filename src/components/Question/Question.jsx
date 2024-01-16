@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import axios from 'axios';
+import {axios} from 'axios';
 import './Question.css';
 
 // Set withCredentials to true globally
