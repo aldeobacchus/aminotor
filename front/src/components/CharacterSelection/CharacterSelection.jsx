@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SizePanelBar from '../SizePanelBar/SizePanelBar';
 import SelectionPanel from '../SelectionPanel/SelectionPanel';
-import { useState } from 'react';
 import './characterSelection.css';
 import axios from 'axios';
+
+// Set withCredentials to true globally
+axios.defaults.withCredentials = true;
 
 function CharacterSelection(args) {
     const [squares, setSquares] = useState([]);
@@ -16,7 +18,7 @@ function CharacterSelection(args) {
 
     React.useEffect(() => {
       const fetchData = async () => {
-        const response = await axios.get('http://127.0.0.1:5000/api/init');
+        const response = await axios.get('http://127.0.0.1:5000/api/init/1');
         const value = response.data;
         const newSquares = Array(1024).fill('000000').map((_, i) => {
           const padded = value[i].toString().padStart(6, '0');
@@ -30,7 +32,7 @@ function CharacterSelection(args) {
   return (
     <div className='game_characterSelection'>
         <SizePanelBar onSliderChange={handleSliderChange} />
-        <SelectionPanel size={sliderValue} squares={squares} onImageSelect={setSelectedImage}/>
+        <SelectionPanel size={2**(sliderValue*2)} squares={squares} onImageSelect={setSelectedImage}/>
         {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
     </div>
   )
