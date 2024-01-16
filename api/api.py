@@ -8,6 +8,7 @@ from features import new_features, new_questions, proba_features  # Import new f
 from flask_cors import CORS
 from flask_session import Session
 import os
+from flask import make_response
 
 
 app = Flask(__name__)
@@ -17,6 +18,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 Session(app)
 CORS(app)
 
@@ -28,7 +30,6 @@ def init_game(gamemod):
         list_image = []
     else :
         list_image = session['list_upload']
-        print("yesssssss")
     
     nb_images_bdd = 40000
 
@@ -63,21 +64,20 @@ def start_game(nb_images):
     session['last_feature'] = None
     session['proba_list'] = [1]*nb_images
 
-    #create img list from size selected by user
-    for i in range(nb_images):
-        final_img_list.append(list_image[i])
-
     # create a list of path from the list of images
     if session.get('list_upload') is None:
         list_upload = []
     else :
         list_upload = session['list_upload']
-    
+
     nb_generated_img = nb_images-len(list_upload)
+    print("nb generated img", nb_generated_img)
 
     list_path = []
     for i in range(nb_generated_img):
+        final_img_list.append(list_image[i])
         list_path.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
+        print(final_img_list[i])
 
     #predict labels on selected images
     predicted_labels = load_process_predict(list_path)
@@ -221,7 +221,7 @@ def upload_img():
         success=True
     )
 
-@app.route('/api/flush/', methods=['GET'])
+@app.route('/api/flush_session/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def flush():
     flush_upload()
@@ -233,7 +233,11 @@ def flush():
 @app.route('/api/flush_upload/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def flush_upload():
-    list_upload = session['list_upload']
+    if session.get('list_upload') is None:
+        list_upload = []
+    else :
+        list_upload = session['list_upload']
+        session['list_upload'] = []
 
     #delete the images from the temp folder
     folder_path = "./temp/"
@@ -243,11 +247,11 @@ def flush_upload():
         if os.path.exists(file):
             os.remove(file)
     
-    session['list_upload'] = []
+    response = make_response(jsonify(success=True))
+    response.delete_cookie('AminotorSession')
+    
+    return response
 
-    return jsonify(
-        success=True
-    )
             
 
 if __name__ == '__main__':
