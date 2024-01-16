@@ -1,5 +1,5 @@
 import random
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, send_from_directory, session
 from random import randrange
 from questions import get_questions
 from ml import load_process_predict, load_process_images  # Import your ML functions
@@ -26,11 +26,12 @@ CORS(app)
 @app.route('/api/init/<int:gamemod>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def init_game(gamemod):
+
     if session.get('list_upload') is None:
         list_image = []
     else :
-        list_image = session['list_upload']
-    
+        list_image = session['list_upload'].copy()
+
     nb_images_bdd = 40000
 
     if gamemod == 1:
@@ -194,8 +195,7 @@ def update_probabilities(user_answer):
         else:
             proba_list[i] *=  (1-proba_features[index])
 
-    #update the session variables
-    session['proba_list'] = proba_list
+    return proba_list
 
 @app.route('/api/upload/', methods=['POST'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
@@ -214,8 +214,6 @@ def upload_img():
         list_upload = session['list_upload']
 
     list_upload.append(random_name)
-
-    session['list_upload'] = list_upload
 
     return jsonify(
         success=True
@@ -252,6 +250,12 @@ def flush_upload():
     
     return response
 
+@app.route('/api/get_img/<int:img>', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def get_img(img):
+    img_folder = os.path.join(app.root_path, 'temp')
+    
+    return send_from_directory(img_folder, img)
             
 
 if __name__ == '__main__':
