@@ -77,6 +77,7 @@ def load_process_predict(_model_path=model_path):
 
     list_path_init = data['list_path_init']
     
+
     # Load and preprocess the images
     if len(list_path_init) > 0 :
         if images.size == 0:
@@ -85,6 +86,7 @@ def load_process_predict(_model_path=model_path):
             images = np.concatenate((images, load_images(list_path_init)), axis=0)
 
     predicted_labels += np.round(model.predict(images)).tolist()
+
 
     return jsonify(predicted_labels=predicted_labels)
 

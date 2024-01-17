@@ -1,6 +1,8 @@
+
 import os
 import random
 from flask import Flask, jsonify, request, send_file, send_from_directory, session
+
 from random import randrange
 from flask_cors import CORS
 
@@ -9,6 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 #initialisation du jeu : sélection de 1024 images
+
 @app.route('/image/init', methods=['POST'])
 
 def init_game():
@@ -18,6 +21,7 @@ def init_game():
 
     list_image = []
 
+
     nb_images_bdd = 40000
 
     if gamemod == 1:
@@ -25,7 +29,9 @@ def init_game():
     elif gamemod == 2:
         grid_size = 28
 
+
     while len(list_image) < grid_size-nb_upload:
+
         r = randrange(0, nb_images_bdd) + 52000 #the number of the images start at 52000
         if r not in list_image:
             list_image.append(r)
@@ -79,6 +85,7 @@ def get_img(img):
     folder_path = os.path.join(os.getcwd(), folder_name)  
     img_path = os.path.join(folder_path, img_name)  
     return send_file(img_path, mimetype='image/jpeg')
+
 
 if __name__ == '__main__':
     app.run(debug=True, port = 5001)

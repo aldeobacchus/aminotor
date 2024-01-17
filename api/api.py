@@ -1,4 +1,6 @@
+
 from flask import Flask, Response, jsonify, make_response, request, send_from_directory, session
+
 from flask_cors import cross_origin  # Fix the typo in import
 from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
 from flask_cors import CORS
@@ -41,6 +43,7 @@ def init_game(gamemod):
         )
 
 
+
 #première question du jeu
 @app.route('/api/start/<int:nb_images>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
@@ -53,6 +56,7 @@ def start_game(nb_images):
         'nb_images': session['nb_images'],
         'list_image': session['list_image'], 
         'list_upload': session['list_upload']
+
     }
     
     response = requests.post('http://localhost:5002/aminoguess/start', json=data).json()
@@ -147,6 +151,7 @@ def upload_img():
     if session.get('list_upload') is None:
         session['list_upload'] = []
 
+
     list_upload = session['list_upload']
 
     list_upload.append(response.get('random_name'))
@@ -187,6 +192,7 @@ def flush_upload():
 def get_img(img):
     print(img)
     response = requests.get('http://localhost:5001/image/get/{}'.format(img))
+
     
     return Response(response.content, content_type='image/jpeg')
 

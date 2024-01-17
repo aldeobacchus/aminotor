@@ -1,3 +1,4 @@
+
 import os
 from flask import Flask, jsonify, request, session
 from questions import get_questions
@@ -17,6 +18,7 @@ def start_game():
     nb_image = data['nb_images']
     list_image = data['list_image']
     list_features = data['list_features']
+
     list_upload = data['list_upload']
 
     #add the images uploaded by the user
@@ -51,6 +53,7 @@ def start_game():
 
     predicted_labels = response.get('predicted_labels')
     
+
     #donner la première question
     feature = get_questions(list_features, predicted_labels)
     question = new_questions[feature]
