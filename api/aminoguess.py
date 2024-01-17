@@ -1,3 +1,5 @@
+
+import os
 from flask import Flask, jsonify, request, session
 from questions import get_questions
 from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
@@ -16,18 +18,42 @@ def start_game():
     nb_image = data['nb_images']
     list_image = data['list_image']
     list_features = data['list_features']
-    #create img list from size selected by user
-    for i in range(nb_image):
+
+    list_upload = data['list_upload']
+
+    #add the images uploaded by the user
+    i=0
+    while len(final_img_list) < nb_image and i < len(list_upload):
+        final_img_list.append(list_upload[i])
+        i += 1
+    
+    #add the images from the initial server
+    i = 0
+    while len(final_img_list) < nb_image:
         final_img_list.append(list_image[i])
-    # create a list of path from the list of images
-    list_path = []  
+        i += 1
+
+    #TODO: change from the local server to the azure stockage service
+    folder_name = "temp"
+
+    list_path_upload = []
+    for img in list_upload:
+        list_path_upload.append(os.path.join(os.getcwd(),folder_name, f"{img}.jpg"))
+
+    # create a list of path from the list of images from the initial server
+    list_path_init = []  
     for i in range(nb_image):
-        list_path.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
+        list_path_init.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
+    
     #predict labels on selected images
-    data = {'list_path':list_path}
+    data = {'list_path_upload':list_path_upload,
+            'list_path_init':list_path_init
+            }
     response = requests.post('http://localhost:5003/ml/predict', json=data).json()
 
     predicted_labels = response.get('predicted_labels')
+    
+
     #donner la première question
     feature = get_questions(list_features, predicted_labels)
     question = new_questions[feature]

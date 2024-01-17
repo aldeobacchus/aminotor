@@ -1,3 +1,9 @@
 /api/flask_session
 /api/__pycache__
-.github
+.github/api/__pycache__
+/api/venv
+/api/flask_session
+/build
+/node_modules
+/front/build
+/front/node_modules

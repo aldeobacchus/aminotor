@@ -1,12 +1,16 @@
-import React, {useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Question.css';
+
 
 // Set withCredentials to true globally
 axios.defaults.withCredentials = true;
 
 function Question(args) {
-  const [question, setQuestion] = React.useState(args.question);
+  const [question, setQuestion] = useState(args.question);
+
+  const [nombreAleatoire, setNombreAleatoire] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,49 +23,24 @@ function Question(args) {
         return question;
       }
     }
+
+    // Générer un nombre aléatoire entre 1 et 2
+    const nombreDecimal = 1 + Math.random();
+    const nombreFinal = nombreDecimal < 0.5 ? 1 : 2;
+    // Mettre à jour l'état avec le nombre aléatoire généré
+    setNombreAleatoire(nombreFinal);
+    
+    //fetch data
     fetchData();
   }, []); 
 
-  function answerYes() {
-    axios.get('http://127.0.0.1:5000/api/answer/1')
-      .then(response => {
-        if (response.data.character) {
-          const paddedCharacter = response.data.character.toString().padStart(6, '0');
-          args.setGuess(paddedCharacter);
-        }
-        else if (response.data.fail === true) {
-          args.setGuess("fail");
-        }
-        setQuestion(response.data.question);
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération de la question', error);
-      });
-    }
-
-    function answerNo() {
-      axios.get('http://127.0.0.1:5000/api/answer/0')
+    function answer(arg) {
+      axios.get('http://127.0.0.1:5000/api/answer/'+arg)
         .then(response => {
           if (response.data.character) {
-            const paddedCharacter = response.data.character.toString().padStart(6, '0');
-            args.setGuess(paddedCharacter);
-          }
-          else if (response.data.fail) {
-            args.setGuess("fail");
-          }
-          setQuestion(response.data.question);
-        })
-        .catch(error => {
-          console.error('Erreur lors de la récupération de la question', error);
-        });
-    }
-
-    function answerDontKnow() {
-      axios.get('http://127.0.0.1:5000/api/answer/2')
-        .then(response => {
-          if (response.data.character) {
-            const paddedCharacter = response.data.character.toString().padStart(6, '0');
-            args.setGuess(paddedCharacter);
+            const guess = response.data.character;
+            console.log(guess);
+            args.setGuess(args.charactersSources[args.characters.indexOf(guess)])
           }
           else if (response.data.fail) {
             args.setGuess("fail");
@@ -76,11 +55,24 @@ function Question(args) {
   if (question !== '') {
       return (
           <div className='question'>
-              <h3>Question : {question}</h3>
-              <div className='answer'>
-                <button onClick={() => answerYes()}>Oui</button>
-                <button onClick={() => answerNo()}>Non</button>
-                <button onClick={() => answerDontKnow()}>Je ne sais pas</button>
+              <h4>Question : {question}</h4>
+              <div className="answer-container">
+              {/*get local image in public/img*/}
+              { nombreAleatoire === 1 ? <img className="minotor" src='img/minotors/LAMP.png' alt="image1" /> : <img className="minotor" src='img/minotors/LAMP.png' alt="image2"/>
+              }
+                <div className="answer-container2">
+                  <div className='answer'>
+                    <button onClick={() => answer(1)}>Oui</button>
+                    <button onClick={() => answer(0)}>Non</button>
+                  </div>
+
+                  <div className='answer'>
+                    <button onClick={() => answer(3)}>Je pense que oui</button>
+                    <button onClick={() => answer(2)}>Je ne sais pas</button>
+                    <button onClick={() => answer(4)}>Je pense que non</button>
+                  </div>
+                </div>
+                <div className='answer-container-padding'></div>
               </div>
           </div>
     )
