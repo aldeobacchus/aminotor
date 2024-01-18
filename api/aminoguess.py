@@ -2,7 +2,6 @@
 import os
 from flask import Flask, jsonify, request, session
 from questions import get_questions
-from features import new_features, new_questions, proba_features  # Import new features, questions, and answers
 from flask_cors import CORS
 import requests
 
@@ -56,12 +55,11 @@ def start_game():
 
     #donner la première question
     feature = get_questions(list_features, predicted_labels)
-    question = new_questions[feature]
+    
     return jsonify(
         final_img_list=final_img_list,
         predicted_labels=predicted_labels,
-        feature=feature,
-        question=question
+        feature=feature
     )
 
 
@@ -111,11 +109,7 @@ def get_response_and_next_question():
         predicted_labels = data['predicted_labels']
         feature = get_questions(list_features, predicted_labels)
 
-        # Prepare the response
-        question = new_questions[feature]
-
         response['feature'] = feature
-        response['question'] = question
 
     return response
     
@@ -136,13 +130,8 @@ def continue_next_question():
 
     feature = get_questions(list_features, predicted_labels)
 
-    # Prepare the response
-    question = new_questions[feature]
-    
-
     return jsonify(
         feature=feature,
-        question=question,
         final_img_list=final_img_list,
         proba_list=proba_list
 

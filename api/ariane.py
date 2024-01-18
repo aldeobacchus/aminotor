@@ -1,16 +1,8 @@
 import os
-import random
-
 import requests
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request
 from random import randrange
-from questions import get_questions
-from ml import load_process_predict, load_process_images  # Import your ML functions
-from flask_cors import cross_origin  # Fix the typo in import
-from features import new_features, new_questions, answers  # Import new features, questions, and answers
 from flask_cors import CORS
-
-
 
 app = Flask(__name__)
 CORS(app)
@@ -22,7 +14,7 @@ CORS(app)
 @app.route('/ariane/start', methods=['POST'])
 def start_game():
     data = request.json
-    final_img_list = []
+    asked_img_list = []
     
     list_image = data['list_image']
     nb_images = len(list_image)
@@ -33,14 +25,14 @@ def start_game():
 
     #add the images uploaded by the user
     i=0
-    while len(final_img_list) < nb_images and i < len(list_upload):
-        final_img_list.append(list_upload[i])
+    while len(asked_img_list) < nb_images and i < len(list_upload):
+        asked_img_list.append(list_upload[i])
         i += 1
     
     #add the images from the initial server
     i = 0
-    while len(final_img_list) < nb_images:
-        final_img_list.append(list_image[i])
+    while len(asked_img_list) < nb_images:
+        asked_img_list.append(list_image[i])
         i += 1
 
     #TODO: change from the local server to the azure stockage service
@@ -53,7 +45,7 @@ def start_game():
     # create a list of path from the list of images from the initial server
     list_path_init = []  
     for i in range(nb_images):
-        list_path_init.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
+        list_path_init.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(asked_img_list[i])+".jpg")
     
     #predict labels on selected images
     data = {'list_path_upload':list_path_upload,
@@ -65,7 +57,7 @@ def start_game():
     predicted_labels = response.get('predicted_labels')
 
     return jsonify(
-        final_img_list=final_img_list,
+        asked_img_list=asked_img_list,
         predicted_labels=predicted_labels,
         img_choice=img_choice
     )
@@ -73,8 +65,7 @@ def start_game():
 #MS du mode de jeu 2
 #get la feature/question que le joueur a choisi et répondre
 @app.route('/ariane/feature/', methods=['POST'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
-def get_feature(feature):
+def get_feature():
 
     data = request.json
     feature = data['feature']
@@ -87,7 +78,7 @@ def get_feature(feature):
 
     if nb_questions < max_questions :
         #get AI answer from predicted labels
-        nb_feature = list_features.index(nb_feature)
+        nb_feature = list_features.index(feature)
         answer = predicted_labels[img_choice][nb_feature]
 
         result = list_answers[list_features[nb_feature]][int(answer)]

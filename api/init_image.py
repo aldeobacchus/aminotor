@@ -24,9 +24,9 @@ def init_game():
 
     nb_images_bdd = 40000
 
-    if gamemod == 1:
+    if gamemod == 1: #aminoguess
         grid_size = 1024
-    elif gamemod == 2:
+    elif gamemod == 2: #ariane and theseus
         grid_size = 28
 
 
