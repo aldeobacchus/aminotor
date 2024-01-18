@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 #première question du jeu
-@app.route('/aminoguess/start', methods=['POST'])
+@app.route('/aminoguess/start/', methods=['POST'])
 def start_game():
     data = request.json
     final_img_list = []
@@ -34,6 +34,7 @@ def start_game():
 
     #TODO: change from the local server to the azure stockage service
     folder_name = "temp"
+    server_path = "https://etud.insa-toulouse.fr/~alami-mejjat/0"
 
     list_path_upload = []
     for img in list_upload:
@@ -42,13 +43,13 @@ def start_game():
     # create a list of path from the list of images from the initial server
     list_path_init = []  
     for i in range(nb_image):
-        list_path_init.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(final_img_list[i])+".jpg")
+        list_path_init.append(server_path+str(final_img_list[i])+".jpg")
     
     #predict labels on selected images
     data = {'list_path_upload':list_path_upload,
             'list_path_init':list_path_init
             }
-    response = requests.post('http://localhost:5003/ml/predict', json=data).json()
+    response = requests.post('http://localhost:5003/ml/predict/', json=data).json()
 
     predicted_labels = response.get('predicted_labels')
     
@@ -64,7 +65,7 @@ def start_game():
 
 
 #update pour chaque question que l'on pose
-@app.route('/aminoguess/answer', methods=['POST'])
+@app.route('/aminoguess/answer/', methods=['POST'])
 def get_response_and_next_question():
     data = request.json
 
@@ -78,10 +79,10 @@ def get_response_and_next_question():
     data['nb_images'] = len(final_img_list)
 
     response = {
+        'type': None,
         'character': None,
         'fail': False,
         'feature': None,
-        'question': None,
         'list_features': None,
         'proba_list': None
     }
@@ -101,19 +102,21 @@ def get_response_and_next_question():
         guess_index = proba_list.index(max(proba_list))
         guess = final_img_list[guess_index]
         response['character']=guess
+        response['type']="character"
     # Si les probas sont trop faibles, on peut déclarer forfait
     elif max(proba_list) < 0.5 :
         response['fail']=True
+        response['type']="fail"
     # Sinon on continue à jouer en posant une nouvelle question
     else :
         predicted_labels = data['predicted_labels']
         feature = get_questions(list_features, predicted_labels)
-
         response['feature'] = feature
+        response['type']="question"
 
     return response
     
-@app.route('/aminoguess/proposition', methods=['POST'])
+@app.route('/aminoguess/proposition/', methods=['POST'])
 def continue_next_question():
     data = request.json
 
@@ -136,6 +139,53 @@ def continue_next_question():
         proba_list=proba_list
 
     )
+
+@app.route('/aminoguess/get_question/', methods=['POST'])
+def process_questions():
+    data = request.json if request.json else request.get_json()
+
+    if not data:
+        return "Erreur : Aucune donnée reçue dans la requête.", 400
+
+    return get_questions(data)
+
+def get_questions(data):
+
+    labels = data['labels']
+    predicted_labels = data['predicted_labels']
+
+    nb_rows = len(predicted_labels) #number of elements in the grid
+    print("nb rows", nb_rows)
+    nb_col = len(predicted_labels[0]) #number of features
+    print("nb col", nb_col)
+
+    #init rate
+    rate = []
+    for i in range(0, nb_col):
+        if labels[i]== None:
+            rate.append(None)
+        else :
+            rate.append(0)
+
+    #compute positive rate for each feature
+    for i in range(0,nb_col):
+        if rate[i]!= None:
+            count = 0
+            for j in range(0, nb_rows):
+                if predicted_labels[j][i] is not None :
+                    count = count + predicted_labels[j][i]
+            rate[i]=(count/nb_rows)
+
+    # There is None inside
+    closest_rate = min([v for v in rate if v is not None], key=lambda x: abs(x - 0.5))
+    closest_index = rate.index(closest_rate)
+    chosen_label=labels[closest_index]
+
+    print("chosen label", chosen_label)
+    print("Closest rate to 0.5:", closest_rate)
+    print("corresponding label:", chosen_label)
+    
+    return chosen_label
 
 
 # Update the probabilities based on the user's answer

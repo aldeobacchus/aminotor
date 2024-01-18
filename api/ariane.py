@@ -11,10 +11,10 @@ CORS(app)
 #MS du mode de jeu 2 : start
 #PENSEZ à RECUP la nouvelle version de FEATURES.PY
 #début du jeu (choix de l'image et initialisation de la liste de questions)
-@app.route('/ariane/start', methods=['POST'])
+@app.route('/ariane/start/', methods=['POST'])
 def start_game():
     data = request.json
-    asked_img_list = []
+    final_img_list = []
     
     list_image = data['list_image']
     nb_images = len(list_image)
@@ -25,18 +25,19 @@ def start_game():
 
     #add the images uploaded by the user
     i=0
-    while len(asked_img_list) < nb_images and i < len(list_upload):
-        asked_img_list.append(list_upload[i])
+    while len(final_img_list) < nb_images and i < len(list_upload):
+        final_img_list.append(list_upload[i])
         i += 1
     
     #add the images from the initial server
     i = 0
-    while len(asked_img_list) < nb_images:
-        asked_img_list.append(list_image[i])
+    while len(final_img_list) < nb_images:
+        final_img_list.append(list_image[i])
         i += 1
 
     #TODO: change from the local server to the azure stockage service
     folder_name = "temp"
+    server_path = "https://etud.insa-toulouse.fr/~alami-mejjat/0"
 
     list_path_upload = []
     for img in list_upload:
@@ -45,19 +46,19 @@ def start_game():
     # create a list of path from the list of images from the initial server
     list_path_init = []  
     for i in range(nb_images):
-        list_path_init.append("https://etud.insa-toulouse.fr/~alami-mejjat/0"+str(asked_img_list[i])+".jpg")
+        list_path_init.append(server_path+str(final_img_list[i])+".jpg")
     
     #predict labels on selected images
     data = {'list_path_upload':list_path_upload,
             'list_path_init':list_path_init,
             'nb_images': nb_images
             }
-    response = requests.post('http://localhost:5003/ml/predict', json=data).json()
+    response = requests.post('http://localhost:5003/ml/predict/', json=data).json()
 
     predicted_labels = response.get('predicted_labels')
 
     return jsonify(
-        asked_img_list=asked_img_list,
+        final_img_list=final_img_list,
         predicted_labels=predicted_labels,
         img_choice=img_choice
     )
@@ -69,14 +70,18 @@ def get_feature():
 
     data = request.json
     feature = data['feature']
-    nb_questions = data['nb_questions']
-    max_questions = data['max_questions']
     img_choice = data['img_choice']
     list_features = data['list_features']
     predicted_labels = data['predicted_labels']
     list_answers = data['list_answers']
 
-    if nb_questions < max_questions :
+    if all(f is None for f in list_features):
+        return jsonify(
+            list_features = list_features, 
+            answer="Il n'y a plus de questions possibles.."
+        )
+
+    else:
         #get AI answer from predicted labels
         nb_feature = list_features.index(feature)
         answer = predicted_labels[img_choice][nb_feature]

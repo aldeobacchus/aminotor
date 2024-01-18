@@ -61,7 +61,7 @@ def load_images (list_images):
 
     return np.array(images)
 
-@app.route('/ml/predict', methods=['POST'])
+@app.route('/ml/predict/', methods=['POST'])
 def load_process_predict(_model_path=model_path):
     data = request.json
 

@@ -21,7 +21,7 @@ CORS(app)
 
 ############################## INITIALISATION ##############################
 
-#initialisation du jeu : sélection de 1024 images
+#initialisation du jeu : sélection des images
 @app.route('/api/init/<int:gamemod>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000" )
 def init_game(gamemod):
@@ -47,7 +47,7 @@ def init_game(gamemod):
 ############################## MODE DE JEU 1 - AMINOGUESS ##############################
 
 #première question du jeu
-@app.route('/api/start/aminoguess/<int:nb_images>', methods=['GET'])
+@app.route('/api/aminoguess/start/<int:nb_images>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game_amino(nb_images):
 
@@ -60,7 +60,7 @@ def start_game_amino(nb_images):
         'list_upload': session['list_upload']
     }
     
-    response = requests.post('http://localhost:5002/aminoguess/start', json=data).json()
+    response = requests.post('http://localhost:5002/aminoguess/start/', json=data).json()
 
     #initialisation et update the session variables
     session['max_questions'] = 10
@@ -77,7 +77,7 @@ def start_game_amino(nb_images):
     )
 
 #update pour chaque question que l'on pose
-@app.route('/api/answer/<int:answer>', methods=['GET'])
+@app.route('/api/aminoguess/answer/<int:answer>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_response_and_next_question(answer):
 
@@ -91,23 +91,27 @@ def get_response_and_next_question(answer):
         'max_questions': session['max_questions'],
         'predicted_labels': session['predicted_labels']
     }
-    response = requests.post('http://localhost:5002/aminoguess/answer', json=data).json()
+    response = requests.post('http://localhost:5002/aminoguess/answer/', json=data).json()
     feature = response.get('feature')
-    question = new_questions[feature]
+    
 
     if response.get('proba_list'):
         session['proba_list'] = response.get('proba_list')
 
     session['list_features'] = response.get("list_features")
 
-    if question: # L'IA pose une nouvelle fonction
+    if response['type'] == "question": # L'IA pose une nouvelle question
         session['last_feature'] = feature
+
+        question = new_questions[feature]
+        response['question'] = question
         session['question'] = question
+
         session['nb_questions'] = session['nb_questions'] + 1
 
     return response
     
-@app.route('/api/proposition/', methods=['GET'])
+@app.route('/api/aminoguess/proposition/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def continue_next_question():
 
@@ -118,7 +122,7 @@ def continue_next_question():
         'predicted_labels': session['predicted_labels']
     }
 
-    response = requests.post('http://localhost:5002/aminoguess/proposition', json=data).json()
+    response = requests.post('http://localhost:5002/aminoguess/proposition/', json=data).json()
 
     # update the session variables
     session['nb_questions'] = 1
@@ -133,7 +137,7 @@ def continue_next_question():
 
 ####################### MODE DE JEU 2 - ARIANE #############################
 
-@app.route('/api/start/ariane/', methods=['GET'])
+@app.route('/api/ariane/start/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game_ariane():
 
@@ -145,12 +149,10 @@ def start_game_ariane():
         'list_upload': session['list_upload']
     }
     
-    response = requests.post('http://localhost:5004/ariane/start', json=data).json()
+    response = requests.post('http://localhost:5004/ariane/start/', json=data).json()
 
     #initialisation et update the session variables
-    session['max_questions'] = 10
-    session['nb_questions'] = 1
-    session['asked_img_list'] = response.get("asked_img_list")
+    session['final_img_list'] = response.get("final_img_list")
     session['max_guess'] = 3
     session['nb_guess'] = 0
     session['predicted_labels'] = response.get("predicted_labels")
@@ -161,7 +163,7 @@ def start_game_ariane():
         features=session['list_features'] 
     )
 
-@app.route('/api/feature/',  methods=['POST'])
+@app.route('/api/ariane/feature/',  methods=['POST'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_feature():
     #get post 
@@ -179,17 +181,17 @@ def get_feature():
         'list_answers': session['list_answers'] 
     }
 
-    response = requests.post('http://localhost:5004/ariane/feature', json=data).json()
+    response = requests.post('http://localhost:5004/ariane/feature/', json=data).json()
 
     #update the session variables
     session['list_features_asked'] = response.get('list_features')
 
     return jsonify(
-        list_features=session['list_features'],
+        list_features=session['list_features_asked'],
         answer=response.get('answer')
     )
 
-@app.route('/api/guess/<int:guess>', methods=['GET'])
+@app.route('/api/ariane/guess/<int:guess>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def answer_proposition(guess):
 
@@ -200,7 +202,7 @@ def answer_proposition(guess):
         'max_guess': session['max_guess']
     }
 
-    response = requests.post('http://localhost:5004/ariane/guess', json=data).json()
+    response = requests.post('http://localhost:5004/ariane/guess/', json=data).json()
 
     #update the session variables
     session['nb_guess'] = response.get('nb_guess')
@@ -218,7 +220,6 @@ def start_game_theseus():
     
         session['list_features'] = new_features.copy()
         session['list_features_asked'] = new_features.copy()
-        nb_images = session['nb_images']
         
         data={
             'list_features': session['list_features'],
@@ -226,30 +227,178 @@ def start_game_theseus():
             'list_upload': session['list_upload']
         }
         
-        response = requests.post('http://localhost:5005/theseus/start', json=data).json()
-    
-        session['last_feature'] = response.get("feature")
-        session['question'] = response.get("question")
-
-        session['predicted_labels'] = response.get("predicted_labels")
-        session['img_choice'] = response.get("img_choice")
-
-        session['proba_list'] = [1]*nb_images
-        session['final_img_list'] = response.get("img_list")
-        session['asked_img_list'] = response.get("img_list")
+        response = requests.post('http://localhost:5004/ariane/start/', json=data).json()
 
         #initialisation et update the session variables
-        session['max_questions'] = 10
-        session['nb_questions'] = 1
-        session['nb_questions_asked'] = 0
+        session['predicted_labels'] = response.get("predicted_labels")
+        session['final_img_list'] = response.get("final_img_list")
+
+        session['img_choice'] = response.get("img_choice")
 
         session['max_guess'] = 3
         session['nb_guess'] = 0
+        
+        session['proba_list'] = [1]*len(session['final_img_list'])
+        session['type'] = None
+
+        session['max_questions'] = 10
+        session['nb_questions'] = 0
 
         return jsonify(
-            features=session['list_features_asked'],
-            question=new_questions[response.get("feature")]
+            features=session['list_features_asked']
         )
+
+# WORKS FOR THE FIRST QUESTION
+@app.route('/api/theseus/feature/',  methods=['POST'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def get_feature_and_ask_question():
+    data = request.get_json()
+    session['last_feature'] = data.get('feature')
+    session['list_answers'] = answers.copy()
+
+    data_ariane = {
+        'feature': session['last_feature'],
+        'img_choice': session['img_choice'],
+        'list_features': session['list_features_asked'],
+        'predicted_labels': session['predicted_labels'],
+        'max_questions': session['max_questions'],
+        'nb_questions': session['nb_questions'],
+        'list_answers': session['list_answers'] 
+    }
+
+    response_ariane = requests.post('http://localhost:5004/ariane/feature/', json=data_ariane).json()
+
+    session['list_features_asked'] = response_ariane.get('list_features')
+    answer = response_ariane.get('answer')
+
+    response = ask_question(answer)
+
+    # GIVE THE ANSWER TO THE USER AND ASK HIM A QUESTION
+    return response
+
+@app.route('/api/theseus/guess/<int:guess>', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def answer_proposition_and_give_labels(guess):
+
+    data_ariane = {
+        'guess': guess,
+        'img_choice': session['img_choice'],
+        'nb_guess': session['nb_guess'],
+        'max_guess': session['max_guess']
+    }
+
+    response_ariane = requests.post('http://localhost:5004/ariane/guess/', json=data_ariane).json()
+
+    #update the session variables
+    session['nb_guess'] = response_ariane.get('nb_guess')
+
+    result = response_ariane.get('result')
+
+    if result == 1: # the user didn't found, we can continue the game
+        response = ask_question(result)
+    else : # the user found or loose, we can stop the game
+        response = jsonify(answer=result)
+
+    return response
+    
+def ask_question(answer):
+
+    response = {
+        'answer': answer,
+        'character': None,
+        'fail': False,
+        'question': None,
+    }
+
+    data_amino= {
+        'labels': session['list_features'],
+        'predicted_labels': session['predicted_labels']
+    }
+
+    if session['type'] == None : # 1st question
+        response_amino = requests.post('http://localhost:5002/aminoguess/get_question/', json=data_amino).json()
+        session['last_feature'] = response_amino.get('feature')
+        response['response'] = new_questions[response_amino.get('feature')]
+        session['nb_questions'] = session['nb_questions'] + 1
+    elif session['type'] == "question":
+        response['question'] = new_questions[session['question']]
+        session['last_feature'] = session['question']
+        session['nb_questions'] = session['nb_questions'] + 1
+    elif session['type'] == "character":
+        response['character'] = session['character']
+    elif session['type'] == "fail":
+        response['fail'] = True
+
+    return response
+
+
+@app.route('/api/theseus/answer/<int:answer>', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def get_response_and_give_labels(answer):
+
+    data_amino = {
+        'answer': answer,
+        'list_features': session['list_features'],
+        'last_feature': session['last_feature'],
+        'proba_list': session['proba_list'],
+        'final_img_list': session['final_img_list'],
+        'nb_questions': session['nb_questions'],
+        'max_questions': session['max_questions'],
+        'predicted_labels': session['predicted_labels']
+    }
+    response = requests.post('http://localhost:5002/aminoguess/answer/', json=data_amino).json()
+    feature = response.get('feature')
+
+    if response.get('proba_list'):
+        session['proba_list'] = response.get('proba_list')
+
+    session['list_features'] = response.get("list_features")
+    
+    response_type = response.get('type')
+    session['type'] = response_type
+
+    if (response_type == "question"): # L'IA posera une nouvelle question
+        session['question'] = feature # on garde la feature pour sauvegarder last_feature
+    
+    elif (response_type == "character"): # L'IA proposera un personnage
+        session['character'] = response.get('character')
+
+    # RETURN THE LABELS AVAILABLE FOR THE USER
+    return jsonify(
+        list_features=session['list_features_asked']
+    )
+
+@app.route('/api/theseus/proposition/', methods=['GET'])
+@cross_origin(supports_credentials=True, origins="http://localhost:3000")
+def wrong_proposition_and_give_labels():
+    
+        data_amino = {
+            'list_features': session['list_features'],
+            'proba_list': session['proba_list'],
+            'final_img_list': session['final_img_list'],
+            'predicted_labels': session['predicted_labels']
+        }
+    
+        response_amino = requests.post('http://localhost:5002/aminoguess/proposition/', json=data_amino).json()
+    
+        # update the session variables
+        session['nb_questions'] = 0
+        session['final_img_list'] = response_amino.get('final_img_list')
+        session['proba_list'] = response_amino.get('proba_list')
+        # the newt interaction will be a question
+        session['type'] = "question"
+        session['question'] = response_amino.get('feature')
+    
+        # RETURN THE LABELS AVAILABLE FOR THE USER
+        return jsonify(
+            list_features=session['list_features_asked']
+        )
+
+
+
+
+
+
 
 
 
@@ -279,7 +428,7 @@ def upload_img():
         'image': file
     }
 
-    response = requests.post('http://localhost:5001/image/upload', files=data).json()
+    response = requests.post('http://localhost:5001/image/upload/', files=data).json()
 
     if session.get('list_upload') is None:
         session['list_upload'] = []
@@ -311,7 +460,7 @@ def flush_upload():
 
     data = {'list_upload': list_upload}
 
-    response = requests.post('http://localhost:5001/image/delete', json=data).json()
+    response = requests.post('http://localhost:5001/image/delete/', json=data).json()
 
     session['list_upload'] = []
 
