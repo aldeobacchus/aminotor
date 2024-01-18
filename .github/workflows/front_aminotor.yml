@@ -58,5 +58,5 @@ jobs:
         with:
           app-name: 'aminotor'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2A17A684F12E4FF9B97E4A433234294E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5A0E08FB0454EF1921706C8A999027E }}
           package: .
