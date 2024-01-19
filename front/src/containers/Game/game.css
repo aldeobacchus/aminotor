@@ -1,5 +1,6 @@
-.game_characterSelection{
-    margin: auto 5vw;
+.game{
+    height:100%;
     display: flex;
     flex-direction: column;
+    gap: 5vh;
 }

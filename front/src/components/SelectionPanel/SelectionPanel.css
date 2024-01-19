@@ -1,10 +1,10 @@
 .selection-panel {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  display: flex;
   gap: 10px;
-  max-height: 680px;
+  max-height: 70vh;
   overflow: auto;
+  flex-wrap: wrap;
+  padding: 10px;
 }
 
 .selection-panel > div {
@@ -13,4 +13,47 @@
   padding: 20px 0;
   font-size: 30px;
 }
+
+.square-img{
+  width: 11.5%;
+  border-radius: 10px;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
+}
+
+.square-img:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
+  border-radius: 10px;
+}
+@media screen and (max-width: 768px){
+  .square-img{
+    width: 22.5%;
+  }
   
+}
+
+/*SCROLL BAR*/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--color-purple1);
+  border-radius: 10px;
+  }
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-orange1);
+  border-radius: 10px
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-orange2);
+}

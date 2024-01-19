@@ -1,19 +1,13 @@
-import React, { useState } from 'react'
-import SizePanelBar from '../SizePanelBar/SizePanelBar';
-import SelectionPanel from '../SelectionPanel/SelectionPanel';
-import './characterSelection.css';
+import React, {useState} from 'react'
 import axios from 'axios';
+import SelectionPanel from '../SelectionPanel/SelectionPanel';
+import './UserGrid.css';
 
-// Set withCredentials to true globally
 axios.defaults.withCredentials = true;
 
-function CharacterSelection(args) {
-    const [sliderValue, setSliderValue] = useState(2);
-    const [selectedImage, setSelectedImage] = useState(null);
-  
-    const handleSliderChange = (value) => {
-      setSliderValue(value);
-    };
+function UserGrid(args) {
+  const size = 28;
+  const [selectedImage, setSelectedImage] = useState(null);
 
     React.useEffect(() => {
       fetchData();
@@ -22,7 +16,7 @@ function CharacterSelection(args) {
     const fetchData = async () => {
       console.log("before fetch")
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/init/1');
+        const response = await axios.get('http://127.0.0.1:5000/api/init/2');
         const uploadValue = response.data.list_upload;
         let imageUrls = [];
         console.log("before upload value")
@@ -61,14 +55,16 @@ function CharacterSelection(args) {
         console.error('Error fetching data:', error);
       }
     };
-  
-  return (
-    <div className='game_characterSelection'>
-        <SizePanelBar onSliderChange={handleSliderChange} />
-        <SelectionPanel size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
-        {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
-    </div>
-  )
+
+    return (
+        <div className='game_userGrid'>
+            <SelectionPanel size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
+            <button onClick={() => {fetchData()}}>Nouvelle grille</button>
+            {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+        </div>
+    )
 }
 
-export default CharacterSelection
+export default UserGrid
+            
+
