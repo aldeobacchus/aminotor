@@ -12,7 +12,7 @@ CORS(app)
 
 #initialisation du jeu : sélection de 1024 images
 
-@app.route('/image/init', methods=['POST'])
+@app.route('/image/init/', methods=['POST'])
 
 def init_game():
     data = request.json
@@ -24,9 +24,9 @@ def init_game():
 
     nb_images_bdd = 40000
 
-    if gamemod == 1:
+    if gamemod == 1: #aminoguess
         grid_size = 1024
-    elif gamemod == 2:
+    elif gamemod == 2: #ariane and theseus
         grid_size = 28
 
 
@@ -39,7 +39,7 @@ def init_game():
     # envoie liste d'id images
     return jsonify(list_image=list_image)
 
-@app.route('/image/upload', methods=['POST'])
+@app.route('/image/upload/', methods=['POST'])
 def upload_img():
     random_name = random.randint(1, 50000)
     file = request.files['image']
@@ -57,7 +57,7 @@ def upload_img():
         random_name=random_name
     )
 
-@app.route('/image/delete', methods=['POST'])
+@app.route('/image/delete/', methods=['POST'])
 def delete_img():
     
     data = request.json
