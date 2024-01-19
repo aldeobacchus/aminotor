@@ -1,7 +1,6 @@
 
 import os
 from flask import Flask, jsonify, request, session
-from questions import get_questions
 from flask_cors import CORS
 import requests
 
@@ -53,9 +52,13 @@ def start_game():
 
     predicted_labels = response.get('predicted_labels')
     
+    data_labels = {
+        'labels': list_features,
+        'predicted_labels': predicted_labels
+    }
 
     #donner la première question
-    feature = get_questions(list_features, predicted_labels)
+    feature = get_questions(data_labels)
     
     return jsonify(
         final_img_list=final_img_list,
@@ -110,7 +113,8 @@ def get_response_and_next_question():
     # Sinon on continue à jouer en posant une nouvelle question
     else :
         predicted_labels = data['predicted_labels']
-        feature = get_questions(list_features, predicted_labels)
+        data_labels = {"labels": list_features,"predicted_labels": predicted_labels}
+        feature = get_questions(data_labels)
         response['feature'] = feature
         response['type']="question"
 
@@ -131,7 +135,8 @@ def continue_next_question():
     final_img_list[final_img_list.index(guess)] = None
     proba_list[guess_index] = 0
 
-    feature = get_questions(list_features, predicted_labels)
+    data_labels = {"labels": list_features,"predicted_labels": predicted_labels}
+    feature = get_questions(data_labels)
 
     return jsonify(
         feature=feature,
@@ -143,11 +148,12 @@ def continue_next_question():
 @app.route('/aminoguess/get_question/', methods=['POST'])
 def process_questions():
     data = request.json if request.json else request.get_json()
-
+    
     if not data:
         return "Erreur : Aucune donnée reçue dans la requête.", 400
-
-    return get_questions(data)
+    response = get_questions(data)
+    print (response)
+    return jsonify(feature=response)
 
 def get_questions(data):
 

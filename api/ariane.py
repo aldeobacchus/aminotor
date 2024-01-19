@@ -20,8 +20,6 @@ def start_game():
     nb_images = len(list_image)
     list_upload = data['list_upload']
 
-    img_choice = randrange(0, nb_images)
-    print(img_choice)
 
     #add the images uploaded by the user
     i=0
@@ -34,6 +32,10 @@ def start_game():
     while len(final_img_list) < nb_images:
         final_img_list.append(list_image[i])
         i += 1
+
+    random = randrange(0, nb_images-1)
+    img_choice = final_img_list[random]
+    print(img_choice)
 
     #TODO: change from the local server to the azure stockage service
     folder_name = "temp"

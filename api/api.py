@@ -13,8 +13,8 @@ app = Flask(__name__)
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to none in prod
+app.config['SESSION_COOKIE_SECURE'] = False # change to true in prod
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 Session(app)
 CORS(app)
@@ -94,6 +94,11 @@ def get_response_and_next_question(answer):
     response = requests.post('http://localhost:5002/aminoguess/answer/', json=data).json()
     feature = response.get('feature')
     
+    reel_response = {
+        'character': response.get('character'),
+        'fail': response.get('fail'),
+        'question': None,
+    }
 
     if response.get('proba_list'):
         session['proba_list'] = response.get('proba_list')
@@ -104,12 +109,12 @@ def get_response_and_next_question(answer):
         session['last_feature'] = feature
 
         question = new_questions[feature]
-        response['question'] = question
+        reel_response['question'] = question
         session['question'] = question
 
         session['nb_questions'] = session['nb_questions'] + 1
 
-    return response
+    return reel_response
     
 @app.route('/api/aminoguess/proposition/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
@@ -160,7 +165,7 @@ def start_game_ariane():
     print(session['img_choice'])
 
     return jsonify(
-        features=session['list_features'] 
+        features=session['list_features_asked'] 
     )
 
 @app.route('/api/ariane/feature/',  methods=['POST'])
@@ -176,8 +181,6 @@ def get_feature():
         'img_choice': session['img_choice'],
         'list_features': session['list_features_asked'],
         'predicted_labels': session['predicted_labels'],
-        'max_questions': session['max_questions'],
-        'nb_questions': session['nb_questions'],
         'list_answers': session['list_answers'] 
     }
 
@@ -214,7 +217,7 @@ def answer_proposition(guess):
 ############################## MODE DE JEU 3 - THESEUS ##############################
 
 # It's the mix between the two previous games, the user have to guess and the AI have to guess
-@app.route('/api/start/theseus/', methods=['GET'])
+@app.route('/api/theseus/start/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game_theseus():
     
@@ -248,7 +251,7 @@ def start_game_theseus():
             features=session['list_features_asked']
         )
 
-# WORKS FOR THE FIRST QUESTION
+# the user ask for a feature
 @app.route('/api/theseus/feature/',  methods=['POST'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_feature_and_ask_question():
@@ -276,9 +279,10 @@ def get_feature_and_ask_question():
     # GIVE THE ANSWER TO THE USER AND ASK HIM A QUESTION
     return response
 
+# the user make a guess
 @app.route('/api/theseus/guess/<int:guess>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
-def answer_proposition_and_give_labels(guess):
+def answer_proposition_and_ask_question(guess):
 
     data_ariane = {
         'guess': guess,
@@ -301,6 +305,7 @@ def answer_proposition_and_give_labels(guess):
 
     return response
     
+# ASK QUESTION TO THE USER
 def ask_question(answer):
 
     response = {
@@ -318,7 +323,7 @@ def ask_question(answer):
     if session['type'] == None : # 1st question
         response_amino = requests.post('http://localhost:5002/aminoguess/get_question/', json=data_amino).json()
         session['last_feature'] = response_amino.get('feature')
-        response['response'] = new_questions[response_amino.get('feature')]
+        response['question'] = new_questions[response_amino.get('feature')]
         session['nb_questions'] = session['nb_questions'] + 1
     elif session['type'] == "question":
         response['question'] = new_questions[session['question']]
@@ -331,7 +336,7 @@ def ask_question(answer):
 
     return response
 
-
+# the user answer to the question
 @app.route('/api/theseus/answer/<int:answer>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_response_and_give_labels(answer):
@@ -368,6 +373,7 @@ def get_response_and_give_labels(answer):
         list_features=session['list_features_asked']
     )
 
+# the user answer the AI guess
 @app.route('/api/theseus/proposition/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def wrong_proposition_and_give_labels():
@@ -393,21 +399,6 @@ def wrong_proposition_and_give_labels():
         return jsonify(
             list_features=session['list_features_asked']
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
