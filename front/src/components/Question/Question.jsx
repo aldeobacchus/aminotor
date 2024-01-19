@@ -8,8 +8,7 @@ axios.defaults.withCredentials = true;
 
 function Question(args) {
   const [question, setQuestion] = useState(args.question);
-
-  const [nombreAleatoire, setNombreAleatoire] = useState(null);
+  const [nombreAleatoire, setNombreAleatoire] = useState(1);
 
 
   useEffect(() => {
@@ -17,25 +16,19 @@ function Question(args) {
       if (question === '') {
         console.log(question);
         const grid_size = 2**(args.sliderValue*2);
-        const response = await axios.get(`http://127.0.0.1:5000/api/start/${grid_size}`, { withCredentials: true })
+        const response = await axios.get(`http://127.0.0.1:5000/api/aminoguess/start/${grid_size}`, { withCredentials: true })
         setQuestion(response.data.question);
         console.log(question);
         return question;
       }
     }
 
-    // Générer un nombre aléatoire entre 1 et 2
-    const nombreDecimal = 1 + Math.random();
-    const nombreFinal = nombreDecimal < 0.5 ? 1 : 2;
-    // Mettre à jour l'état avec le nombre aléatoire généré
-    setNombreAleatoire(nombreFinal);
-    
     //fetch data
     fetchData();
   }, []); 
 
     function answer(arg) {
-      axios.get('http://127.0.0.1:5000/api/answer/'+arg)
+      axios.get('http://127.0.0.1:5000/api/aminoguess/answer/'+arg)
         .then(response => {
           if (response.data.character) {
             const guess = response.data.character;
@@ -50,6 +43,12 @@ function Question(args) {
         .catch(error => {
           console.error('Erreur lors de la récupération de la question', error);
         });
+
+        // Générer un nombre aléatoire entre 1 et 2
+        const nombreDecimal = 1 + Math.random();
+        const nombreFinal = nombreDecimal < 0.5 ? 1 : 2;
+        // Mettre à jour l'état avec le nombre aléatoire généré
+        setNombreAleatoire(nombreFinal);
     }
 
   if (question !== '') {
@@ -57,9 +56,8 @@ function Question(args) {
           <div className='question'>
               <h4>Question : {question}</h4>
               <div className="answer-container">
-              {/*get local image in public/img*/}
-              { nombreAleatoire === 1 ? <img className="minotor" src='img/minotors/LAMP.png' alt="image1" /> : <img className="minotor" src='img/minotors/LAMP.png' alt="image2"/>
-              }
+                {/* CHANGER DE PLACE VERS AMINO */}
+                {nombreAleatoire === 1 ? <img className="minotor" src='img/minotors/NORMAL.png' alt="image1" /> : <img className="minotor" src='img/minotors/LAMP.png' alt="image2"/>}
                 <div className="answer-container2">
                   <div className='answer'>
                     <button onClick={() => answer(1)}>Oui</button>
