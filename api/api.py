@@ -419,7 +419,7 @@ def upload_img():
         'image': file
     }
 
-    response = requests.post('http://localhost:5001/image/upload/', files=data).json()
+    response = requests.post('http://localhost:5001/image/upload', files=data).json()
 
     if session.get('list_upload') is None:
         session['list_upload'] = []
@@ -431,7 +431,7 @@ def upload_img():
 
     return jsonify(
         success=True
-    )
+    )   
 
 @app.route('/api/flush_session/', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
@@ -451,7 +451,7 @@ def flush_upload():
 
     data = {'list_upload': list_upload}
 
-    response = requests.post('http://localhost:5001/image/delete/', json=data).json()
+    response = requests.post('http://localhost:5001/image/delete', json=data).json()
 
     session['list_upload'] = []
 
@@ -468,6 +468,7 @@ def get_img(img):
 
     
     return Response(response.content, content_type='image/jpeg')
+
 
 ############################## MAIN ##############################
 
