@@ -27,7 +27,7 @@ function Guess(args) {
   return (
     <div className="guess">
       <h2>Penses-tu à cette personne ?</h2>
-      <img className="character" src={`https://etud.insa-toulouse.fr/~alami-mejjat/${args.guess}.jpg`} alt="Selected" />
+      <img className="character" src={args.guess} alt="Selected" />
       <div className="answer-sol">
         <button onClick={() => answerYes()}>Oui</button>
         <button onClick={() => answerNo()}>Non</button>

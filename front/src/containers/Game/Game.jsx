@@ -9,22 +9,31 @@ function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);
   const [character, setCharacter] = useState(null);
   const [sliderValue, setSliderValue] = useState(null);
-  const [grid, setGrid] = useState(null);
+  const [characters, setCharacters] = useState([]);
+  const [charactersSources, setCharactersSources] = useState([]);
 
 
   return (
     <div className='game'>
       
       {selectionMode && args.gm === "Amino'Guess" && (
-        <CharacterSelection setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setSliderValue={setSliderValue}/>
+        <CharacterSelection setSelectionMode={setSelectionMode} 
+          setSelectedImage={setCharacter} setSliderValue={setSliderValue} 
+          setSquares={setCharacters} setSquaresSources={setCharactersSources}
+          squares={characters} squaresSources={charactersSources}
+          />
       )}
 
       {!selectionMode && args.gm === "Amino'Guess" && (
-        <Amino character={character} sliderValue={sliderValue} setMode={args.setMode} setSelectionMode={setSelectionMode}/>
+        <Amino character={character} sliderValue={sliderValue} 
+          setMode={args.setMode} setSelectionMode={setSelectionMode} 
+          characters={characters} charactersSources={charactersSources}/>
       )}
 
       {selectionMode && args.gm === "Theseus Battle" && (
-        <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setGrid={setGrid}/>
+        <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
+          setSquares={setCharacters} setSquaresSources={setCharactersSources}
+          squares={characters} squaresSources={charactersSources}/>
       )}
 
       {!selectionMode && args.gm === "Theseus Battle" && (

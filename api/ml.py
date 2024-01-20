@@ -1,11 +1,15 @@
 import tensorflow as tf
 from keras.preprocessing.image import img_to_array
 import numpy as np
-import os
-import requests
 from PIL import Image
 from io import BytesIO
+from flask import Flask, jsonify, request, session
+from flask_cors import CORS
+import os
+import requests
 
+app = Flask(__name__)
+CORS(app)
 
 # Parameters
 model_path = os.path.join(os.getcwd(), "model_ki_s")
@@ -14,21 +18,18 @@ nb_images = 10
 image_width, image_height = 128, 128
 
 
-def load_process_images(_image_dir_path, _nb_images):
+def load_process_images(list_image_path):
     # Load and preprocess the images
     images = []
-    filenames = os.listdir(_image_dir_path)[:_nb_images]
-    for filename in filenames:
-        if filename.endswith(".jpg"):
-            # Load and resize the image
-            img_path = os.path.join(_image_dir_path, filename)
-            img = tf.keras.utils.load_img(img_path, target_size=(image_width, image_height))
-            img_array = img_to_array(img)
-            # Preprocess the image (you may need to adapt this based on your specific requirements)
-            img_array = img_array / 255.0  # Normalize pixel values to [0, 1]
+    for image_path in list_image_path:
+        # Load and resize the image
+        img = tf.keras.utils.load_img(image_path, target_size=(image_width, image_height))
+        img_array = img_to_array(img)
+        # Preprocess the image (you may need to adapt this based on your specific requirements)
+        img_array = img_array / 255.0  # Normalize pixel values to [0, 1]
 
-            # Append the image and label to the lists
-            images.append(img_array)
+        # Append the image and label to the lists
+        images.append(img_array)
 
     return np.array(images)
 
@@ -60,28 +61,35 @@ def load_images (list_images):
 
     return np.array(images)
 
+@app.route('/ml/predict/', methods=['POST'])
+def load_process_predict(_model_path=model_path):
+    data = request.json
 
-def load_process_predict(list_path, _model_path=model_path):
     # Load the model
     model = tf.keras.models.load_model(_model_path)
+
+    predicted_labels = []
+
+    list_path_upload = data['list_path_upload']
+
+    # TODO : change once we know how to get from the database
+    images = load_process_images(list_path_upload)
+
+    list_path_init = data['list_path_init']
+    
 
     # Load and preprocess the images
-    images = load_images(list_path)
+    if len(list_path_init) > 0 :
+        if images.size == 0:
+            images = load_images(list_path_init)
+        else:
+            images = np.concatenate((images, load_images(list_path_init)), axis=0)
 
-    labels_predicted = model.predict(images)
-
-    return np.round(labels_predicted)
-
-def load_process_predict_import(list_img, _model_path=model_path):
-    # Load the model
-    model = tf.keras.models.load_model(_model_path)
-
-    # simulate the prediction of the model
-    
-    labels_predicted = img_to_array(list_img)
-
-    return np.round(labels_predicted)
+    predicted_labels += np.round(model.predict(images)).tolist()
 
 
-#for v in load_process_predict(["https://etud.insa-toulouse.fr/~alami-mejjat/052000.jpg", "https://etud.insa-toulouse.fr/~alami-mejjat/052001.jpg"]):
-#	 print(v)
+    return jsonify(predicted_labels=predicted_labels)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port = 5003)
