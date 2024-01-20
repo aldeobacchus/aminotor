@@ -1,8 +1,68 @@
-.game_theseus {
+.theseus{
     text-align: center;
 }
-  
-.button {
+.theseus__game{
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    gap:20px;
+    margin:0 5vw;
+}
+ 
+.theseus__board{
+    display: flex;
+    flex-wrap: wrap;
+    gap:5px;
+    width :50vw;
+}
+.theseus__actions{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+}
+
+.theseus__drawer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    background-color: var(--color-orange1);
+    cursor: pointer;
+    border-radius: 10px;
+}
+.theseus__questions{
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 10px;
+    background-color: white;
+}
+
+.theseus__list-questions{
+    display: flex;
+    flex-direction: column;
+    max-height:40vh;
+    overflow-y: scroll;
+}
+
+.theseus__question-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+.theseus__question-text:hover{
+    background-color: rgba(237, 168, 40, 0.24);
+    cursor: pointer;
+}
+
+
+.theseus__button{
+    font-family: var(--font-inika);
+    font-weight: bold;
+}
+.theseus-square-img {
+    width: 15%;
+    border-radius: 10px;
 }

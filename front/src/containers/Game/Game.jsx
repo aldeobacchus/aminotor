@@ -9,6 +9,7 @@ function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);
   const [character, setCharacter] = useState(null);
   const [sliderValue, setSliderValue] = useState(null);
+  const [grid, setGrid] = useState(null);
 
 
   return (
@@ -23,11 +24,11 @@ function Game(args) {
       )}
 
       {selectionMode && args.gm === "Theseus Battle" && (
-        <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}/>
+        <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter} setGrid={setGrid}/>
       )}
 
       {!selectionMode && args.gm === "Theseus Battle" && (
-        <Theseus character={character} setMode={args.setMode}/>
+        <Theseus grid={grid} character={character} setMode={args.setMode}/>
       )}
       
     </div>

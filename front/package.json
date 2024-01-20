@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,8 +16,7 @@
     "react-draggable": "^4.4.6",
     "react-router-dom": "^6.20.0",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^2.1.4",
-    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
