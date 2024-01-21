@@ -18,7 +18,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 50%;
+    align-items: center;
+    width: 100%;
 }
 
 .theseus__drawer{
@@ -51,6 +52,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
+    border-radius: 10px;
 }
 .theseus__question-text:hover{
     background-color: rgba(237, 168, 40, 0.24);

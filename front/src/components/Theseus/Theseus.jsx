@@ -3,33 +3,35 @@ import './Theseus.css'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import axios from 'axios';
+import UserGrid from '../UserGrid/UserGrid';
+import SelectionPanel from '../SelectionPanel/SelectionPanel';
 
 function Theseus(args) {
 
   const [squaresToDisplay, setSquaresToDisplay] = React.useState(args.grid);
   const [isFoldDrawer, setIsFoldDrawer] = React.useState(true);
   const [listFeatures, setListFeatures] = React.useState([]);
-
+  const [selectedQuestion, setSelectedQuestion] = React.useState(null);
   console.log("args in Theseus:", args);
   
   useEffect(() => {
     const fetchData = async () => {
       if(listFeatures.length === 0) {
-        const response = await axios.get('http://127.0.0.1:5000/api2/start');
-        console.log(response)
-        const value = await response.data.list_features;
+        const response = await axios.get('http://127.0.0.1:5000/api/ariane/start/');
+        console.log("response : ", response)
+        const value = await response.data.features;
         console.log("value:", value);
 
         //remove all null values
-        value.forEach((item, index) => {
-          if(item === null) {
-            value.splice(index, 1);
-          }
-        });
+        if (value){
+          value.forEach((item, index) => {
+            if(item === null) {
+              value.splice(index, 1);
+            }
+          })
+        }
         console.log("value without null:", value);
         setListFeatures(value);
-        console.log("listFeatures:", listFeatures);
-
         return listFeatures;
       }
     }
@@ -46,10 +48,19 @@ function Theseus(args) {
   const handleClickQuestion = (feature) => {
     return () => {
       console.log("feature:", feature);
-      const fetchData = async () => {
-        const response = await axios.get('http://127.0.0.1:api2/features');
-      }
+      setSelectedQuestion(feature);
     }
+  }
+
+  const handleClickSend = () => {
+    console.log("selectedQuestion:", selectedQuestion);
+    const fetchData = async () => {
+      const response = await axios.post('http://127.0.0.1:5000/api/ariane/feature/', {
+        feature: selectedQuestion
+      });
+      console.log("response : ", response)
+    }
+    fetchData();
   }
 
 
@@ -59,16 +70,7 @@ function Theseus(args) {
     <div className="theseus">
       
       <div className="theseus__game">
-        <div key={24} className="theseus__board">
-          {squaresToDisplay.map((square) => (
-            <img 
-              className='theseus-square-img'
-              key={square} 
-              src={`https://etud.insa-toulouse.fr/~alami-mejjat/${square}.jpg`}
-              alt={`${square}`}
-            />
-          ))}
-        </div>
+        <SelectionPanel size={24} squares={args.squares} squaresSources={args.squaresSources}/>
         <div className="theseus__actions">
           <div className="theseus__questions">
             <div className="theseus__drawer" onClick={handleClickDrawer}>
@@ -78,12 +80,17 @@ function Theseus(args) {
             {!isFoldDrawer && (
              <div className="theseus__list-questions">
                   {listFeatures.map((feature) => (
-                    <p className="theseus__question-text" onClick={handleClickQuestion(feature)}>{feature}</p>
+                    <p 
+                    className="theseus__question-text" 
+                    key={feature}
+                    onClick={handleClickQuestion(feature)}
+                    style={feature === selectedQuestion ? { backgroundColor: '#EDA828' } : {}}>
+                    {feature}</p>
                   ))}
               </div>
             )}
           </div>
-          <button className="theseus__button">Ask question</button>
+          <button className="theseus__button" onClick={handleClickSend}>Demander</button>
         </div>
       </div>
 

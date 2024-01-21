@@ -37,7 +37,7 @@ function Game(args) {
       )}
 
       {!selectionMode && args.gm === "Theseus Battle" && (
-        <Theseus grid={grid} character={character} setMode={args.setMode}/>
+        <Theseus character={character} squares={characters} squaresSources={charactersSources} setMode={args.setMode}/>
       )}
       
     </div>
