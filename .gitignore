@@ -1,3 +1,4 @@
-/api/flask_session
-/api/__pycache__
+/api/
 .github
+/flask_session/
+/__pycache__/
