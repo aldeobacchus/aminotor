@@ -20,6 +20,11 @@ CORS(app)
 
 ############################## INITIALISATION ##############################
 
+@app.route('/')
+def hello():
+    return 'Bienvenue chez l'orchestrateur'
+
+
 #initialisation du jeu : sélection des images
 @app.route('/api/init/<int:gamemod>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000" )
