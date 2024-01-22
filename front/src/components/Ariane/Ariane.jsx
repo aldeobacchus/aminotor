@@ -14,25 +14,31 @@ function Ariane(args) {
   const [selectedQuestion, setSelectedQuestion] = React.useState(null);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
-  const [trouve, setTrouve] = React.useState(0);
+  const [trouve, setTrouve] = React.useState(1);
+  const [attempt, setAttempt] = React.useState(2);
+  const [askStyle, setAskStyle] = React.useState("ariane__ask_disabled");
+
+  const [answer, setAnswer] = React.useState("");
+  const [maskedImages, setMaskedImages] = React.useState([]);
   
+  const removeNull = (value) => {
+    if (value){
+      value.forEach((item, index) => {
+        if(item === null) {
+          value.splice(index, 1);
+        }
+      }
+    )}
+    return value;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if(listFeatures.length === 0) {
         const response = await axios.get('http://127.0.0.1:5000/api/ariane/start/');
-        console.log("response : ", response)
         const value = await response.data.features;
-        console.log("value:", value);
-
         //remove all null values
-        if (value){
-          value.forEach((item, index) => {
-            if(item === null) {
-              value.splice(index, 1);
-            }
-          })
-        }
-        console.log("value without null:", value);
+        removeNull(value);
         setListFeatures(value);
         return listFeatures;
       }
@@ -50,17 +56,20 @@ function Ariane(args) {
   const handleClickQuestion = (feature) => {
     return () => {
       console.log("feature:", feature);
+      setAskStyle("ariane__ask_enabled");
       setSelectedImage(null);
       setSelectedQuestion(feature);
     }
   }
   const onImageGuess = (image) => {
     console.log("image:", image);
+    setAskStyle("ariane__ask_enabled");
     setSelectedQuestion(null);
     setSelectedImage(image);
   }
 
   const handleClickSend = () => {
+    console.log("Masked images:", maskedImages);
     console.log("======ASKING QUESTION======");
     console.log("   selectedQuestion:", selectedQuestion);
     console.log("   selectedImage:", selectedImage);
@@ -71,14 +80,16 @@ function Ariane(args) {
     }
     if (selectedImage && selectedQuestion){
       console.log("image and question selected");
-      return
+      return;
     }
     if (selectedQuestion){
       const fetchData = async () => {
         const response = await axios.post('http://127.0.0.1:5000/api/ariane/feature/', {
           feature: selectedQuestion
         });
-        console.log("response : ", response)
+        const data = await response.data;
+        setAnswer(data.answer);
+        setListFeatures(removeNull(data.list_features));
       }
       fetchData();
     }
@@ -90,15 +101,30 @@ function Ariane(args) {
         console.log("response : ", response);
         const value = await response.data;
         console.log("value:", value);
-        if (value.result === 2){
-          setTrouve(2);
+        if (value.result === "0"){
+          setTrouve(0);
+          answer("Bravo vous avez trouvé !");
+        } else if(value.result === "2"){
+          setAttempt(0);
+          setAnswer("Perdu, 3 essais ratés")
+        } else {
+          setAttempt(attempt-1);
+          setAnswer("Raté, il vous reste "+attempt+" essais");
         }
       }
       fetchData();
     }
   }
 
-
+  const handleMask = () => {
+    console.log("MASKING IMAGE", selectedImage);
+    {/*if selected image is not in maskedimages, put it in, else remove it*/}
+    if (!maskedImages.includes(selectedImage)){
+      setMaskedImages([...maskedImages, selectedImage]);
+    } else {
+      setMaskedImages(maskedImages.filter((item) => item !== selectedImage));
+    }
+  }
   
 
 
@@ -107,9 +133,9 @@ function Ariane(args) {
     <div className="ariane">
       
       <div className="ariane__game">
-        <div className="ariane__grid">
-          <SelectionPanel mode="ariane" size={24} squares={args.squares} squaresSources={args.squaresSources} onImageGuess={onImageGuess} />
-          <button className="ariane__button">Masquer</button>
+        <div className="ariane__board">
+          <SelectionPanel mode="ariane" size={24} selectedImage={selectedImage} maskedList={maskedImages} squares={args.squares} squaresSources={args.squaresSources} onImageGuess={onImageGuess} />
+          <button className="ariane__button" onClick={handleMask}>Masquer</button>
         </div>
         <div className="ariane__actions">
           <div className="ariane__questions">
@@ -130,7 +156,14 @@ function Ariane(args) {
               </div>
             )}
           </div>
-          <button className="ariane__button" onClick={handleClickSend}>Demander</button>
+          
+          <button className={askStyle} onClick={askStyle==="ariane__ask_enabled" ? handleClickSend : ()=>{} }>Demander</button>
+        
+          {answer && (
+            <div className="ariane__answer">
+              <p className="ariane__answer-text">{answer}</p>
+            </div>
+          )}
         </div>
       </div>
 

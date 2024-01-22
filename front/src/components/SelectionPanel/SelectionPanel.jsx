@@ -19,7 +19,22 @@ const SelectionPanel = (args) => {
     args.onImageGuess(image);
   };
 
+  const handleStyle = (square) => {
+    let styles = {};
+    if (square === selectedImage) {
+      styles = { boxShadow: '0 0 3px 5px #EDA828' };
+    }
+    if (args.maskedList?.includes(square)) {
+      styles = { opacity: 0.5 };
+    }
+    if (args.maskedList?.includes(square) && square === selectedImage) {
+      styles = { opacity: 0.5, boxShadow: '0 0 3px 5px #EDA828' };
+    }
+    
+    return styles;
+  }
 
+  
   return (
     <div key={args.size} className="selection-panel">
       {squaresToDisplay.map((square) => (
@@ -29,7 +44,8 @@ const SelectionPanel = (args) => {
           src={squaresSourcesToDisplay[squaresToDisplay.indexOf(square)]}
           alt={`${square}`}
           onClick={args.mode==="ariane" ? () => handleImageGuess(square): () => handleImageSelect(square)}
-          style={square === selectedImage ? { boxShadow: '0 0 3px 5px #EDA828' } : {}}
+          
+          style={handleStyle(square)}
         />
       ))}
     </div>

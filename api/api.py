@@ -180,7 +180,8 @@ def get_feature():
         'img_choice': session['img_choice'],
         'list_features': session['list_features_asked'],
         'predicted_labels': session['predicted_labels'],
-        'list_answers': session['list_answers'] 
+        'list_answers': session['list_answers'],
+        'image_list': session['final_img_list']
     }
 
     response = requests.post('http://localhost:5004/ariane/feature/', json=data).json()

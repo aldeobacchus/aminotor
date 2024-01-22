@@ -10,9 +10,8 @@
  
 .ariane__board{
     display: flex;
-    flex-wrap: wrap;
-    gap:5px;
-    width :50vw;
+    flex-direction: column;
+    gap: 20px;
 }
 .ariane__actions{
     display: flex;
@@ -20,6 +19,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    gap:30px;
 }
 
 .ariane__drawer{
@@ -37,6 +37,7 @@
 
     border-radius: 10px;
     background-color: white;
+    width: 100%;
 }
 
 .ariane__list-questions{
@@ -54,6 +55,15 @@
     padding: 0.5rem 1rem;
     border-radius: 10px;
 }
+.ariane__answer-text{
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 1.5rem;
+    font-family: var(--font-inika);
+    font-weight: bold;
+
+}
 .ariane__question-text:hover{
     background-color: rgba(237, 168, 40, 0.24);
     cursor: pointer;
@@ -64,6 +74,12 @@
     font-family: var(--font-inika);
     font-weight: bold;
 }
+
+.ariane__ask_disabled{
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor:default;
+}
+
 .ariane-square-img {
     width: 15%;
     border-radius: 10px;
