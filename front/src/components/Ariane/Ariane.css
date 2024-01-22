@@ -1,20 +1,20 @@
-.theseus{
+.ariane{
     text-align: center;
 }
-.theseus__game{
+.ariane__game{
     display: flex;
     flex-direction: row;
     gap:20px;
     margin:0 5vw;
 }
  
-.theseus__board{
+.ariane__board{
     display: flex;
     flex-wrap: wrap;
     gap:5px;
     width :50vw;
 }
-.theseus__actions{
+.ariane__actions{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,7 +22,7 @@
     width: 100%;
 }
 
-.theseus__drawer{
+.ariane__drawer{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -31,7 +31,7 @@
     cursor: pointer;
     border-radius: 10px;
 }
-.theseus__questions{
+.ariane__questions{
     display: flex;
     flex-direction: column;
 
@@ -39,14 +39,14 @@
     background-color: white;
 }
 
-.theseus__list-questions{
+.ariane__list-questions{
     display: flex;
     flex-direction: column;
     max-height:40vh;
     overflow-y: scroll;
 }
 
-.theseus__question-text{
+.ariane__question-text{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -54,17 +54,17 @@
     padding: 0.5rem 1rem;
     border-radius: 10px;
 }
-.theseus__question-text:hover{
+.ariane__question-text:hover{
     background-color: rgba(237, 168, 40, 0.24);
     cursor: pointer;
 }
 
 
-.theseus__button{
+.ariane__button{
     font-family: var(--font-inika);
     font-weight: bold;
 }
-.theseus-square-img {
+.ariane-square-img {
     width: 15%;
     border-radius: 10px;
 }

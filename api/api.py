@@ -1,4 +1,3 @@
-
 from flask import Flask, Response, jsonify, make_response, request, send_from_directory, session
 
 from flask_cors import cross_origin  # Fix the typo in import
@@ -13,8 +12,8 @@ app = Flask(__name__)
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to none in prod
-app.config['SESSION_COOKIE_SECURE'] = True # change to true in prod
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to none in prod
+app.config['SESSION_COOKIE_SECURE'] = False # change to true in prod
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 Session(app)
 CORS(app)

@@ -65,7 +65,7 @@ function CharacterSelection(args) {
   return (
     <div className='game_characterSelection'>
         <SizePanelBar onSliderChange={handleSliderChange} />
-        <SelectionPanel size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
+        <SelectionPanel mode="selection" size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
         {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
     </div>
   )
