@@ -7,6 +7,11 @@ from flask import Flask, jsonify, request, session
 from flask_cors import CORS
 import os
 import requests
+import tensorflow as tf
+
+# Disable TensorFlow warnings
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
 
 app = Flask(__name__)
 CORS(app)
