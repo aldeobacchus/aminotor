@@ -9,7 +9,7 @@ CORS(app)
 
 @app.route('/')
 def hello():
-    print("hello x")
+    return("hello x")
 
 #MS du mode de jeu 2 : start
 #PENSEZ à RECUP la nouvelle version de FEATURES.PY
