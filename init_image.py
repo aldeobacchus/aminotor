@@ -10,6 +10,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+
+@app.route('/')
+def hello():
+    return 'Bienvenue chez InitImageService'
+
+
 #initialisation du jeu : sélection de 1024 images
 
 @app.route('/image/init/', methods=['POST'])
