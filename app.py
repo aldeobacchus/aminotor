@@ -7,6 +7,11 @@ import requests
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def hello():
+    return 'Bienvenue chez aminoguessservice'
+
+
 #première question du jeu
 @app.route('/aminoguess/start/', methods=['POST'])
 def start_game():
