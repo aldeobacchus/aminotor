@@ -1,3 +1,7 @@
-/api/flask_session
-/api/__pycache__
+/flask_session/
+/__pycache__/
 .github
+/api/
+/flask_session/
+/aminoguess/
+/IA/
