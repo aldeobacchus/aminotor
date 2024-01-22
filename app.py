@@ -23,7 +23,7 @@ CORS(app)
 #Racine
 @app.route('/')
 def hello():
-    return 'Bienvenue chez l'orchestrateur'
+    return 'Bienvenue chez orchestrateur'
 
 
 #initialisation du jeu : sélection des images
