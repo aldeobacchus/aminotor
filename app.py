@@ -16,6 +16,12 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def hello():
+    return 'Bienvenue chez AIService'
+
+
+
 # Parameters
 model_path = os.path.join(os.getcwd(), "model_ki_s")
 images_dir_path = os.path.join(os.getcwd(), "images")
