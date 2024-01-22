@@ -20,6 +20,7 @@ CORS(app)
 
 ############################## INITIALISATION ##############################
 
+#Racine
 @app.route('/')
 def hello():
     return 'Bienvenue chez l'orchestrateur'
