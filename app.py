@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 
+ms_ai = 'https://aiservice1.azurewebsites.net/'
 
 app = Flask(__name__)
 CORS(app)
@@ -52,7 +53,7 @@ def start_game():
     data = {'list_path_upload':list_path_upload,
             'list_path_init':list_path_init
             }
-    response = requests.post('http://localhost:5003/ml/predict/', json=data).json()
+    response = requests.post(ms_ai+'/ml/predict/', json=data).json()
 
     predicted_labels = response.get('predicted_labels')
     
