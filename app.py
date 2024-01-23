@@ -18,8 +18,8 @@ app = Flask(__name__)
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to 'None' in prod and 'Lax' with postman
-app.config['SESSION_COOKIE_SECURE'] = False # change to True in prod and False with postman
+app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to 'None' in prod and 'Lax' with postman
+app.config['SESSION_COOKIE_SECURE'] = True # change to True in prod and False with postman
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 
 Session(app)
@@ -161,7 +161,7 @@ def start_game_ariane():
         'list_image': session['list_image'], 
         'list_upload': session['list_upload']
     }
-    
+
     response = requests.post(ms_ariane+'ariane/start/', json=data).json()
 
     #initialisation et update the session variables
