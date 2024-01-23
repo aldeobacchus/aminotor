@@ -1,8 +1,49 @@
 .question {
+    display: flex;
+    flex-direction: column;
     text-align: center;
+    gap:5vh;
+    width: 100%;
 }
-  
+
+.answer-container{
+    display:flex;
+    flex-direction:row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.answer-container2{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.answer-container-padding{
+    width:20vw;
+}
+
 .answer {
-display: flex;
-justify-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.answer-sol{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.minotor{
+    width: 23vw;
+}
+
+@media screen and (max-width: 768px){
+    .answer{
+        flex-direction: column;
+    }
+    
 }

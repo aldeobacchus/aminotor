@@ -1,11 +1,10 @@
-import React, { useState } from 'react';  
-import SizePanelBar from '../../components/SizePanelBar/SizePanelBar';
-import SelectionPanel from '../../components/SelectionPanel/SelectionPanel';
+import React from 'react';
+import UserGrid from '../../components/UserGrid/UserGrid';
 
 function Test() {
 
   return (
-     <button onClick={() => {console.log('test')}}>Test</button>
+      <UserGrid/>
   );
 }
 

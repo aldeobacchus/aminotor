@@ -1,7 +1,7 @@
 .selection-panel {
   display: flex;
   gap: 10px;
-  max-height: 50vh;
+  max-height: 70vh;
   overflow: auto;
   flex-wrap: wrap;
   padding: 10px;
@@ -15,13 +15,30 @@
 }
 
 .square-img{
-  width: 13.25%;
+  width: 11.5%;
+  border-radius: 10px;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
+}
+
+.square-img:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
+  border-radius: 10px;
+}
+@media screen and (max-width: 768px){
+  .square-img{
+    width: 22.5%;
+  }
+  
 }
 
 /*SCROLL BAR*/
 /* width */
 ::-webkit-scrollbar {
-  width: 1vw;
+  width: 10px;
 }
 
 /* Track */

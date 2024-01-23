@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-
+    gap: 10vh;
     margin: 0 auto;
 }
 
@@ -11,8 +11,28 @@
     flex-direction: row;
     justify-content: center;
     gap: 10rem;
+}
 
-    padding: 20vh 0;
+.param-menu{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5vh;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:5vh;
+    background: rgba(197, 215, 244, 0.5);
+    max-width: 35vw;
+    border-radius: 20px;
+    padding: 2rem;
+    
+}
+
+.param-buttons{
+    display:flex;
+    flex-direction: column;
+    align-items : center;
 }
 
 @media screen and (max-width: 768px){
@@ -20,6 +40,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         gap: 2.5rem;
 
         margin: 0 auto;

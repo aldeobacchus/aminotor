@@ -2,7 +2,6 @@ import './App.css';
 import GameSelection from './components/GameSelection/GameSelection';
 import { useState } from 'react';
 import Game from './containers/Game/Game';
-import Test from './containers/Test/Test';
 
 function App() {
   
@@ -33,10 +32,10 @@ function App() {
         </>
       )}
 
-      {mode === 'Theseus Battle' && (
+      {mode === 'Ariane Battle' && (
         <>
           <h3 onClick={() => {setMode("home")}}>Aminotor</h3>
-          <Game gm="Theseus Battle" setMode={setMode}/>
+          <Game gm="Ariane Battle" setMode={setMode}/>
         </>
       )}
 
