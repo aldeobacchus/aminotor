@@ -6,21 +6,25 @@ from flask_cors import CORS
 from flask_session import Session
 import requests
 
+ms_image = 'https://initimageservice.azurewebsites.net/'
+ms_aminoguess = 'http://aminoguessservice.azurewebsites.net/'
+ms_ariane = 'http://arianeservice.azurewebsites.net/'
+#path_front = 'https://aminotor.azurewebsites.net' #deployment
+path_front = 'http://localhost:3000' #local
 
 app = Flask(__name__)
+
 #app.secret_key = os.environ.get('SECRET_KEY') #KEEP THIS LINE AND ADD THE KEY ON AZURE
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to 'None' in prod and 'Lax' with postman
-app.config['SESSION_COOKIE_SECURE'] = True # change to True in prod and False with postman
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to 'None' in prod and 'Lax' with postman
+app.config['SESSION_COOKIE_SECURE'] = False # change to True in prod and False with postman
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
-Session(app)
-CORS(app)
 
-ms_image = 'https://initimageservice.azurewebsites.net/'
-ms_aminoguess = 'http://aminoguessservice.azurewebsites.net/'
-ms_ariane = 'http://arianeservice.azurewebsites.net/'
+Session(app)
+CORS(app, supports_credentials=True, origins=path_front)
+
 
 ############################## INITIALISATION ##############################
 
@@ -32,7 +36,6 @@ def hello():
 
 #initialisation du jeu : sélection des images
 @app.route('/api/init/<int:gamemod>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000" )
 def init_game(gamemod):
 
     if session.get('list_upload') is None:
@@ -57,7 +60,6 @@ def init_game(gamemod):
 
 #première question du jeu
 @app.route('/api/aminoguess/start/<int:nb_images>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game_amino(nb_images):
 
     session['list_features'] = new_features.copy()
@@ -87,7 +89,6 @@ def start_game_amino(nb_images):
 
 #update pour chaque question que l'on pose
 @app.route('/api/aminoguess/answer/<int:answer>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_response_and_next_question(answer):
 
     data = {
@@ -126,7 +127,6 @@ def get_response_and_next_question(answer):
     return reel_response
     
 @app.route('/api/aminoguess/proposition/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def continue_next_question():
 
     data = {
@@ -152,7 +152,6 @@ def continue_next_question():
 ####################### MODE DE JEU 2 - ARIANE #############################
 
 @app.route('/api/ariane/start/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game_ariane():
 
     session['list_features_asked'] = new_features.copy()
@@ -178,7 +177,6 @@ def start_game_ariane():
     )
 
 @app.route('/api/ariane/feature/',  methods=['POST'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_feature():
     #get post 
     data = request.get_json()
@@ -204,7 +202,6 @@ def get_feature():
     )
 
 @app.route('/api/ariane/guess/<int:guess>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def answer_proposition(guess):
 
     data = {
@@ -227,7 +224,6 @@ def answer_proposition(guess):
 
 # It's the mix between the two previous games, the user have to guess and the AI have to guess
 @app.route('/api/theseus/start/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def start_game_theseus():
     
         session['list_features'] = new_features.copy()
@@ -262,7 +258,6 @@ def start_game_theseus():
 
 # the user ask for a feature
 @app.route('/api/theseus/feature/',  methods=['POST'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_feature_and_ask_question():
     data = request.get_json()
     session['last_feature'] = data.get('feature')
@@ -290,7 +285,6 @@ def get_feature_and_ask_question():
 
 # the user make a guess
 @app.route('/api/theseus/guess/<int:guess>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def answer_proposition_and_ask_question(guess):
 
     data_ariane = {
@@ -347,7 +341,6 @@ def ask_question(answer):
 
 # the user answer to the question
 @app.route('/api/theseus/answer/<int:answer>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_response_and_give_labels(answer):
 
     data_amino = {
@@ -384,7 +377,6 @@ def get_response_and_give_labels(answer):
 
 # the user answer the AI guess
 @app.route('/api/theseus/proposition/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def wrong_proposition_and_give_labels():
     
         data_amino = {
@@ -414,7 +406,6 @@ def wrong_proposition_and_give_labels():
 ############################## IMAGES UPLOAD AND FLUSH COOKIES ##############################
 
 @app.route('/api/upload/', methods=['POST'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def upload_img():
 
     # check if image is uploaded
@@ -443,7 +434,6 @@ def upload_img():
     )   
 
 @app.route('/api/flush_session/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def flush():
     flush_upload()
     session.clear()
@@ -452,7 +442,6 @@ def flush():
     )
 
 @app.route('/api/flush_upload/', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def flush_upload():
 
     if session.get('list_upload') is not None:
@@ -470,7 +459,6 @@ def flush_upload():
     return response
 
 @app.route('/api/get_img/<int:img>', methods=['GET'])
-@cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_img(img):
     print(img)
     response = requests.get(ms_image+'image/get/{}'.format(img))
