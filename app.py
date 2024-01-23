@@ -53,7 +53,7 @@ def start_game():
     data = {'list_path_upload':list_path_upload,
             'list_path_init':list_path_init
             }
-    response = requests.post(ms_ai+'/ml/predict/', json=data).json()
+    response = requests.post(ms_ai+'ml/predict/', json=data).json()
 
     predicted_labels = response.get('predicted_labels')
     
