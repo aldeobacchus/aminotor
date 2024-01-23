@@ -9,14 +9,18 @@ import requests
 
 app = Flask(__name__)
 #app.secret_key = os.environ.get('SECRET_KEY') #KEEP THIS LINE AND ADD THE KEY ON AZURE
-#app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
+app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to 'None' in prod and 'Lax' with postman
+app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to 'None' in prod and 'Lax' with postman
 app.config['SESSION_COOKIE_SECURE'] = True # change to True in prod and False with postman
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 Session(app)
 CORS(app)
+
+ms_image = 'https://initimageservice.azurewebsites.net/'
+ms_aminoguess = 'http://aminoguessservice.azurewebsites.net/'
+ms_ariane = 'http://arianeservice.azurewebsites.net/'
 
 ############################## INITIALISATION ##############################
 
@@ -41,7 +45,7 @@ def init_game(gamemod):
         'nb_upload': len(list_upload)
     }
 
-    response = requests.post('http://localhost:5001/image/init', json=data).json()
+    response = requests.post(ms_image+'image/init/', json=data).json()
     session['list_image'] = response.get('list_image')
 
     return jsonify(
@@ -65,7 +69,7 @@ def start_game_amino(nb_images):
         'list_upload': session['list_upload']
     }
     
-    response = requests.post('http://localhost:5002/aminoguess/start/', json=data).json()
+    response = requests.post(ms_aminoguess+'aminoguess/start/', json=data).json()
 
     #initialisation et update the session variables
     session['max_questions'] = 10
@@ -96,7 +100,7 @@ def get_response_and_next_question(answer):
         'max_questions': session['max_questions'],
         'predicted_labels': session['predicted_labels']
     }
-    response = requests.post('http://localhost:5002/aminoguess/answer/', json=data).json()
+    response = requests.post(ms_aminoguess+'aminoguess/answer/', json=data).json()
     feature = response.get('feature')
     
     reel_response = {
@@ -132,7 +136,7 @@ def continue_next_question():
         'predicted_labels': session['predicted_labels']
     }
 
-    response = requests.post('http://localhost:5002/aminoguess/proposition/', json=data).json()
+    response = requests.post(ms_aminoguess+'aminoguess/proposition/', json=data).json()
 
     # update the session variables
     session['nb_questions'] = 1
@@ -159,7 +163,7 @@ def start_game_ariane():
         'list_upload': session['list_upload']
     }
     
-    response = requests.post('http://localhost:5004/ariane/start/', json=data).json()
+    response = requests.post(ms_ariane+'ariane/start/', json=data).json()
 
     #initialisation et update the session variables
     session['final_img_list'] = response.get("final_img_list")
@@ -189,7 +193,7 @@ def get_feature():
         'list_answers': session['list_answers'] 
     }
 
-    response = requests.post('http://localhost:5004/ariane/feature/', json=data).json()
+    response = requests.post(ms_ariane+'ariane/feature/', json=data).json()
 
     #update the session variables
     session['list_features_asked'] = response.get('list_features')
@@ -210,7 +214,7 @@ def answer_proposition(guess):
         'max_guess': session['max_guess']
     }
 
-    response = requests.post('http://localhost:5004/ariane/guess/', json=data).json()
+    response = requests.post(ms_ariane+'ariane/guess/', json=data).json()
 
     #update the session variables
     session['nb_guess'] = response.get('nb_guess')
@@ -235,7 +239,7 @@ def start_game_theseus():
             'list_upload': session['list_upload']
         }
         
-        response = requests.post('http://localhost:5004/ariane/start/', json=data).json()
+        response = requests.post(ms_ariane+'ariane/start/', json=data).json()
 
         #initialisation et update the session variables
         session['predicted_labels'] = response.get("predicted_labels")
@@ -274,7 +278,7 @@ def get_feature_and_ask_question():
         'list_answers': session['list_answers'] 
     }
 
-    response_ariane = requests.post('http://localhost:5004/ariane/feature/', json=data_ariane).json()
+    response_ariane = requests.post(ms_ariane+'ariane/feature/', json=data_ariane).json()
 
     session['list_features_asked'] = response_ariane.get('list_features')
     answer = response_ariane.get('answer')
@@ -296,7 +300,7 @@ def answer_proposition_and_ask_question(guess):
         'max_guess': session['max_guess']
     }
 
-    response_ariane = requests.post('http://localhost:5004/ariane/guess/', json=data_ariane).json()
+    response_ariane = requests.post(ms_image+'ariane/guess/', json=data_ariane).json()
 
     #update the session variables
     session['nb_guess'] = response_ariane.get('nb_guess')
@@ -326,7 +330,7 @@ def ask_question(answer):
     }
 
     if session['type'] == None : # 1st question
-        response_amino = requests.post('http://localhost:5002/aminoguess/get_question/', json=data_amino).json()
+        response_amino = requests.post(ms_aminoguess+'aminoguess/get_question/', json=data_amino).json()
         session['last_feature'] = response_amino.get('feature')
         response['question'] = new_questions[response_amino.get('feature')]
         session['nb_questions'] = session['nb_questions'] + 1
@@ -356,7 +360,7 @@ def get_response_and_give_labels(answer):
         'max_questions': session['max_questions'],
         'predicted_labels': session['predicted_labels']
     }
-    response = requests.post('http://localhost:5002/aminoguess/answer/', json=data_amino).json()
+    response = requests.post(ms_aminoguess+'aminoguess/answer/', json=data_amino).json()
     feature = response.get('feature')
 
     if response.get('proba_list'):
@@ -390,7 +394,7 @@ def wrong_proposition_and_give_labels():
             'predicted_labels': session['predicted_labels']
         }
     
-        response_amino = requests.post('http://localhost:5002/aminoguess/proposition/', json=data_amino).json()
+        response_amino = requests.post(ms_aminoguess+'aminoguess/proposition/', json=data_amino).json()
     
         # update the session variables
         session['nb_questions'] = 0
@@ -424,7 +428,7 @@ def upload_img():
         'image': file
     }
 
-    response = requests.post('http://localhost:5001/image/upload', files=data).json()
+    response = requests.post(ms_image+'image/upload', files=data).json()
 
     if session.get('list_upload') is None:
         session['list_upload'] = []
@@ -456,7 +460,7 @@ def flush_upload():
 
     data = {'list_upload': list_upload}
 
-    response = requests.post('http://localhost:5001/image/delete', json=data).json()
+    response = requests.post(ms_image+'image/delete', json=data).json()
 
     session['list_upload'] = []
 
@@ -469,7 +473,7 @@ def flush_upload():
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")
 def get_img(img):
     print(img)
-    response = requests.get('http://localhost:5001/image/get/{}'.format(img))
+    response = requests.get(ms_image+'image/get/{}'.format(img))
 
     
     return Response(response.content, content_type='image/jpeg')
