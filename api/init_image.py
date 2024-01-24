@@ -27,7 +27,7 @@ def init_game():
     if gamemod == 1: #aminoguess
         grid_size = 1024
     elif gamemod == 2: #ariane and theseus
-        grid_size = 28
+        grid_size = 24
 
 
     while len(list_image) < grid_size-nb_upload:

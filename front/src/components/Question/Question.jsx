@@ -56,7 +56,7 @@ function Question(args) {
           <div className='question'>
               <h4>Question : {question}</h4>
               <div className="answer-container">
-                {/* CHANGER DE PLACE VERS AMINO */}
+                {/* TODO CHANGER DE PLACE VERS AMINO */}
                 {nombreAleatoire === 1 ? <img className="minotor" src='img/minotors/NORMAL.png' alt="image1" /> : <img className="minotor" src='img/minotors/LAMP.png' alt="image2"/>}
                 <div className="answer-container2">
                   <div className='answer'>

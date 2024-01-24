@@ -18,7 +18,7 @@ function GameSelection(args) {
 
             <div className='gs_buttons'>
               <button className='button-orange' onClick={() => args.callback("Amino'Guess")}>Amino'Guess</button>
-              <button className='button-blue' onClick={() => args.callback("Theseus Battle")}>Theseus Battle</button>
+              <button className='button-blue' onClick={() => args.callback("Ariane Battle")}>Ariane Battle</button>
             </div>
 
             <button className='button-parametres' onClick={handleClickParam}>Paramètres</button>

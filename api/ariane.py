@@ -76,6 +76,7 @@ def get_feature():
     list_features = data['list_features']
     predicted_labels = data['predicted_labels']
     list_answers = data['list_answers']
+    image_list = data['image_list']
 
     if all(f is None for f in list_features):
         return jsonify(
@@ -85,8 +86,9 @@ def get_feature():
 
     else:
         #get AI answer from predicted labels
+        index_image = image_list.index(img_choice)
         nb_feature = list_features.index(feature)
-        answer = predicted_labels[img_choice][nb_feature]
+        answer = predicted_labels[index_image][nb_feature]
 
         result = list_answers[list_features[nb_feature]][int(answer)]
         

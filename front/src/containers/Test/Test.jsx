@@ -1,9 +1,10 @@
 import React from 'react';
+import UserGrid from '../../components/UserGrid/UserGrid';
 
 function Test() {
 
   return (
-     <button onClick={() => {console.log('test')}}>Test</button>
+      <UserGrid/>
   );
 }
 

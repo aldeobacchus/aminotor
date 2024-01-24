@@ -6,7 +6,7 @@ import './UserGrid.css';
 axios.defaults.withCredentials = true;
 
 function UserGrid(args) {
-  const size = 28;
+  const size = 24;
   const [selectedImage, setSelectedImage] = useState(null);
 
     React.useEffect(() => {
@@ -58,13 +58,13 @@ function UserGrid(args) {
 
     return (
         <div className='game_userGrid'>
-            <SelectionPanel size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
-            <button onClick={() => {fetchData()}}>Nouvelle grille</button>
-            {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+            <SelectionPanel mode="selection" size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
+            <div className="userGrid_buttons">
+              <button onClick={() => {fetchData()}}>Nouvelle grille</button>
+              {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+            </div>
         </div>
     )
 }
 
 export default UserGrid
-            
-

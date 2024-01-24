@@ -66,6 +66,10 @@ h4{
   font-size: 2.5vw;
   margin:2vh auto;
 }
+h5{
+  font-family: var(--font-inika);
+  text-transform: uppercase;
+}
 
 
 button{
@@ -80,8 +84,11 @@ button{
   border: none;
   border-radius: 15px;
   padding: 1rem 1.5rem;
-  margin: 1vh;
   cursor: pointer;
+}
+
+p{
+  margin: 0;
 }
 
 @media screen and (max-width: 768px){
@@ -120,4 +127,12 @@ button{
 
 .small-text{
   font-size: 1.25rem;
+}
+
+.no-padding{
+  padding: 0;
+}
+
+.no-margin{
+  margin: 0;
 }

@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Amino from '../../components/Amino/Amino';
-import Theseus from '../../components/Theseus/Theseus';
+import Ariane from '../../components/Ariane/Ariane';
 import CharacterSelection from '../../components/CharacterSelection/CharacterSelection';
 import './game.css'
 import UserGrid from '../../components/UserGrid/UserGrid';
@@ -30,14 +30,14 @@ function Game(args) {
           characters={characters} charactersSources={charactersSources}/>
       )}
 
-      {selectionMode && args.gm === "Theseus Battle" && (
+      {selectionMode && args.gm === "Ariane Battle" && (
         <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
           setSquares={setCharacters} setSquaresSources={setCharactersSources}
           squares={characters} squaresSources={charactersSources}/>
       )}
 
-      {!selectionMode && args.gm === "Theseus Battle" && (
-        <Theseus character={character} setMode={args.setMode}/>
+      {!selectionMode && args.gm === "Ariane Battle" && (
+        <Ariane character={character} squares={characters} squaresSources={charactersSources} setMode={args.setMode}/>
       )}
       
     </div>

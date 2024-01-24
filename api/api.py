@@ -1,4 +1,3 @@
-
 from flask import Flask, Response, jsonify, make_response, request, send_from_directory, session
 
 from flask_cors import cross_origin  # Fix the typo in import
@@ -13,8 +12,8 @@ app = Flask(__name__)
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to none in prod
-app.config['SESSION_COOKIE_SECURE'] = False # change to true in prod
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to 'None' in prod and 'Lax' with postman
+app.config['SESSION_COOKIE_SECURE'] = True # change to True in prod and False with postman
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 Session(app)
 CORS(app)
@@ -181,7 +180,8 @@ def get_feature():
         'img_choice': session['img_choice'],
         'list_features': session['list_features_asked'],
         'predicted_labels': session['predicted_labels'],
-        'list_answers': session['list_answers'] 
+        'list_answers': session['list_answers'],
+        'image_list': session['final_img_list']
     }
 
     response = requests.post('http://localhost:5004/ariane/feature/', json=data).json()
@@ -266,7 +266,8 @@ def get_feature_and_ask_question():
         'predicted_labels': session['predicted_labels'],
         'max_questions': session['max_questions'],
         'nb_questions': session['nb_questions'],
-        'list_answers': session['list_answers'] 
+        'list_answers': session['list_answers'],
+        'image_list': session['final_img_list']
     }
 
     response_ariane = requests.post('http://localhost:5004/ariane/feature/', json=data_ariane).json()
