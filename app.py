@@ -9,8 +9,8 @@ import requests
 ms_image = 'https://initimageservice.azurewebsites.net/'
 ms_aminoguess = 'http://aminoguessservice.azurewebsites.net/'
 ms_ariane = 'http://arianeservice.azurewebsites.net/'
-#path_front = 'https://aminotor.azurewebsites.net' #deployment
-path_front = 'http://localhost:3000' #local
+#origin = 'https://aminotor.azurewebsites.net' #deployment
+origin = 'http://localhost:3000' #local
 
 app = Flask(__name__)
 
@@ -23,7 +23,7 @@ app.config['SESSION_COOKIE_SECURE'] = False # change to True in prod and False w
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 
 Session(app)
-CORS(app, supports_credentials=True, origins=path_front)
+CORS(app, supports_credentials=True, origins=origin)
 
 
 ############################## INITIALISATION ##############################
