@@ -3,10 +3,12 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 
+origin = 'https://orchestratorservice1.azurewebsites.net/'
+#origin = 'http://localhost:5000/' #for local testing
 ms_ai = 'https://aiservice1.azurewebsites.net/'
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=origin)
 
 @app.route('/')
 def hello():
