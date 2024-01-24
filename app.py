@@ -5,7 +5,7 @@ from random import randrange
 from flask_cors import CORS
 
 #origin = 'https://orchestratorservice1.azurewebsites.net/'
-origin = 'http://localhost:8000/' #pour le dev
+origin = '*' #pour le dev
 ms_ai = 'https://aiservice1.azurewebsites.net/'
 
 app = Flask(__name__)
