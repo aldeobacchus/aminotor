@@ -12,15 +12,15 @@ import tensorflow as tf
 # Disable TensorFlow warnings
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
+ms_ariane = 'https://arianeservice.azurewebsites.net/'
+ms_aminoguess = 'https://aminoguessservice.azurewebsites.net/'
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=[ms_ariane, ms_aminoguess])
 
 @app.route('/')
 def hello():
     return 'Bienvenue chez AIService'
-
-
 
 # Parameters
 model_path = os.path.join(os.getcwd(), "model_ki_s")
