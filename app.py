@@ -18,8 +18,8 @@ app = Flask(__name__)
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to 'None' in prod and 'Lax' with postman
-app.config['SESSION_COOKIE_SECURE'] = True # change to True in prod and False with postman
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to 'None' in prod and 'Lax' with postman
+app.config['SESSION_COOKIE_SECURE'] = False # change to True in prod and False with postman
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 
 Session(app)
@@ -162,7 +162,15 @@ def start_game_ariane():
         'list_upload': session['list_upload']
     }
 
-    response = requests.post(ms_ariane+'ariane/start/', json=data).json()
+    try:
+        response = requests.post(ms_ariane + 'ariane/start/', json=data)
+        response.raise_for_status()  # Lève une exception en cas de code d'état HTTP non 2xx
+        json_data = response.json()
+        # Traitement des données JSON
+    except requests.RequestException as e:
+        print(f"Erreur lors de la requête POST : {e}")
+        # Gérer l'erreur, par exemple retourner une réponse d'erreur appropriée
+
 
     #initialisation et update the session variables
     session['final_img_list'] = response.get("final_img_list")
