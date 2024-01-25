@@ -84,3 +84,25 @@
     width: 15%;
     border-radius: 10px;
 }
+
+.ariane__lose{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:row-reverse;
+    align-items: flex-start;
+    gap: 2rem;  
+
+    margin-top: 5rem;
+}
+
+.ariane__lose-img{
+    width: 25vw;
+}
+.ariane__lose-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}

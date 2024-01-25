@@ -101,12 +101,14 @@ function Ariane(args) {
         console.log("response : ", response);
         const value = await response.data;
         console.log("value:", value);
-        if (value.result === "0"){
+        console.log("result:", value.result);
+        if (value.result === 0){
           setTrouve(0);
           answer("Bravo vous avez trouvé !");
-        } else if(value.result === "2"){
+        } else if(value.result === 2){
           setAttempt(0);
-          setAnswer("Perdu, 3 essais ratés")
+          setTrouve(2);
+          setAnswer("Perdu, 3 essais ratés");
         } else {
           setAttempt(attempt-1);
           setAnswer("Raté, il vous reste "+attempt+" essais");
@@ -132,7 +134,7 @@ function Ariane(args) {
     
     <div className="ariane">
       
-      <div className="ariane__game">
+      { trouve===1 && (<div className="ariane__game">
         <div className="ariane__board">
           <SelectionPanel mode="ariane" size={24} selectedImage={selectedImage} maskedList={maskedImages} squares={args.squares} squaresSources={args.squaresSources} onImageGuess={onImageGuess} />
           <button className="ariane__button" onClick={handleMask}>Masquer</button>
@@ -167,8 +169,25 @@ function Ariane(args) {
         </div>
       </div>
 
+      )}
+      { trouve===0 && (
+        <div className="ariane__win">
+          <h2 className="ariane__win-text">Bravo vous avez trouvé !</h2>
+        </div>
+      )}
+      { trouve===2 && (
+        <div className="ariane__lose">
+          <div className="ariane__lose-text">
+            <h2 className="ariane__lose-text">Perdu, 3 essais ratés</h2>
+            <button className="ariane__lose-button" onClick={() => args.setSelectionMode(true)}>Recommencer</button>
+            <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button> 
+          </div>
+          
+          <img className="ariane__lose-img" src="img/minotors/NORMAL.png" alt="lose"/>
+        </div>
+      )}
     </div> 
-
+    
     )
 }
 

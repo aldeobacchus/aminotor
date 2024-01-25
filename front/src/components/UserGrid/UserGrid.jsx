@@ -61,7 +61,7 @@ function UserGrid(args) {
             <SelectionPanel mode="selection" size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
             <div className="userGrid_buttons">
               <button onClick={() => {fetchData()}}>Nouvelle grille</button>
-              {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+              {(selectedImage || args.mode === "ariane") && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
             </div>
         </div>
     )

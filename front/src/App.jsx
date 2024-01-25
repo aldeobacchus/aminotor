@@ -32,12 +32,20 @@ function App() {
         </>
       )}
 
-      {mode === 'Ariane Battle' && (
+      {mode === 'Ariane' && (
         <>
-          <h3 onClick={() => {setMode("home")}}>Aminotor</h3>
-          <Game gm="Ariane Battle" setMode={setMode}/>
+          <h3 onClick={() => {setMode("home")}}>Ariane</h3>
+          <Game gm="Ariane" setMode={setMode}/>
         </>
       )}
+
+      {mode === 'Theseus Battle' && (
+        <>
+          <h3 onClick={() => {setMode("home")}}>Theseus Battle</h3>
+          <Game gm="Theseus Battle" setMode={setMode}/>
+        </>
+      )  
+      }
 
       
     </div>

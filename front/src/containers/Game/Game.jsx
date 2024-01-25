@@ -30,16 +30,26 @@ function Game(args) {
           characters={characters} charactersSources={charactersSources}/>
       )}
 
-      {selectionMode && args.gm === "Ariane Battle" && (
-        <UserGrid setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
+      {selectionMode && args.gm === "Ariane" && (
+        <UserGrid mode="ariane" setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
           setSquares={setCharacters} setSquaresSources={setCharactersSources}
           squares={characters} squaresSources={charactersSources}/>
       )}
 
-      {!selectionMode && args.gm === "Ariane Battle" && (
-        <Ariane character={character} squares={characters} squaresSources={charactersSources} setMode={args.setMode}/>
+      {!selectionMode && args.gm === "Ariane" && (
+        <Ariane character={character} squares={characters} setSelectionMode={setSelectionMode} squaresSources={charactersSources} setMode={args.setMode}/>
       )}
       
+
+      {selectionMode && args.gm === "Theseus Battle" && (
+        <UserGrid mode="ariane" setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
+          setSquares={setCharacters} setSquaresSources={setCharactersSources}
+          squares={characters} squaresSources={charactersSources}/>
+      )}
+
+      {!selectionMode && args.gm === "Theseus Battle" && (
+        <Ariane character={character} squares={characters} setSelectionMode={setSelectionMode} squaresSources={charactersSources} setMode={args.setMode}/>
+      )}
     </div>
   )
 }
