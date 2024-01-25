@@ -62,7 +62,7 @@ def start_game_amino(nb_images):
     response = requests.post('http://localhost:5002/aminoguess/start/', json=data).json()
 
     #initialisation et update the session variables
-    session['max_questions'] = 10
+    session['max_questions'] = 6
     session['proba_list'] = [1]*nb_images
     session['final_img_list'] = response.get("final_img_list")
     session['last_feature'] = response.get("feature")
@@ -98,6 +98,7 @@ def get_response_and_next_question(answer):
         'fail': response.get('fail'),
         'question': None,
     }
+    print(f"ICIIIIIII {reel_response['character']}")
 
     if response.get('proba_list'):
         session['proba_list'] = response.get('proba_list')

@@ -1,8 +1,8 @@
 # Nouvelles caractéristiques
-new_features = ['Barbe de 3 jours', 'Sourcils Arqués', None, 'Cernes', 'Chauve', 'Frange', 'Grosses Levres', 'Gros Nez', 'Cheveux noirs', 'Cheveux blonds', None, 
-                'Cheveux Bruns', 'Sourcils Broussailleux', None, 'Double Menton', 'Lunettes', 'Bouc', 'Cheveux Gris', 'Maquillage', 'Pommettes Hautes', 'Homme', 
-                'Bouche Entrouverte', 'Moustache', 'Yeux Etroits', 'Pas de barbe', 'Visage Oval', None, 'Nez Pointu', 'Calvitie', None, 
-                None, 'Sourire', 'Cheveux Lisses', 'Cheveux Ondules', 'Boucles d oreilles', 'Chapeau', 'Rouge A Levres', 'Collier', 'Cravate', 
+new_features = [None, None, None, None, 'Chauve', None, None, None, 'Cheveux noirs', 'Cheveux blonds', None, 
+                'Cheveux Bruns', None, None, None, 'Lunettes', None, None, 'Maquillage', 'Pommettes Hautes', 'Homme', 
+                'Bouche Entrouverte', None, None, 'Pas de barbe', None, None, None, None, None, 
+                None, 'Sourire', None, None, None, 'Chapeau', 'Rouge A Levres', None, None, 
                 'Jeune']
 
 features = ['Barbe de 3 jours', 'Sourcils Arqués', 'Attirant', 'Cernes', 'Chauve', 'Frange', 'Grosses Levres', 'Gros Nez', 'Cheveux noirs', 'Cheveux blonds', 'Flou', 
@@ -97,11 +97,3 @@ answers = {
     'Cravate': ['Non, le personnage ne porte pas de cravate.', 'Oui, le personnage porte une cravate.'],
     'Jeune': ['Non, le personnage n\'est pas jeune.', 'Oui, le personnage est jeune.'],
     }
-
-
-# Proba features
-proba_features = [  0.9008, 0.7902, 0.7648, 0.805, 0.9752, 0.9252, 0.7598, 0.8002, 0.874, 
-                    0.9284, 0.9532, 0.8348, 0.8916, 0.9464, 0.9542, 0.9752, 0.9508, 0.9698, 0.8886, 0.84, 
-                    0.9406, 0.8578, 0.9622, 0.8882, 0.9098, 0.722, 0.9618, 0.7334, 0.9222, 0.9416, 0.9506, 
-                    0.8876, 0.7758, 0.7714,0.8364, 0.975, 0.9052, 0.858, 0.946, 0.8372]
-
