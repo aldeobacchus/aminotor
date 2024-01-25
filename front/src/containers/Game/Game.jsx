@@ -4,6 +4,7 @@ import Ariane from '../../components/Ariane/Ariane';
 import CharacterSelection from '../../components/CharacterSelection/CharacterSelection';
 import './game.css'
 import UserGrid from '../../components/UserGrid/UserGrid';
+import Theseus from '../../components/Theseus/Theseus';
 
 function Game(args) {
   const [selectionMode, setSelectionMode] = useState(true);
@@ -48,7 +49,7 @@ function Game(args) {
       )}
 
       {!selectionMode && args.gm === "Theseus Battle" && (
-        <Ariane character={character} squares={characters} setSelectionMode={setSelectionMode} squaresSources={charactersSources} setMode={args.setMode}/>
+        <Theseus character={character} squares={characters} setSelectionMode={setSelectionMode} squaresSources={charactersSources} setMode={args.setMode}/>
       )}
     </div>
   )

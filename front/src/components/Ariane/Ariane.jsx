@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
 import './Ariane.css'
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import axios from 'axios';
-import UserGrid from '../UserGrid/UserGrid';
 import SelectionPanel from '../SelectionPanel/SelectionPanel';
 
 function Ariane(args) {
@@ -87,6 +84,7 @@ function Ariane(args) {
         const response = await axios.post('http://127.0.0.1:5000/api/ariane/feature/', {
           feature: selectedQuestion
         });
+        console.log("response:", response);
         const data = await response.data;
         setAnswer(data.answer);
         setListFeatures(removeNull(data.list_features));
@@ -142,7 +140,6 @@ function Ariane(args) {
         <div className="ariane__actions">
           <div className="ariane__questions">
             <div className="ariane__drawer" onClick={handleClickDrawer}>
-              {isFoldDrawer ? <ArrowRightIcon className='ariane__arrow' /> : <ArrowDropDownIcon className='ariane__arrow' />}
               <h5 className='no-margin'>question list</h5>
             </div>
             {!isFoldDrawer && (

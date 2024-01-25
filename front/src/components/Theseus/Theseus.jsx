@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import './theseus.css'
+import axios from 'axios';
+import SelectionPanel from '../SelectionPanel/SelectionPanel';
 
-const Theseus = () => {
+const Theseus = (args) => {
     const [isFoldDrawer, setIsFoldDrawer] = React.useState(true);
     const [listFeatures, setListFeatures] = React.useState([]);
   
@@ -12,10 +15,15 @@ const Theseus = () => {
 
     //trouve = 0 -> player win; trouve = 1 -> game in progress; trouve = 2 -> player lose
     const [trouve, setTrouve] = React.useState(1);
+    //trouveIA = 0 -> theseus win; trouveIA = 1 -> game in progress; trouveIA = 2 -> theseus lose
+    const [trouveIA, setTrouveIA] = React.useState(1);
     const [attempt, setAttempt] = React.useState(2);
     const [askStyle, setAskStyle] = React.useState("ariane__ask_disabled");
   
     const [answer, setAnswer] = React.useState("");
+    const [question, setQuestion] = React.useState("");
+    const [guessCharacter, setGuessCharacter] = React.useState(null);
+    
     const [maskedImages, setMaskedImages] = React.useState([]);
     
 
@@ -67,6 +75,8 @@ const Theseus = () => {
       setSelectedImage(image);
     }
 
+    //========= HANDLE CLICK SEND QUESTION OR GUESS IMAGE =========
+
     const handleClickSend = () => {
       setTurn(1);
       console.log("Masked images:", maskedImages);
@@ -82,17 +92,32 @@ const Theseus = () => {
         console.log("image and question selected");
         return;
       }
+      //========= HANDLE CLICK SEND QUESTION =========
       if (selectedQuestion){
         const fetchData = async () => {
           const response = await axios.post('http://127.0.0.1:5000/api/theseus/feature/', {
             feature: selectedQuestion
           });
+          console.log("response:", response);
           const data = await response.data;
           setAnswer(data.answer);
+          //set next question or guess or lose if theseus has no question or guess
+          if(data.fail){
+            setTrouveIA(2);
+          }
+          if(data.character){
+            setGuessCharacter(data.character);
+          }
+          else{
+            setQuestion(data.question);
+          }
+          setQuestion(data.question);
           setListFeatures(removeNull(data.list_features));
         }
         fetchData();
       }
+
+      //========= HANDLE CLICK SEND GUESS IMAGE =========
       if (selectedImage){
         console.log("image (from theseus):", selectedImage);
         const fetchData = async () => {
@@ -144,12 +169,12 @@ const Theseus = () => {
         
             
                 <div className="ariane__actions">
-
+                    
+                    {/*Tour du joueur*/}
                     {turn === 0 && (
                     <>
                         <div className="ariane__questions">
                             <div className="ariane__drawer" onClick={handleClickDrawer}>
-                                {isFoldDrawer ? <ArrowRightIcon className='ariane__arrow' /> : <ArrowDropDownIcon className='ariane__arrow' />}
                                 <h5 className='no-margin'>question list</h5>
                             </div>
                             {!isFoldDrawer && (
@@ -171,18 +196,32 @@ const Theseus = () => {
                         
                     </>
                     )}
+
+                    {/*Tour de Thésée*/}
                     {turn === 1 && (
                     <>
+                        
                         {answer && (
-                            <div className="ariane__answer">
-                                <p className="ariane__answer-text">{answer}</p>
+                            <div className="theseus__answer">
+                                <p className="theseus__answer-text">{answer}</p>
                             </div>
                         )}
 
-                        <div>
-                            <p className="ariane__question-text">C'est au tour de Thésée</p>
+                        <p className="theseus__text">C'est au tour de Thésée</p>
 
-                        </div>
+                        {question && (
+                            <div className="theseus__answer">
+                                <p className="theseus__answer-text">{question}</p>
+                            </div>
+                        )}
+
+                        {guessCharacter && (
+                            <div className="theseus__answer">
+                                <p className="theseus__answer-text">Je pense que c'est {guessCharacter}</p>
+                            </div>
+                        )}
+
+                        
                     </>   
                     )}
                 </div>
