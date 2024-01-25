@@ -1,5 +1,6 @@
 /api/flask_session
 /api/__pycache__
+/api/api2.py
 .github/api/__pycache__
 /api/venv
 /api/flask_session
@@ -7,3 +8,4 @@
 /node_modules
 /front/build
 /front/node_modules
+/api/temp
