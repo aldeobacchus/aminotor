@@ -100,16 +100,18 @@ def get_response_and_next_question():
     response['list_features'] = list_features
 
 
+   
+    # S'il n'y a plus de question à poser
+    if list_features == [None]*len(list_features):
+        response['fail']=True
+        response['type']="fail"
     # Si le max est 2 fois plus grand que le deuxième max, on peut proposer une réponse
-    if max(proba_list) > 1.3*sorted(proba_list)[-2] or nb_questions == max_questions :
+    elif max(proba_list) > 1.3*sorted(proba_list)[-2] or nb_questions == max_questions :
+        print(f"LAAAAAA {nb_questions}")
         guess_index = proba_list.index(max(proba_list))
         guess = final_img_list[guess_index]
         response['character']=guess
         response['type']="character"
-    # Si les probas sont trop faibles, on peut déclarer forfait
-    elif max(proba_list) < 0.5 :
-        response['fail']=True
-        response['type']="fail"
     # Sinon on continue à jouer en posant une nouvelle question
     else :
         predicted_labels = data['predicted_labels']

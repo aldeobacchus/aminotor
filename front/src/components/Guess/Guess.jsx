@@ -14,7 +14,7 @@ function Guess(args) {
     }
 
     function answerNo() {
-        axios.get('http://127.0.0.1:5000/api/proposition/')
+        axios.get('http://127.0.0.1:5000/api/aminoguess/proposition/')
           .then(response => {
             args.setQuestion(response.data.question);
             args.setGuess('');

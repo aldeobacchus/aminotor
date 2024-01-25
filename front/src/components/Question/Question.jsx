@@ -38,7 +38,9 @@ function Question(args) {
           else if (response.data.fail) {
             args.setGuess("fail");
           }
-          setQuestion(response.data.question);
+          else {
+            setQuestion(response.data.question);
+          }
         })
         .catch(error => {
           console.error('Erreur lors de la récupération de la question', error);

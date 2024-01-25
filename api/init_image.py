@@ -2,10 +2,10 @@
 import os
 import random
 from flask import Flask, jsonify, request, send_file, send_from_directory, session
-
+from PIL import Image
 from random import randrange
 from flask_cors import CORS
-
+import io
 
 app = Flask(__name__)
 CORS(app)
@@ -43,6 +43,13 @@ def init_game():
 def upload_img():
     random_name = random.randint(1, 50000)
     file = request.files['image']
+    image_data = file.read()    
+    image = Image.open(io.BytesIO(image_data))
+
+    target_width = 178
+    target_height = 218
+    resized_image = resize_and_crop_image(image, target_width, target_height)
+
 
     folder_name = "temp"
     folder_path = os.path.join(os.getcwd(), folder_name)
@@ -51,11 +58,34 @@ def upload_img():
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
 
-    file.save(os.path.join(folder_path, f"{random_name}.jpg"))
+    resized_image.save(os.path.join(folder_path, f"{random_name}.jpg"))
 
     return jsonify(
         random_name=random_name
     )
+
+def resize_and_crop_image(image, target_width, target_height):
+
+    original_width, original_height = image.size
+
+    width_ratio = target_width / original_width
+    height_ratio = target_height / original_height
+
+    resize_ratio = max(width_ratio, height_ratio)
+
+    new_width = int(original_width * resize_ratio)
+    new_height = int(original_height * resize_ratio)
+    resized_image = image.resize((new_width, new_height),
+                                 Image.ANTIALIAS if "ANTIALIAS" in dir(Image) else Image.BILINEAR)
+
+    left = (new_width - target_width) / 2
+    top = (new_height - target_height) / 2
+    right = (new_width + target_width) / 2
+    bottom = (new_height + target_height) / 2
+
+    cropped_image = resized_image.crop((left, top, right, bottom))
+
+    return cropped_image
 
 @app.route('/image/delete/', methods=['POST'])
 def delete_img():
