@@ -50,7 +50,7 @@ jobs:
         run: unzip release.zip
 
       - name: 'Set environment variable for WEBSITES_PORT'
-        run: echo "WEBSITES_PORT=3000" >> $GITHUB_ENV
+        run: echo "WEBSITES_PORT=8080" >> $GITHUB_ENV
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
