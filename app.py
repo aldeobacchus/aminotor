@@ -26,7 +26,7 @@ def hello():
 model_path = os.path.join(os.getcwd(), "model_ki_s")
 images_dir_path = os.path.join(os.getcwd(), "images")
 nb_images = 10
-image_width, image_height = 128, 128
+image_width, image_height = 178, 218
 
 
 def load_process_images(list_image_path):
@@ -34,7 +34,7 @@ def load_process_images(list_image_path):
     images = []
     for image_path in list_image_path:
         # Load and resize the image
-        img = tf.keras.utils.load_img(image_path, target_size=(image_width, image_height))
+        img = tf.keras.utils.load_img(image_path, target_size=(image_height, image_width))
         img_array = img_to_array(img)
         # Preprocess the image (you may need to adapt this based on your specific requirements)
         img_array = img_array / 255.0  # Normalize pixel values to [0, 1]
@@ -60,9 +60,6 @@ def load_images (list_images):
 
             # Convertissez l'image en tableau numpy
             img_array = np.array(img) / 255.0
-
-            # Redimensionnez l'image
-            img_array = tf.image.resize(img_array, [image_width, image_height])
 
             # Stockez l'image prétraitée dans une liste
             images.append(img_array)
