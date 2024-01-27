@@ -14,7 +14,7 @@ function Parameters(args) {
         formData.append('image', selectedImage);
 
         try {
-            const response = await axios.post('http://127.0.0.1:5000/api/upload/', formData, {
+            const response = await axios.post('https://orchestratorservice1.azurewebsites.net/api/upload/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -29,7 +29,7 @@ function Parameters(args) {
 
     const handleFlush = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:5000/api/flush_upload/');
+            const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/flush_upload/');
             setConfirmationMessage('Les données ont été supprimées avec succès.');
             console.log('Réponse du serveur:', response.data);
         } catch (error) {

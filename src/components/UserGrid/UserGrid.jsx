@@ -16,14 +16,14 @@ function UserGrid(args) {
     const fetchData = async () => {
       console.log("before fetch")
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/init/2');
+        const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/init/2');
         const uploadValue = response.data.list_upload;
         let imageUrls = [];
         console.log("before upload value")
         if (uploadValue.length !== 0) {
           // Load images in parallel
           const imagePromises = uploadValue.map((imageName) => {
-            return fetch(`http://localhost:5000/api/get_img/${imageName}`)
+            return fetch(`https://orchestratorservice1.azurewebsites.net/api/get_img/${imageName}`)
               .then(response => response.blob())
               .then(blob => URL.createObjectURL(blob))
               .catch(error => {
