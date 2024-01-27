@@ -18,8 +18,8 @@ app = Flask(__name__)
 app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # change to 'None' in prod and 'Lax' with postman
-app.config['SESSION_COOKIE_SECURE'] = False # change to True in prod and False with postman
+app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to 'None' in prod and 'Lax' with postman
+app.config['SESSION_COOKIE_SECURE'] = True # change to True in prod and False with postman
 app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 
 Session(app)
@@ -74,7 +74,7 @@ def start_game_amino(nb_images):
     response = requests.post(ms_aminoguess+'aminoguess/start/', json=data).json()
 
     #initialisation et update the session variables
-    session['max_questions'] = 10
+    session['max_questions'] = 6
     session['proba_list'] = [1]*nb_images
     session['final_img_list'] = response.get("final_img_list")
     session['last_feature'] = response.get("feature")
@@ -478,4 +478,4 @@ def get_img(img):
 ############################## MAIN ##############################
 
 if __name__ == '__main__':
-    app.run(debug=True, port = 8000)
+    app.run(debug=True, port = 5000)
