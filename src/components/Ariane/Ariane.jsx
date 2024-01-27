@@ -33,7 +33,7 @@ function Ariane(args) {
   useEffect(() => {
     const fetchData = async () => {
       if(listFeatures.length === 0) {
-        const response = await axios.get('http://127.0.0.1:5000/api/ariane/start/');
+        const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/ariane/start/');
         const value = await response.data.features;
         //remove all null values
         removeNull(value);
@@ -82,7 +82,7 @@ function Ariane(args) {
     }
     if (selectedQuestion){
       const fetchData = async () => {
-        const response = await axios.post('http://127.0.0.1:5000/api/ariane/feature/', {
+        const response = await axios.post('https://orchestratorservice1.azurewebsites.net/api/ariane/feature/', {
           feature: selectedQuestion
         });
         const data = await response.data;
@@ -94,7 +94,7 @@ function Ariane(args) {
     if (selectedImage){
       console.log("image (from ariane):", selectedImage);
       const fetchData = async () => {
-        const url = 'http://127.0.0.1:5000/api/ariane/guess/'+selectedImage;
+        const url = 'https://orchestratorservice1.azurewebsites.net/api/ariane/guess/'+selectedImage;
         const response = await axios.get(url);
         console.log("response : ", response);
         const value = await response.data;
