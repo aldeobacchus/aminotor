@@ -9,8 +9,8 @@ import requests
 ms_image = 'https://initimageservice.azurewebsites.net/'
 ms_aminoguess = 'http://aminoguessservice.azurewebsites.net/'
 ms_ariane = 'http://arianeservice.azurewebsites.net/'
-#origin = 'https://aminotor.azurewebsites.net' #deployment
-origin = 'http://localhost:3000' #local
+origin = 'https://aminotor.azurewebsites.net' #deployment
+#origin = 'http://localhost:3000' #local
 
 app = Flask(__name__)
 
