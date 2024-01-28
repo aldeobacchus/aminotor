@@ -58,11 +58,18 @@ function UserGrid(args) {
 
     return (
         <div className='game_userGrid'>
-            <SelectionPanel mode="selection" size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
-            <div className="userGrid_buttons">
-              <button onClick={() => {fetchData()}}>Nouvelle grille</button>
-              {(selectedImage || args.mode === "ariane") && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+          {args.squares.length === 0 && (
+            <span class="loader2"></span>
+          )}
+          {args.squares.length !== 0 && (
+            <div>
+              <SelectionPanel mode="selection" size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
+              <div className="userGrid_buttons">
+                <button onClick={() => {fetchData()}}>Nouvelle grille</button>
+                {(selectedImage || args.mode === "ariane") && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+              </div>
             </div>
+          )}
         </div>
     )
 }

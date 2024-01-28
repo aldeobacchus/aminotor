@@ -15,8 +15,17 @@ const SelectionPanel = (args) => {
   };
 
   const handleImageGuess = (image) => {
-    setSelectedImage(image);
-    args.onImageGuess(image);
+    if (args.maskingMode) {
+      args.setMaskedImages([...args.maskedList, image]);
+      if (!args.maskedImages.includes(image)){
+        args.setMaskedImages([...args.maskedImages, image]);
+      } else {
+        args.setMaskedImages(args.maskedImages.filter((item) => item !== image));
+      }
+    }else{
+      setSelectedImage(image);
+      args.onImageGuess(image);
+    }
   };
 
   const handleStyle = (square) => {

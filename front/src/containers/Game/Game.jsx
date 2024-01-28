@@ -43,7 +43,7 @@ function Game(args) {
       
 
       {selectionMode && args.gm === "Theseus Battle" && (
-        <UserGrid mode="ariane" setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
+        <UserGrid mode="theseus" setSelectionMode={setSelectionMode} setSelectedImage={setCharacter}
           setSquares={setCharacters} setSquaresSources={setCharactersSources}
           squares={characters} squaresSources={charactersSources}/>
       )}
