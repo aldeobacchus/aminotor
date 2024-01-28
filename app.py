@@ -7,8 +7,8 @@ from flask_session import Session
 import requests
 
 ms_image = 'https://initimageservice.azurewebsites.net/'
-ms_aminoguess = 'http://aminoguessservice.azurewebsites.net/'
-ms_ariane = 'http://arianeservice.azurewebsites.net/'
+ms_aminoguess = 'https://aminoguessservice.azurewebsites.net/'
+ms_ariane = 'https://arianeservice.azurewebsites.net/'
 origin = 'https://aminotor.azurewebsites.net' #deployment
 #origin = 'http://localhost:3000' #local
 
@@ -161,16 +161,8 @@ def start_game_ariane():
         'list_image': session['list_image'], 
         'list_upload': session['list_upload']
     }
-
-    try:
-        response = requests.post(ms_ariane + 'ariane/start/', json=data)
-        response.raise_for_status()  # Lève une exception en cas de code d'état HTTP non 2xx
-        json_data = response.json()
-        # Traitement des données JSON
-    except requests.RequestException as e:
-        print(f"Erreur lors de la requête POST : {e}")
-        # Gérer l'erreur, par exemple retourner une réponse d'erreur appropriée
-
+    
+    response = requests.post(ms_ariane+'ariane/start/', json=data).json()
 
     #initialisation et update the session variables
     session['final_img_list'] = response.get("final_img_list")
