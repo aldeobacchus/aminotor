@@ -28,6 +28,7 @@ function Question(args) {
   }, []); 
 
     function answer(arg) {
+      setQuestion('');
       axios.get('http://127.0.0.1:5000/api/aminoguess/answer/'+arg)
         .then(response => {
           if (response.data.character) {
@@ -57,29 +58,27 @@ function Question(args) {
       return (
           <div className='question'>
               <h4>Question : {question}</h4>
-              <div className="answer-container">
-                {/* TODO CHANGER DE PLACE VERS AMINO */}
-                {nombreAleatoire === 1 ? <img className="minotor" src='img/minotors/NORMAL.png' alt="image1" /> : <img className="minotor" src='img/minotors/LAMP.png' alt="image2"/>}
-                <div className="answer-container2">
-                  <div className='answer'>
-                    <button onClick={() => answer(1)}>Oui</button>
-                    <button onClick={() => answer(0)}>Non</button>
-                  </div>
-
-                  <div className='answer'>
-                    <button onClick={() => answer(3)}>Je pense que oui</button>
-                    <button onClick={() => answer(2)}>Je ne sais pas</button>
-                    <button onClick={() => answer(4)}>Je pense que non</button>
-                  </div>
+              
+              <div className="answer-container2">
+                <div className='answer'>
+                  <button onClick={() => answer(1)}>Oui</button>
+                  <button onClick={() => answer(0)}>Non</button>
                 </div>
-                <div className='answer-container-padding'></div>
+
+                <div className='answer'>
+                  <button onClick={() => answer(3)}>Je pense que oui</button>
+                  <button onClick={() => answer(2)}>Je ne sais pas</button>
+                  <button onClick={() => answer(4)}>Je pense que non</button>
+                </div>
               </div>
+              
           </div>
     )
     } else {
       return (
         <div className='wait'>
-            <h3>Laissez-moi réfléchir un instant...</h3>
+            <span className="loader2 no-margin"></span>
+            <h5>Laissez-moi réfléchir un instant...</h5>
         </div>
       )
     }

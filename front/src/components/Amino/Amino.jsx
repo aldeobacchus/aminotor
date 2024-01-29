@@ -15,6 +15,7 @@ function Amino(args) {
   return (
 
     <div className="game_amino">
+      <img className="minotor" src='img/minotors/LAMP.png' alt="image1" />
 
       {!guess && !boolFind && <>
         <Question setGuess={setGuess} question={question} sliderValue={args.sliderValue} setQuestion={setQuestion} characters={args.characters} charactersSources={args.charactersSources}/>

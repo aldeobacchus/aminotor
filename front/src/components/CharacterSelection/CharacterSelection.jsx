@@ -64,9 +64,19 @@ function CharacterSelection(args) {
   
   return (
     <div className='game_characterSelection'>
+      {/**image list is empty*/}
+    {args.squares.length !== 0 ? (
+        <>
         <SizePanelBar onSliderChange={handleSliderChange} />
         <SelectionPanel mode="selection" size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
         {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
+        </>
+      ) : (
+        <div className='game_characterSelection-loading'>
+          <span class="loader2"></span>
+          <h5>Chargement des images</h5>
+        </div>
+      )}
     </div>
   )
 }
