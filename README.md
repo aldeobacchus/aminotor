@@ -63,7 +63,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 ### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+# Construire votre image Docker localement
+docker build -t aminotor-front .
+
+# Tagger l'image pour Azure Container Registry (ACR), n'oubliez pas d'adapter la version
+docker tag aminotor-front front1.azurecr.io/aminotor-front:v2
+
+# Authentifier à Azure Container Registry
+az acr login --name front1
+
+# Pousser l'image taguée vers Azure Container Registry (ACR)
+docker push front1.azurecr.io/aminotor-front:v2
+
 
 ### `npm run build` fails to minify
 
