@@ -3,3 +3,10 @@
     display: flex;
     flex-direction: column;
 }
+
+.game_characterSelection-loading{
+    margin: auto 5vw;
+    display: flex;
+    flex-direction: column;
+    margin:20vh;
+}

@@ -22,14 +22,14 @@ function CharacterSelection(args) {
     const fetchData = async () => {
       console.log("before fetch")
       try {
-        const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/init/1');
+        const response = await axios.get('http://127.0.0.1:5000/api/init/1');
         const uploadValue = response.data.list_upload;
         let imageUrls = [];
         console.log("before upload value")
         if (uploadValue.length !== 0) {
           // Load images in parallel
           const imagePromises = uploadValue.map((imageName) => {
-            return fetch(`https://orchestratorservice1.azurewebsites.net/api/get_img/${imageName}`)
+            return fetch(`http://localhost:5000/api/get_img/${imageName}`)
               .then(response => response.blob())
               .then(blob => URL.createObjectURL(blob))
               .catch(error => {
@@ -64,9 +64,19 @@ function CharacterSelection(args) {
   
   return (
     <div className='game_characterSelection'>
+      {/**image list is empty*/}
+    {args.squares.length !== 0 ? (
+        <>
         <SizePanelBar onSliderChange={handleSliderChange} />
         <SelectionPanel mode="selection" size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
         {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
+        </>
+      ) : (
+        <div className='game_characterSelection-loading'>
+          <span class="loader2"></span>
+          <h5>Chargement des images</h5>
+        </div>
+      )}
     </div>
   )
 }

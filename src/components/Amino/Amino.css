@@ -8,10 +8,12 @@
 
 .game_amino{
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
   gap: 20px;
   height: auto;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 10vh;
 }
 
 .character{
@@ -33,6 +35,13 @@
   gap: 20px;
 }
 
+.amino__fail{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+}
 .characterFocus{
   height: 60vh;
   border-radius: 10px;

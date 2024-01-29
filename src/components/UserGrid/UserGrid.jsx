@@ -16,14 +16,14 @@ function UserGrid(args) {
     const fetchData = async () => {
       console.log("before fetch")
       try {
-        const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/init/2');
+        const response = await axios.get('http://127.0.0.1:5000/api/init/2');
         const uploadValue = response.data.list_upload;
         let imageUrls = [];
         console.log("before upload value")
         if (uploadValue.length !== 0) {
           // Load images in parallel
           const imagePromises = uploadValue.map((imageName) => {
-            return fetch(`https://orchestratorservice1.azurewebsites.net/api/get_img/${imageName}`)
+            return fetch(`http://localhost:5000/api/get_img/${imageName}`)
               .then(response => response.blob())
               .then(blob => URL.createObjectURL(blob))
               .catch(error => {
@@ -58,11 +58,21 @@ function UserGrid(args) {
 
     return (
         <div className='game_userGrid'>
-            <SelectionPanel mode="selection" size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
-            <div className="userGrid_buttons">
-              <button onClick={() => {fetchData()}}>Nouvelle grille</button>
-              {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+          {args.squares.length === 0 && (
+            <div className="game_characterSelection-loading">
+              <span class="loader2"></span>
+              <h5>Chargement des images</h5>
             </div>
+          )}
+          {args.squares.length !== 0 && (
+            <>
+              <SelectionPanel mode="selection" size={size} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
+              <div className="userGrid_buttons">
+                <button onClick={() => {fetchData()}}>Nouvelle grille</button>
+                {(selectedImage || args.mode === "ariane") && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage);}}>Start</button> }
+              </div>
+            </>
+          )}
         </div>
     )
 }

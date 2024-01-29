@@ -15,8 +15,7 @@
 }
 .ariane__actions{
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-direction: column; 
     align-items: center;
     width: 100%;
     gap:30px;
@@ -28,9 +27,12 @@
     align-items: center;
 
     background-color: var(--color-orange1);
-    cursor: pointer;
     border-radius: 10px;
+    cursor: default;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
 }
+
 .ariane__questions{
     display: flex;
     flex-direction: column;
@@ -62,7 +64,6 @@
     font-size: 1.5rem;
     font-family: var(--font-inika);
     font-weight: bold;
-
 }
 .ariane__question-text:hover{
     background-color: rgba(237, 168, 40, 0.24);
@@ -83,4 +84,38 @@
 .ariane-square-img {
     width: 15%;
     border-radius: 10px;
+}
+
+.ariane__lose{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:row-reverse;
+    align-items: flex-start;
+    gap: 2rem;  
+
+    margin-top: 5rem;
+}
+
+.ariane__lose-img{
+    width: 25vw;
+}
+.ariane__lose-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.ariane__loading-text{
+    padding: 0.5rem 1rem;
+}
+
+.ariane__loading{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; 
 }
