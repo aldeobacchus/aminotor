@@ -108,6 +108,10 @@
     gap: 2rem;
 }
 
+.ariane__loading-text{
+    padding: 0.5rem 1rem;
+}
+
 .ariane__loading{
     display: flex;
     flex-direction: column;
