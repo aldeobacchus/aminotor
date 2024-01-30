@@ -303,7 +303,7 @@ def answer_proposition_and_ask_question(guess):
         'max_guess': session['max_guess']
     }
 
-    response_ariane = requests.post(ms_image+'ariane/guess/', json=data_ariane).json()
+    response_ariane = requests.post(ms_ariane+'ariane/guess/', json=data_ariane).json()
 
     #update the session variables
     session['nb_guess'] = response_ariane.get('nb_guess')
