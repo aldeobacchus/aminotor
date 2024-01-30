@@ -1,0 +1,71 @@
+.theseus__answer {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.theseus__button-idk{
+    width:100%;
+
+}
+
+.theseus__text{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.theseus__questions{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.theseus__question-wrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.theseus__answer-text{
+    font-size: 1.5rem;
+    font-family: var(--font-inika);
+    font-weight: bold;
+
+}
+.theseus__guess{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+}
+
+.theseus__guess-text{
+    font-family: var(--font-inika);
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.theseus__guess-buttons{
+    display :flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 1rem;
+}
+
+.theseus__guess-img{
+    border-radius: 15px;
+}
+
+.theseus__mycharacter{
+    cursor:zoom-in;
+    border-radius: 15px;
+}

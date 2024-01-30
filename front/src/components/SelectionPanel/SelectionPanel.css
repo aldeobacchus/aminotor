@@ -1,7 +1,7 @@
 .selection-panel {
   display: flex;
   gap: 10px;
-  max-height: 70vh;
+  max-height: 71vh;
   overflow: auto;
   flex-wrap: wrap;
   padding: 10px;
@@ -15,7 +15,7 @@
 }
 
 .square-img{
-  width: 11.5%;
+  width: 10.60%;
   border-radius: 10px;
   transition-duration: 0.2s;
   transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
@@ -28,9 +28,14 @@
   transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
   border-radius: 10px;
 }
+
+/* RESPONSIVE */
 @media screen and (max-width: 768px){
   .square-img{
     width: 22.5%;
+  }
+  .selection-panel{
+    max-height: 60vh;
   }
   
 }

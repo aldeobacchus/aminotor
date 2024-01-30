@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./SizePanelBar.css";
 
 const SizePanelBar = ({onSliderChange }) => {
-    const [sliderValue, setSliderValue] = useState(2);
+    const [sliderValue, setSliderValue] = useState(4);
 
     const handleSliderChange = (event) => {
       const sliderValue = parseInt(event.target.value, 10);
@@ -28,14 +28,14 @@ const SizePanelBar = ({onSliderChange }) => {
     <div className="slider-container">
       <input
         type="range"
-        min="2"
-        max="5"
+        min="4"
+        max="7"
         value={sliderValue}
         className="slider"
         onChange={handleSliderChange}
       />
       <div className="checkpoints-container">{renderCheckpoints()}</div>
-      <div className="slider-value">{2**(sliderValue*2)}</div>
+      <div className="slider-value">{2**(sliderValue)}</div>
     </div>
   );
 };
