@@ -67,20 +67,8 @@ def load_process_predict(_model_path=model_path):
 
     predicted_labels = []
 
-    list_path_upload = data['list_path_upload']
-
-    # TODO : change once we know how to get from the database
-    images = load_process_images(list_path_upload)
-
     list_path_init = data['list_path_init']
-    
-
-    # Load and preprocess the images
-    if len(list_path_init) > 0 :
-        if images.size == 0:
-            images = load_images(list_path_init)
-        else:
-            images = np.concatenate((images, load_images(list_path_init)), axis=0)
+    images = load_images(list_path_init)
 
     predicted_labels += np.round(model.predict(images)).tolist()
 
