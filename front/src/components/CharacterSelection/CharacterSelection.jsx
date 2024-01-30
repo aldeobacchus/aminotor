@@ -23,7 +23,11 @@ function CharacterSelection(args) {
       console.log("before fetch")
       try {
         const response = await axios.get('http://127.0.0.1:5000/api/init/1');
-        const uploadValue = response.data.list_upload;
+        args.setSquares(response.data.list_image);
+        console.log(response.data.image_urls)
+        args.setSquaresSources(response.data.image_urls);
+        
+        /*const uploadValue = response.data.list_upload;
         let imageUrls = [];
         console.log("before upload value")
         if (uploadValue.length !== 0) {
@@ -51,12 +55,14 @@ function CharacterSelection(args) {
         const newSquares = listImage.map((_, i) => {
           const padded = `https://etud.insa-toulouse.fr/~alami-mejjat/${listImage[i].toString().padStart(6, '0')}.jpg`;
           return padded;
-        });
+        }); 
+
         console.log("after list image")
         // Combine the arrays and set the state
         args.setSquares([...uploadValue,...listImage]);
         args.setSquaresSources([...imageUrls,...newSquares]);
-        console.log("end of fetch")
+        console.log("end of fetch")*/
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -64,9 +70,19 @@ function CharacterSelection(args) {
   
   return (
     <div className='game_characterSelection'>
+      {/**image list is empty*/}
+    {args.squares.length !== 0 ? (
+        <>
         <SizePanelBar onSliderChange={handleSliderChange} />
         <SelectionPanel mode="selection" size={2**(sliderValue*2)} squares={args.squares} squaresSources={args.squaresSources} onImageSelect={setSelectedImage}/>
         {selectedImage && <button onClick={() => {args.setSelectionMode(false); args.setSelectedImage(selectedImage); args.setSliderValue(sliderValue)}}>Start</button> }
+        </>
+      ) : (
+        <div className='game_characterSelection-loading'>
+          <span class="loader2"></span>
+          <h5>Chargement des images</h5>
+        </div>
+      )}
     </div>
   )
 }

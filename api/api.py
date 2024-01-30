@@ -32,15 +32,16 @@ def init_game(gamemod):
 
     data = {
         'gamemod': gamemod,
-        'nb_upload': len(list_upload)
+        'list_upload': list_upload
     }
 
     response = requests.post('http://localhost:5001/image/init', json=data).json()
-    session['list_image'] = response.get('list_image')
+    session['image_list'] = response.get('list_image')
+    session['image_urls'] = response.get('image_urls')
 
     return jsonify(
-        list_upload=session['list_upload'],
-        list_image=session['list_image']
+        list_image = session['image_list'],
+        image_urls = session['image_urls']
         )
 
 ############################## MODE DE JEU 1 - AMINOGUESS ##############################
@@ -55,8 +56,8 @@ def start_game_amino(nb_images):
     data={
         'list_features': session['list_features'],
         'nb_images': session['nb_images'],
-        'list_image': session['list_image'], 
-        'list_upload': session['list_upload']
+        'image_list': session['image_list'],
+        'image_urls' : session['image_urls']
     }
     
     response = requests.post('http://localhost:5002/aminoguess/start/', json=data).json()
@@ -64,11 +65,13 @@ def start_game_amino(nb_images):
     #initialisation et update the session variables
     session['max_questions'] = 6
     session['proba_list'] = [1]*nb_images
-    session['final_img_list'] = response.get("final_img_list")
+    session['image_list'] = response.get("image_list")
     session['last_feature'] = response.get("feature")
     session['question'] = response.get("question")
     session['nb_questions'] = 1
     session['predicted_labels'] = response.get("predicted_labels")
+    session['final_img_list'] = response.get("final_img_list")
+    session['image_urls'] = response.get("list_path_init")
 
     return jsonify(
         feature=response.get("feature"),
@@ -86,6 +89,7 @@ def get_response_and_next_question(answer):
         'last_feature': session['last_feature'],
         'proba_list': session['proba_list'],
         'final_img_list': session['final_img_list'],
+        'nb_images': session['nb_images'],
         'nb_questions': session['nb_questions'],
         'max_questions': session['max_questions'],
         'predicted_labels': session['predicted_labels']
@@ -98,7 +102,6 @@ def get_response_and_next_question(answer):
         'fail': response.get('fail'),
         'question': None,
     }
-    print(f"ICIIIIIII {reel_response['character']}")
 
     if response.get('proba_list'):
         session['proba_list'] = response.get('proba_list')

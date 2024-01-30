@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Ariane.css'
 import axios from 'axios';
-import UserGrid from '../UserGrid/UserGrid';
 import SelectionPanel from '../SelectionPanel/SelectionPanel';
 
 function Ariane(args) {
