@@ -1,6 +1,5 @@
-from flask import Flask, Response, jsonify, make_response, request, send_from_directory, session
+from flask import Flask, Response, jsonify, make_response, request, session
 
-from flask_cors import cross_origin  # Fix the typo in import
 from features import new_features, new_questions, answers
 from flask_cors import CORS
 from flask_session import Session
@@ -14,8 +13,7 @@ origin = 'https://aminotor.azurewebsites.net' #deployment
 
 app = Flask(__name__)
 
-#app.secret_key = os.environ.get('SECRET_KEY') #KEEP THIS LINE AND ADD THE KEY ON AZURE
-app.secret_key = 'you-will-never-guess' # DON'T FORGET TO DELETE THIS LINE ON DEPLOYMENT
+app.secret_key = 'you-will-never-guess' 
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = 'None' # change to 'None' in prod and 'Lax' with postman
@@ -24,7 +22,6 @@ app.config['SESSION_COOKIE_NAME'] = 'AminotorSession'
 
 Session(app)
 CORS(app, supports_credentials=True, origins=origin)
-
 
 ############################## INITIALISATION ##############################
 
@@ -45,17 +42,18 @@ def init_game(gamemod):
 
     data = {
         'gamemod': gamemod,
-        'nb_upload': len(list_upload)
+        'list_upload': list_upload
     }
 
     response = requests.post(ms_image+'image/init/', json=data).json()
-    session['list_image'] = response.get('list_image')
+    session['image_list'] = response.get('list_image')
+    session['image_urls'] = response.get('image_urls')
 
     return jsonify(
-        list_upload=session['list_upload'],
-        list_image=session['list_image']
+        list_image = session['image_list'],
+        image_urls = session['image_urls']
         )
-
+    
 ############################## MODE DE JEU 1 - AMINOGUESS ##############################
 
 #première question du jeu
@@ -67,8 +65,8 @@ def start_game_amino(nb_images):
     data={
         'list_features': session['list_features'],
         'nb_images': session['nb_images'],
-        'list_image': session['list_image'], 
-        'list_upload': session['list_upload']
+        'image_list': session['image_list'],
+        'image_urls' : session['image_urls']
     }
     
     response = requests.post(ms_aminoguess+'aminoguess/start/', json=data).json()
@@ -76,11 +74,13 @@ def start_game_amino(nb_images):
     #initialisation et update the session variables
     session['max_questions'] = 6
     session['proba_list'] = [1]*nb_images
-    session['final_img_list'] = response.get("final_img_list")
+    session['image_list'] = response.get("image_list")
     session['last_feature'] = response.get("feature")
     session['question'] = response.get("question")
     session['nb_questions'] = 1
     session['predicted_labels'] = response.get("predicted_labels")
+    session['final_img_list'] = response.get("final_img_list")
+    session['image_urls'] = response.get("list_path_init")
 
     return jsonify(
         feature=response.get("feature"),
@@ -97,6 +97,7 @@ def get_response_and_next_question(answer):
         'last_feature': session['last_feature'],
         'proba_list': session['proba_list'],
         'final_img_list': session['final_img_list'],
+        'nb_images': session['nb_images'],
         'nb_questions': session['nb_questions'],
         'max_questions': session['max_questions'],
         'predicted_labels': session['predicted_labels']
@@ -156,12 +157,15 @@ def start_game_ariane():
 
     session['list_features_asked'] = new_features.copy()
     
+    session['nb_images'] = 24
+
     data={
         'list_features': session['list_features_asked'],
-        'list_image': session['list_image'], 
-        'list_upload': session['list_upload']
+        'nb_images': session['nb_images'],
+        'image_list': session['image_list'],
+        'image_urls' : session['image_urls']
     }
-    
+
     response = requests.post(ms_ariane+'ariane/start/', json=data).json()
 
     #initialisation et update the session variables
@@ -188,7 +192,8 @@ def get_feature():
         'img_choice': session['img_choice'],
         'list_features': session['list_features_asked'],
         'predicted_labels': session['predicted_labels'],
-        'list_answers': session['list_answers'] 
+        'list_answers': session['list_answers'],
+        'image_list': session['final_img_list']
     }
 
     response = requests.post(ms_ariane+'ariane/feature/', json=data).json()
@@ -228,11 +233,14 @@ def start_game_theseus():
     
         session['list_features'] = new_features.copy()
         session['list_features_asked'] = new_features.copy()
+
+        session['nb_images'] = 24
         
         data={
             'list_features': session['list_features'],
-            'list_image': session['list_image'], 
-            'list_upload': session['list_upload']
+            'nb_images': session['nb_images'],
+            'image_list': session['image_list'],
+            'image_urls' : session['image_urls']
         }
         
         response = requests.post(ms_ariane+'ariane/start/', json=data).json()
@@ -270,7 +278,8 @@ def get_feature_and_ask_question():
         'predicted_labels': session['predicted_labels'],
         'max_questions': session['max_questions'],
         'nb_questions': session['nb_questions'],
-        'list_answers': session['list_answers'] 
+        'list_answers': session['list_answers'],
+        'image_list': session['final_img_list']
     }
 
     response_ariane = requests.post(ms_ariane+'ariane/feature/', json=data_ariane).json()
@@ -348,6 +357,7 @@ def get_response_and_give_labels(answer):
         'list_features': session['list_features'],
         'last_feature': session['last_feature'],
         'proba_list': session['proba_list'],
+        'nb_images': session['nb_images'],
         'final_img_list': session['final_img_list'],
         'nb_questions': session['nb_questions'],
         'max_questions': session['max_questions'],
@@ -433,23 +443,18 @@ def upload_img():
         success=True
     )   
 
-@app.route('/api/flush_session/', methods=['GET'])
-def flush():
-    flush_upload()
-    session.clear()
-    return jsonify(
-        success=True
-    )
-
 @app.route('/api/flush_upload/', methods=['GET'])
 def flush_upload():
 
     if session.get('list_upload') is not None:
         list_upload = session['list_upload']
+    else:
+        list_upload = []
 
     data = {'list_upload': list_upload}
 
-    response = requests.post(ms_image+'image/delete', json=data).json()
+    response = requests.post('http://localhost:5001/image/delete', json=data).json()
+    print(response)
 
     session['list_upload'] = []
 
@@ -462,7 +467,6 @@ def flush_upload():
 def get_img(img):
     print(img)
     response = requests.get(ms_image+'image/get/{}'.format(img))
-
     
     return Response(response.content, content_type='image/jpeg')
 
