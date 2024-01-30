@@ -15,8 +15,8 @@ function Question(args) {
     const fetchData = async () => {
       if (question === '') {
         console.log(question);
-        const grid_size = 2 ** (args.sliderValue * 2);
-        const response = await axios.get(`http://127.0.0.1:5000/api/aminoguess/start/${grid_size}`, { withCredentials: true })
+        const grid_size = 2**(args.sliderValue);
+        const response = await axios.get(`https://orchestratorservice1.azurewebsites.net/api/aminoguess/start/${grid_size}`, { withCredentials: true })
         setQuestion(response.data.question);
         console.log(question);
         return question;
@@ -29,7 +29,7 @@ function Question(args) {
 
   function answer(arg) {
     setQuestion('');
-    axios.get('http://127.0.0.1:5000/api/aminoguess/answer/' + arg)
+    axios.get('https://orchestratorservice1.azurewebsites.net/api/aminoguess/answer/' + arg)
       .then(response => {
         if (response.data.character) {
           const guess = response.data.character;

@@ -16,7 +16,7 @@ function Guess(args) {
 
   function answerNo() {
     setLoading(true);
-    axios.get('http://127.0.0.1:5000/api/aminoguess/proposition/')
+    axios.get('https://orchestratorservice1.azurewebsites.net/api/aminoguess/proposition/')
       .then(response => {
         args.setQuestion(response.data.question);
         args.setGuess('');

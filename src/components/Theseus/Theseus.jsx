@@ -34,7 +34,7 @@ const Theseus = (args) => {
   useEffect(() => {
     const fetchData = async () => {
       if (listFeatures.length === 0) {
-        const response = await axios.get('http://127.0.0.1:5000/api/theseus/start/');
+        const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/theseus/start/');
         const value = await response.data.features;
         //remove all null values
         setListFeatures(removeNull(value));
@@ -107,7 +107,7 @@ const Theseus = (args) => {
     //========= HANDLE CLICK SEND QUESTION =========
     if (selectedQuestion) {
       const fetchData = async () => {
-        const response = await axios.post('http://127.0.0.1:5000/api/theseus/feature/', {
+        const response = await axios.post('https://orchestratorservice1.azurewebsites.net/api/theseus/feature/', {
           feature: selectedQuestion
         });
         console.log("response:", response);
@@ -118,7 +118,8 @@ const Theseus = (args) => {
           setTrouveIA(2);
         }
         if (data.character) {
-          setGuessCharacter(data.character);
+          const guess = data.character;
+          setGuessCharacter(args.squaresSources[args.squares.indexOf(guess)]);
         }
         else {
           console.log("loading off");
@@ -134,7 +135,7 @@ const Theseus = (args) => {
       console.log("image (from theseus):", selectedImage);
 
       const fetchData = async () => {
-        const url = 'http://127.0.0.1:5000/api/theseus/guess/' + selectedImage;
+        const url = 'https://orchestratorservice1.azurewebsites.net/api/theseus/guess/' + selectedImage;
         const response = await axios.get(url);
 
         console.log("response : ", response);
@@ -155,7 +156,8 @@ const Theseus = (args) => {
             setTrouveIA(2);
           }
           if (data.character) {
-            setGuessCharacter(data.character);
+            const guess = data.character;
+            setGuessCharacter(args.squaresSources[args.squares.indexOf(guess)]);
           }
           else {
             console.log("loading off");
@@ -177,7 +179,7 @@ const Theseus = (args) => {
     setLoadingAsk(true);
     console.log("answering question with : ", arg);
     const fetchData = async () => {
-      const response = await axios.get('http://127.0.0.1:5000/api/theseus/answer/' + arg);
+      const response = await axios.get('https://orchestratorservice1.azurewebsites.net/api/theseus/answer/' + arg);
       console.log("response:", response);
       const data = await response.data;
       console.log("list features:", data.list_features);
@@ -275,7 +277,7 @@ const Theseus = (args) => {
                 {guessCharacter && (
                   <div className="theseus__guess">
                     <p className="theseus__guess-text">Je pense que c'est cette personne :</p>
-                    <img className="theseus__guess-img" src={"https://etud.insa-toulouse.fr/~alami-mejjat/" + guessCharacter.toString().padStart(6, '0')} alt="guess" />
+                    <img className="theseus__guess-img" src={guessCharacter} alt="guess" />
                     <div className="theseus__guess-buttons">
                       <button className='ariane__button' onClick={() => setTrouveIA(0)}>Oui</button>
                       <button className='ariane__button' onClick={() => setTurn(0)}>Non</button>
@@ -297,7 +299,7 @@ const Theseus = (args) => {
         <div className="ariane__lose">
           <div className="ariane__lose-text">
             <h2 className="ariane__lose-text">Bravo vous avez trouvé !</h2>
-            <img className="theseus__guess-img" src={"https://etud.insa-toulouse.fr/~alami-mejjat/" + selectedImage.toString().padStart(6, '0')} />
+            <img className="theseus__guess-img" src={args.squaresSources[args.squares.indexOf(selectedImage)]} />
             <button className="ariane__lose-button" onClick={() => args.setSelectionMode(true)}>Recommencer</button>
             <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button>
           </div>
@@ -322,7 +324,7 @@ const Theseus = (args) => {
         <div className="ariane__lose">
           <div className="ariane__lose-text">
             <h2 className="ariane__lose-text">Thésée a trouvé !</h2>
-            <img className="theseus__guess-img" src={"https://etud.insa-toulouse.fr/~alami-mejjat/" + guessCharacter.toString().padStart(6, '0')} alt="guess" />
+            <img className="theseus__guess-img" src={guessCharacter} alt="guess" />
             <button className="ariane__lose-button" onClick={() => args.setSelectionMode(true)}>Recommencer</button>
             <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button>
           </div>
