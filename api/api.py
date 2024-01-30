@@ -150,11 +150,13 @@ def continue_next_question():
 def start_game_ariane():
 
     session['list_features_asked'] = new_features.copy()
-    
+    session['nb_images'] = 24
+
     data={
         'list_features': session['list_features_asked'],
-        'list_image': session['list_image'], 
-        'list_upload': session['list_upload']
+        'nb_images': session['nb_images'],
+        'image_list': session['image_list'],
+        'image_urls' : session['image_urls']
     }
     
     response = requests.post('http://localhost:5004/ariane/start/', json=data).json()
@@ -227,11 +229,14 @@ def start_game_theseus():
     
         session['list_features'] = new_features.copy()
         session['list_features_asked'] = new_features.copy()
+
+        session['nb_images'] = 24
         
         data={
             'list_features': session['list_features'],
-            'list_image': session['list_image'], 
-            'list_upload': session['list_upload']
+            'nb_images': session['nb_images'],
+            'image_list': session['image_list'],
+            'image_urls' : session['image_urls']
         }
         
         response = requests.post('http://localhost:5004/ariane/start/', json=data).json()
@@ -351,6 +356,7 @@ def get_response_and_give_labels(answer):
         'list_features': session['list_features'],
         'last_feature': session['last_feature'],
         'proba_list': session['proba_list'],
+        'nb_images': session['nb_images'],
         'final_img_list': session['final_img_list'],
         'nb_questions': session['nb_questions'],
         'max_questions': session['max_questions'],

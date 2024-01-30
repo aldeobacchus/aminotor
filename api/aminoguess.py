@@ -18,12 +18,6 @@ def start_game():
     list_features = data['list_features']
     image_urls = data['image_urls']
 
-    #TODO: change from the local server to the azure stockage service
-    folder_name = "temp"
-    server_path = "https://aminotorimages.blob.core.windows.net/images/"
-
-   
-
     # create a list of path from the list of images from the initial server
     list_path_init = []  
     final_img_list = []

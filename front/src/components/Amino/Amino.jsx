@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Question from '../Question/Question';
 import Guess from '../Guess/Guess';
 import './Amino.css';
@@ -18,22 +18,23 @@ function Amino(args) {
       <img className="minotor" src='img/minotors/LAMP.png' alt="image1" />
 
       {!guess && !boolFind && <>
-        <Question setGuess={setGuess} question={question} sliderValue={args.sliderValue} setQuestion={setQuestion} characters={args.characters} charactersSources={args.charactersSources}/>
-        <img className={isFocused ? "characterFocus" : "character mycharacter"} onClick={handleClick} src={args.character} alt="Selected" /> 
+        <Question setGuess={setGuess} question={question} sliderValue={args.sliderValue} setQuestion={setQuestion} characters={args.characters} charactersSources={args.charactersSources} />
+        <img className={isFocused ? "characterFocus" : "character mycharacter"} onClick={handleClick} src={args.character} alt="Selected" />
       </>
       }
 
-      {guess === 'fail' && !boolFind && <>
-        <h3>Désolé, je n'ai pas trouvé..</h3>
-        <div className="answer">
-          <button onClick={() => args.setSelectionMode(true)}>Rejouer</button>
-          <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button>
+      {guess === 'fail' && !boolFind && (
+        <div className="amino__fail">
+          <h2>Désolé, je n'ai pas trouvé..</h2>
+          <div className="answer">
+            <button onClick={() => args.setSelectionMode(true)}>Rejouer</button>
+            <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button>
+          </div>
         </div>
-      </>
-      }
+      )}
 
       {guess && guess !== 'fail' && !boolFind && <>
-        <Guess guess={guess} setGuess={setGuess} setBoolFind={setBoolFind} setQuestion={setQuestion}/>
+        <Guess guess={guess} setGuess={setGuess} setBoolFind={setBoolFind} setQuestion={setQuestion} />
         <img className={isFocused ? "characterFocus" : "character mycharacter"} onClick={handleClick} src={args.character} alt="Selected" />
       </>
       }
@@ -50,9 +51,9 @@ function Amino(args) {
       )}
 
 
-    
-  </div>
-  ) 
+
+    </div>
+  )
 }
 
 export default Amino

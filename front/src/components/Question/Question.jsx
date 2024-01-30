@@ -25,63 +25,63 @@ function Question(args) {
 
     //fetch data
     fetchData();
-  }, []); 
+  }, []);
 
-    function answer(arg) {
-      setQuestion('');
-      axios.get('http://127.0.0.1:5000/api/aminoguess/answer/'+arg)
-        .then(response => {
-          if (response.data.character) {
-            const guess = response.data.character;
-            console.log(guess);
-            args.setGuess(args.charactersSources[args.characters.indexOf(guess)])
-          }
-          else if (response.data.fail) {
-            args.setGuess("fail");
-          }
-          else {
-            setQuestion(response.data.question);
-          }
-        })
-        .catch(error => {
-          console.error('Erreur lors de la récupération de la question', error);
-        });
+  function answer(arg) {
+    setQuestion('');
+    axios.get('http://127.0.0.1:5000/api/aminoguess/answer/' + arg)
+      .then(response => {
+        if (response.data.character) {
+          const guess = response.data.character;
+          console.log(guess);
+          args.setGuess(args.charactersSources[args.characters.indexOf(guess)])
+        }
+        else if (response.data.fail) {
+          args.setGuess("fail");
+        }
+        else {
+          setQuestion(response.data.question);
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération de la question', error);
+      });
 
-        // Générer un nombre aléatoire entre 1 et 2
-        const nombreDecimal = 1 + Math.random();
-        const nombreFinal = nombreDecimal < 0.5 ? 1 : 2;
-        // Mettre à jour l'état avec le nombre aléatoire généré
-        setNombreAleatoire(nombreFinal);
-    }
+    // Générer un nombre aléatoire entre 1 et 2
+    const nombreDecimal = 1 + Math.random();
+    const nombreFinal = nombreDecimal < 0.5 ? 1 : 2;
+    // Mettre à jour l'état avec le nombre aléatoire généré
+    setNombreAleatoire(nombreFinal);
+  }
 
   if (question !== '') {
-      return (
-          <div className='question'>
-              <h4>Question : {question}</h4>
-              
-              <div className="answer-container2">
-                <div className='answer'>
-                  <button onClick={() => answer(1)}>Oui</button>
-                  <button onClick={() => answer(0)}>Non</button>
-                </div>
+    return (
+      <div className='question'>
+        <h4>{question}</h4>
 
-                <div className='answer'>
-                  <button onClick={() => answer(3)}>Je pense que oui</button>
-                  <button onClick={() => answer(2)}>Je ne sais pas</button>
-                  <button onClick={() => answer(4)}>Je pense que non</button>
-                </div>
-              </div>
-              
+        <div className="answer-container2">
+          <div className='answer'>
+            <button onClick={() => answer(1)}>Oui</button>
+            <button onClick={() => answer(0)}>Non</button>
           </div>
-    )
-    } else {
-      return (
-        <div className='wait'>
-            <span className="loader2 no-margin"></span>
-            <h5>Laissez-moi réfléchir un instant...</h5>
+
+          <div className='answer'>
+            <button onClick={() => answer(3)}>Je pense que oui</button>
+            <button onClick={() => answer(2)}>Je ne sais pas</button>
+            <button onClick={() => answer(4)}>Je pense que non</button>
+          </div>
         </div>
-      )
-    }
+
+      </div>
+    )
+  } else {
+    return (
+      <div className='wait'>
+        <span className="loader2 no-margin"></span>
+        <h5>Laissez-moi réfléchir un instant...</h5>
+      </div>
+    )
+  }
 
 }
 

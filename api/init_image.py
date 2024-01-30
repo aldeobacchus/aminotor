@@ -43,6 +43,7 @@ def init_game():
     print(nb_upload)
 
     list_image = []
+    list_blob = []
 
     nb_images_bdd = 40000
 
@@ -60,12 +61,14 @@ def init_game():
         blob_name = f"{value:06}.jpg"
         blob_client = container_client.get_blob_client(blob_name)
         if blob_client.exists():
-            list_image.append(blob_name)
+            list_image.append(value)
+            list_blob.append(blob_name)
+            
     # Fetch URLs of the blobs
     image_urls = []
-    for image in list_image:
+    for blob in list_blob:
         
-        sas_url = generate_sas_url(blob_service_client, container_name, image)
+        sas_url = generate_sas_url(blob_service_client, container_name, blob)
         image_urls.append(sas_url)
 
     print(image_urls[0])
