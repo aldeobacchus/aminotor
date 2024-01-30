@@ -17,22 +17,6 @@ images_dir_path = os.path.join(os.getcwd(), "images")
 nb_images = 10
 image_width, image_height = 178, 218
 
-
-def load_process_images(list_image_path):
-    # Load and preprocess the images
-    images = []
-    for image_path in list_image_path:
-        # Load and resize the image
-        img = tf.keras.utils.load_img(image_path, target_size=(image_height, image_width))
-        img_array = img_to_array(img)
-        # Preprocess the image (you may need to adapt this based on your specific requirements)
-        img_array = img_array / 255.0  # Normalize pixel values to [0, 1]
-
-        # Append the image and label to the lists
-        images.append(img_array)
-
-    return np.array(images)
-
 def load_images (list_images):
 
     images = []

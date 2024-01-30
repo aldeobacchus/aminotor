@@ -1,4 +1,3 @@
-
 import os
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
@@ -76,12 +75,9 @@ def get_response_and_next_question():
         proba_list = update_probabilities(data)
         response['proba_list'] = proba_list
 
-
     list_features[list_features.index(last_feature)] = None
     response['list_features'] = list_features
 
-
-   
     # S'il n'y a plus de question à poser
     if list_features == [None]*len(list_features):
         response['fail']=True

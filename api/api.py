@@ -1,4 +1,4 @@
-from flask import Flask, Response, jsonify, make_response, request, send_from_directory, session
+from flask import Flask, Response, jsonify, make_response, request, session
 
 from flask_cors import cross_origin  # Fix the typo in import
 from features import new_features, new_questions, answers

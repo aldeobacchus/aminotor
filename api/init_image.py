@@ -19,7 +19,6 @@ blob_service_client = BlobServiceClient.from_connection_string(connection_string
 container_client = blob_service_client.get_container_client('images')
 container_name = 'images'
 
-
 def generate_sas_url(blob_service_client, container_name, blob_name):
     sas_token = generate_blob_sas(
         account_name=blob_service_client.account_name,
@@ -33,6 +32,9 @@ def generate_sas_url(blob_service_client, container_name, blob_name):
 
     return blob_url
 
+@app.route('/')
+def hello():
+    return 'Bienvenue chez InitImageService'
 
 @app.route('/image/init/', methods=['POST'])
 def init_game():
