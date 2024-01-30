@@ -3,6 +3,7 @@ import './theseus.css'
 import axios from 'axios';
 import SelectionPanel from '../SelectionPanel/SelectionPanel';
 
+
 const Theseus = (args) => {
   const [listFeatures, setListFeatures] = useState([]);
 
@@ -48,7 +49,6 @@ const Theseus = (args) => {
 
   const removeNull = (value) => {
     if (value) {
-      console.log("value before removing null:", value);
       value = value.filter((item) => item !== null);
     }
     console.log("value after removing null:", value);
@@ -118,7 +118,8 @@ const Theseus = (args) => {
           setTrouveIA(2);
         }
         if (data.character) {
-          setGuessCharacter(data.character);
+          const guess = data.character;
+          setGuessCharacter(args.squaresSources[args.square.indexOf(guess)]);
         }
         else {
           console.log("loading off");
@@ -155,7 +156,8 @@ const Theseus = (args) => {
             setTrouveIA(2);
           }
           if (data.character) {
-            setGuessCharacter(data.character);
+            const guess = data.character;
+            setGuessCharacter(args.squaresSources[args.squares.indexOf(guess)]);
           }
           else {
             console.log("loading off");
@@ -275,7 +277,7 @@ const Theseus = (args) => {
                 {guessCharacter && (
                   <div className="theseus__guess">
                     <p className="theseus__guess-text">Je pense que c'est cette personne :</p>
-                    <img className="theseus__guess-img" src={"https://etud.insa-toulouse.fr/~alami-mejjat/" + guessCharacter.toString().padStart(6, '0')} alt="guess" />
+                    <img className="theseus__guess-img" src={guessCharacter} alt="guess" />
                     <div className="theseus__guess-buttons">
                       <button className='ariane__button' onClick={() => setTrouveIA(0)}>Oui</button>
                       <button className='ariane__button' onClick={() => setTurn(0)}>Non</button>
@@ -297,7 +299,7 @@ const Theseus = (args) => {
         <div className="ariane__lose">
           <div className="ariane__lose-text">
             <h2 className="ariane__lose-text">Bravo vous avez trouvé !</h2>
-            <img className="theseus__guess-img" src={"https://etud.insa-toulouse.fr/~alami-mejjat/" + selectedImage.toString().padStart(6, '0')} />
+            <img className="theseus__guess-img" src={args.squaresSources[args.squares.indexOf(selectedImage)]} />
             <button className="ariane__lose-button" onClick={() => args.setSelectionMode(true)}>Recommencer</button>
             <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button>
           </div>
@@ -322,7 +324,7 @@ const Theseus = (args) => {
         <div className="ariane__lose">
           <div className="ariane__lose-text">
             <h2 className="ariane__lose-text">Thésée a trouvé !</h2>
-            <img className="theseus__guess-img" src={"https://etud.insa-toulouse.fr/~alami-mejjat/" + guessCharacter.toString().padStart(6, '0')} alt="guess" />
+            <img className="theseus__guess-img" src={guessCharacter} alt="guess" />
             <button className="ariane__lose-button" onClick={() => args.setSelectionMode(true)}>Recommencer</button>
             <button onClick={() => args.setMode("home")}>Changer de mode de jeux</button>
           </div>

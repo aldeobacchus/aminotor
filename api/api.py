@@ -253,7 +253,7 @@ def start_game_theseus():
         session['proba_list'] = [1]*len(session['final_img_list'])
         session['type'] = None
 
-        session['max_questions'] = 10
+        session['max_questions'] = 6
         session['nb_questions'] = 0
 
         return jsonify(
