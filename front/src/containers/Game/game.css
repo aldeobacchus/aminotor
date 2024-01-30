@@ -4,3 +4,10 @@
     flex-direction: column;
     gap: 5vh;
 }
+.game-header{
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    align-items: center;
+}
+

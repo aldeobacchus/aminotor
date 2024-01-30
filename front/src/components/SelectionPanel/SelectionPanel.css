@@ -28,9 +28,14 @@
   transition-timing-function: cubic-bezier(0, 0.76, 0.56, 1.03);
   border-radius: 10px;
 }
+
+/* RESPONSIVE */
 @media screen and (max-width: 768px){
   .square-img{
     width: 22.5%;
+  }
+  .selection-panel{
+    max-height: 60vh;
   }
   
 }

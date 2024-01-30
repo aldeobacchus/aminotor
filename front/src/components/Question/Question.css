@@ -40,6 +40,9 @@
 }
 
 .minotor{
+    position: fixed;
+    top: 22.5vh;
+    left: 10vh;
     width: 23vw;
 }
 

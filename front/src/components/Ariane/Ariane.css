@@ -119,3 +119,13 @@
     align-items: center;
     gap: 1rem; 
 }
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px){
+    .ariane__game{
+        flex-direction: column-reverse;
+    }
+    .ariane__lose-img{
+        display: none;
+    }
+}

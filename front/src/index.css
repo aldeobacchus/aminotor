@@ -54,7 +54,6 @@ h3{
   font-family: var(--font-caesar);
   text-transform: uppercase;
   font-size: 7.5vh;
-  margin:2vh auto;
 }
 h3:hover{
   cursor: pointer;
@@ -120,6 +119,31 @@ p{
 .button-red{
   background: #852B2B;
 }
+
+.input-file{
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.label-input-file{
+  font-family: var(--font-inika);
+  color: white;
+  background-color: var(--color-orange1);
+  border-radius: 15px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.label-input-file:hover{ 
+  border: 2px solid white;
+}
+
 
 .inika{
   font-family: var(--font-inika);
