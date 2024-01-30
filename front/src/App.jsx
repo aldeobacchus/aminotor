@@ -1,7 +1,8 @@
 import './App.css';
 import GameSelection from './components/GameSelection/GameSelection';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Game from './containers/Game/Game';
+import axios from 'axios';
 
 function App() {
   
@@ -12,6 +13,24 @@ function App() {
     console.log("Game mode set to : " + varMode);
     setMode(varMode);
   }
+
+  useEffect(() => {
+      const handleBeforeUnload = () => {
+          axios.post('http://localhost:5000/api/flush_session/', { withCredentials: true })
+          .then(response => {
+              console.log('API call successful:', response.data);
+          })
+          .catch(error => {
+              console.error('API call failed:', error);
+          });
+      };
+
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+  }, []);
 
   return (
     <div className="app">

@@ -453,10 +453,13 @@ def flush_upload():
 
     if session.get('list_upload') is not None:
         list_upload = session['list_upload']
+    else:
+        list_upload = []
 
     data = {'list_upload': list_upload}
 
     response = requests.post('http://localhost:5001/image/delete', json=data).json()
+    print(response)
 
     session['list_upload'] = []
 
@@ -464,6 +467,7 @@ def flush_upload():
     response.delete_cookie('AminotorSession')
 
     return response
+
 
 @app.route('/api/get_img/<int:img>', methods=['GET'])
 @cross_origin(supports_credentials=True, origins="http://localhost:3000")

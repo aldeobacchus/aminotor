@@ -15,7 +15,7 @@ function Question(args) {
     const fetchData = async () => {
       if (question === '') {
         console.log(question);
-        const grid_size = 2**(args.sliderValue*2);
+        const grid_size = 2**(args.sliderValue);
         const response = await axios.get(`http://127.0.0.1:5000/api/aminoguess/start/${grid_size}`, { withCredentials: true })
         setQuestion(response.data.question);
         console.log(question);
