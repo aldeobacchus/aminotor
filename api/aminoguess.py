@@ -12,40 +12,27 @@ CORS(app)
 @app.route('/aminoguess/start/', methods=['POST'])
 def start_game():
     data = request.json
-    final_img_list = []
+
     nb_image = data['nb_images']
-    list_image = data['list_image']
+    image_list = data['image_list']
     list_features = data['list_features']
-
-    list_upload = data['list_upload']
-
-    #add the images uploaded by the user
-    i=0
-    while len(final_img_list) < nb_image and i < len(list_upload):
-        final_img_list.append(list_upload[i])
-        i += 1
-    
-    #add the images from the initial server
-    i = 0
-    while len(final_img_list) < nb_image:
-        final_img_list.append(list_image[i])
-        i += 1
+    image_urls = data['image_urls']
 
     #TODO: change from the local server to the azure stockage service
     folder_name = "temp"
-    server_path = "https://etud.insa-toulouse.fr/~alami-mejjat/0"
+    server_path = "https://aminotorimages.blob.core.windows.net/images/"
 
-    list_path_upload = []
-    for img in list_upload:
-        list_path_upload.append(os.path.join(os.getcwd(),folder_name, f"{img}.jpg"))
+   
 
     # create a list of path from the list of images from the initial server
     list_path_init = []  
+    final_img_list = []
     for i in range(nb_image):
-        list_path_init.append(server_path+str(final_img_list[i])+".jpg")
+        list_path_init.append(image_urls[i])
+        final_img_list.append(image_list[i])
     
-    #predict labels on selected images
-    data = {'list_path_upload':list_path_upload,
+
+    data = {
             'list_path_init':list_path_init
             }
     response = requests.post('http://localhost:5003/ml/predict/', json=data).json()
@@ -61,6 +48,7 @@ def start_game():
     feature = get_questions(data_labels)
     
     return jsonify(
+        list_path_init=list_path_init,
         final_img_list=final_img_list,
         predicted_labels=predicted_labels,
         feature=feature
@@ -79,7 +67,6 @@ def get_response_and_next_question():
     final_img_list = data['final_img_list']
     nb_questions = data['nb_questions']
     max_questions = data['max_questions']
-    data['nb_images'] = len(final_img_list)
 
     response = {
         'type': None,
