@@ -4,8 +4,8 @@ from flask import Flask, jsonify, request
 from random import randrange
 from flask_cors import CORS
 
-#origin = 'https://orchestratorservice1.azurewebsites.net/'
-origin = '*' #pour le dev
+origin = 'https://orchestratorservice1.azurewebsites.net/'
+#origin = '*' #pour le dev
 ms_ai = 'https://aiservice1.azurewebsites.net/'
 
 app = Flask(__name__)
@@ -13,54 +13,31 @@ CORS(app, origins=origin)
 
 @app.route('/')
 def hello():
-    return 'Hello, world'
+    return 'Bienvenue sur Ariane Service !'
 
-#MS du mode de jeu 2 : start
-#PENSEZ à RECUP la nouvelle version de FEATURES.PY
-#début du jeu (choix de l'image et initialisation de la liste de questions)
+#MS du mode de jeu 2
 @app.route('/ariane/start/', methods=['POST'])
 def start_game():
     data = request.json
+    
+    nb_images = data['nb_images']
+    image_list = data['image_list']
+    image_urls = data['image_urls']
+
+    # create a list of path from the list of images from the initial server
+    list_path_init = []  
     final_img_list = []
+    for i in range(nb_images):
+        list_path_init.append(image_urls[i])
+        final_img_list.append(image_list[i])
     
-    list_image = data['list_image']
-    nb_images = len(list_image)
-    list_upload = data['list_upload']
-
-
-    #add the images uploaded by the user
-    i=0
-    while len(final_img_list) < nb_images and i < len(list_upload):
-        final_img_list.append(list_upload[i])
-        i += 1
-    
-    #add the images from the initial server
-    i = 0
-    while len(final_img_list) < nb_images:
-        final_img_list.append(list_image[i])
-        i += 1
-
     random = randrange(0, nb_images-1)
     img_choice = final_img_list[random]
     print(img_choice)
 
-    #TODO: change from the local server to the azure stockage service
-    folder_name = "temp"
-    server_path = "https://etud.insa-toulouse.fr/~alami-mejjat/0"
-
-    list_path_upload = []
-    for img in list_upload:
-        list_path_upload.append(os.path.join(os.getcwd(),folder_name, f"{img}.jpg"))
-
-    # create a list of path from the list of images from the initial server
-    list_path_init = []  
-    for i in range(nb_images):
-        list_path_init.append(server_path+str(final_img_list[i])+".jpg")
-    
     #predict labels on selected images
-    data = {'list_path_upload':list_path_upload,
-            'list_path_init':list_path_init,
-            'nb_images': nb_images
+    data = {
+            'list_path_init':list_path_init
             }
     response = requests.post(ms_ai+'ml/predict/', json=data).json()
 
@@ -71,7 +48,7 @@ def start_game():
         predicted_labels=predicted_labels,
         img_choice=img_choice
     )
-
+    
 #MS du mode de jeu 2
 #get la feature/question que le joueur a choisi et répondre
 @app.route('/ariane/feature/', methods=['POST'])
@@ -83,6 +60,7 @@ def get_feature():
     list_features = data['list_features']
     predicted_labels = data['predicted_labels']
     list_answers = data['list_answers']
+    image_list = data['image_list']
 
     if all(f is None for f in list_features):
         return jsonify(
@@ -92,8 +70,9 @@ def get_feature():
 
     else:
         #get AI answer from predicted labels
+        index_image = image_list.index(img_choice)
         nb_feature = list_features.index(feature)
-        answer = predicted_labels[img_choice][nb_feature]
+        answer = predicted_labels[index_image][nb_feature]
 
         result = list_answers[list_features[nb_feature]][int(answer)]
         
@@ -106,7 +85,6 @@ def get_feature():
             answer=result
         )
      
-    
 #MS du mode de jeu 2
 @app.route('/ariane/guess/', methods=['POST'])
 def answer_proposition():
