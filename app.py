@@ -429,7 +429,7 @@ def upload_img():
         'image': file
     }
 
-    response = requests.post(ms_image+'image/upload', files=data).json()
+    response = requests.post(ms_image+'image/upload/', files=data).json()
 
     if session.get('list_upload') is None:
         session['list_upload'] = []
@@ -453,7 +453,7 @@ def flush_upload():
 
     data = {'list_upload': list_upload}
 
-    response = requests.post('http://localhost:5001/image/delete', json=data).json()
+    response = requests.post(ms_image+'image/delete/', json=data).json()
     print(response)
 
     session['list_upload'] = []
@@ -462,14 +462,6 @@ def flush_upload():
     response.delete_cookie('AminotorSession')
 
     return response
-
-@app.route('/api/get_img/<int:img>', methods=['GET'])
-def get_img(img):
-    print(img)
-    response = requests.get(ms_image+'image/get/{}'.format(img))
-    
-    return Response(response.content, content_type='image/jpeg')
-
 
 ############################## MAIN ##############################
 
