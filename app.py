@@ -439,6 +439,8 @@ def upload_img():
 
     list_upload.append(response.get('random_name'))
 
+    session['list_upload'] = list_upload
+
     return jsonify(
         success=True
     )   
