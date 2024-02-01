@@ -16,6 +16,8 @@ model_path = os.path.join(os.getcwd(), "model_ki_s")
 images_dir_path = os.path.join(os.getcwd(), "images")
 nb_images = 10
 image_width, image_height = 178, 218
+model = tf.keras.models.load_model(model_path)
+
 
 def load_images (list_images):
 
@@ -43,11 +45,10 @@ def load_images (list_images):
     return np.array(images)
 
 @app.route('/ml/predict/', methods=['POST'])
-def load_process_predict(_model_path=model_path):
+def load_process_predict():
     data = request.json
 
     # Load the model
-    model = tf.keras.models.load_model(_model_path)
 
     predicted_labels = []
 
